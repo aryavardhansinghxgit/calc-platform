@@ -10,23 +10,53 @@ import {
   Calendar,
   Clock,
   FileSpreadsheet,
-  FileText,
   ArrowUpDown,
   ChevronUp,
   ChevronDown,
 } from "lucide-react";
 import { AmortizationRow, AnnualAmortizationRow } from "@/modules/amortization/types";
-import { formatCurrency } from "@/lib/calculator-engine/formatters";
+import { formatCurrency, formatMonthYear } from "@/lib/calculator-engine/formatters";
+import { AmortizationLocaleOverlay } from "@/i18n/types";
+import { getAmortizationOverlay } from "@/i18n/overlays/amortization";
 
 export interface AmortizationScheduleTableProps {
   monthlySchedule: AmortizationRow[];
   annualSchedule: AnnualAmortizationRow[];
+  overlay?: AmortizationLocaleOverlay;
+  locale?: string;
 }
 
-type SortField = "paymentNumber" | "paymentDate" | "beginningBalance" | "paymentAmount" | "principalPaid" | "interestPaid" | "endingBalance" | "year";
+type SortField =
+  | "paymentNumber"
+  | "paymentDate"
+  | "beginningBalance"
+  | "paymentAmount"
+  | "principalPaid"
+  | "interestPaid"
+  | "endingBalance"
+  | "year";
 type SortDirection = "asc" | "desc";
 
-export function AmortizationScheduleTable({ monthlySchedule, annualSchedule }: AmortizationScheduleTableProps) {
+export function AmortizationScheduleTable({
+  monthlySchedule,
+  annualSchedule,
+  overlay: propOverlay,
+  locale = "en",
+}: AmortizationScheduleTableProps) {
+  const overlay = propOverlay || getAmortizationOverlay(locale);
+  const activeIntlLocale =
+    locale === "es"
+      ? "es-ES"
+      : locale === "fr"
+      ? "fr-FR"
+      : locale === "de"
+      ? "de-DE"
+      : locale === "hi"
+      ? "hi-IN"
+      : locale === "pt"
+      ? "pt-BR"
+      : "en-US";
+
   const [activeTab, setActiveTab] = useState<"annual" | "monthly">("annual");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -44,6 +74,14 @@ export function AmortizationScheduleTable({ monthlySchedule, annualSchedule }: A
     }
   };
 
+  // Helper to get formatted date string for a monthly row
+  const getFormattedRowDate = (row: AmortizationRow): string => {
+    if (row.paymentMonth && row.paymentYear) {
+      return formatMonthYear(row.paymentMonth, row.paymentYear, activeIntlLocale, "short");
+    }
+    return row.paymentDate;
+  };
+
   // Filter and sort active dataset
   const processedRows = useMemo(() => {
     const q = searchTerm.trim().toLowerCase();
@@ -54,8 +92,8 @@ export function AmortizationScheduleTable({ monthlySchedule, annualSchedule }: A
         rows = rows.filter(
           (r) =>
             r.year.toString().includes(q) ||
-            `year ${r.year}`.includes(q) ||
-            formatCurrency(r.endingBalance).toLowerCase().includes(q)
+            `${overlay.yearCol} ${r.year}`.toLowerCase().includes(q) ||
+            formatCurrency(r.endingBalance, "$", 2, activeIntlLocale).toLowerCase().includes(q)
         );
       }
 
@@ -74,12 +112,15 @@ export function AmortizationScheduleTable({ monthlySchedule, annualSchedule }: A
     } else {
       let rows = [...monthlySchedule];
       if (q) {
-        rows = rows.filter(
-          (r) =>
+        rows = rows.filter((r) => {
+          const dateStr = getFormattedRowDate(r).toLowerCase();
+          return (
             r.paymentNumber.toString().includes(q) ||
+            dateStr.includes(q) ||
             r.paymentDate.toLowerCase().includes(q) ||
-            `payment ${r.paymentNumber}`.includes(q)
-        );
+            `${overlay.paymentNumberCol} ${r.paymentNumber}`.toLowerCase().includes(q)
+          );
+        });
       }
 
       rows.sort((a, b) => {
@@ -95,7 +136,7 @@ export function AmortizationScheduleTable({ monthlySchedule, annualSchedule }: A
 
       return rows;
     }
-  }, [activeTab, annualSchedule, monthlySchedule, searchTerm, sortField, sortDirection]);
+  }, [activeTab, annualSchedule, monthlySchedule, searchTerm, sortField, sortDirection, activeIntlLocale, overlay]);
 
   const totalPages = Math.ceil(processedRows.length / itemsPerPage) || 1;
 
@@ -111,16 +152,16 @@ export function AmortizationScheduleTable({ monthlySchedule, annualSchedule }: A
     let csvLines: string[] = [];
 
     if (activeTab === "annual") {
-      headers = "Year,Beginning Balance,Total Payment,Principal Paid,Interest Paid,Ending Balance\n";
+      headers = `${overlay.yearCol},${overlay.beginningBalanceCol},${overlay.paymentAmountCol},${overlay.principalPaidCol},${overlay.interestPaidCol},${overlay.endingBalanceCol}\n`;
       csvLines = annualSchedule.map(
         (r) =>
           `${r.year},${r.beginningBalance.toFixed(2)},${r.totalPayment.toFixed(2)},${r.principalPaid.toFixed(2)},${r.interestPaid.toFixed(2)},${r.endingBalance.toFixed(2)}`
       );
     } else {
-      headers = "Payment Number,Payment Date,Beginning Balance,Payment Amount,Principal Paid,Interest Paid,Ending Balance\n";
+      headers = `${overlay.paymentNumberCol},${overlay.paymentDateCol},${overlay.beginningBalanceCol},${overlay.paymentAmountCol},${overlay.principalPaidCol},${overlay.interestPaidCol},${overlay.endingBalanceCol}\n`;
       csvLines = monthlySchedule.map(
         (r) =>
-          `${r.paymentNumber},"${r.paymentDate}",${r.beginningBalance.toFixed(2)},${r.paymentAmount.toFixed(2)},${r.principalPaid.toFixed(2)},${r.interestPaid.toFixed(2)},${r.endingBalance.toFixed(2)}`
+          `${r.paymentNumber},"${getFormattedRowDate(r)}",${r.beginningBalance.toFixed(2)},${r.paymentAmount.toFixed(2)},${r.principalPaid.toFixed(2)},${r.interestPaid.toFixed(2)},${r.endingBalance.toFixed(2)}`
       );
     }
 
@@ -128,7 +169,7 @@ export function AmortizationScheduleTable({ monthlySchedule, annualSchedule }: A
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `amortization_${activeTab}_schedule.csv`);
+    link.setAttribute("download", `amortization_${activeTab}_schedule_${locale}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -136,7 +177,7 @@ export function AmortizationScheduleTable({ monthlySchedule, annualSchedule }: A
 
   // Export Excel
   const handleExportExcel = () => {
-    handleExportCsv(); // Formatted CSV functions as Excel compatible sheet
+    handleExportCsv();
   };
 
   const renderSortIcon = (field: SortField) => {
@@ -170,7 +211,7 @@ export function AmortizationScheduleTable({ monthlySchedule, annualSchedule }: A
                 : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
             }`}
           >
-            <Calendar className="h-3.5 w-3.5" /> Annual Schedule
+            <Calendar className="h-3.5 w-3.5" /> {overlay.annualTab}
           </button>
           <button
             type="button"
@@ -186,7 +227,7 @@ export function AmortizationScheduleTable({ monthlySchedule, annualSchedule }: A
                 : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100"
             }`}
           >
-            <Clock className="h-3.5 w-3.5" /> Monthly Schedule
+            <Clock className="h-3.5 w-3.5" /> {overlay.monthlyTab}
           </button>
         </div>
 
@@ -195,7 +236,7 @@ export function AmortizationScheduleTable({ monthlySchedule, annualSchedule }: A
           <div className="relative flex-1 sm:flex-none">
             <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-zinc-400" />
             <Input
-              placeholder={activeTab === "annual" ? "Search year..." : "Search payment or date..."}
+              placeholder={activeTab === "annual" ? overlay.searchYearPlaceholder : overlay.searchPaymentPlaceholder}
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
@@ -212,7 +253,7 @@ export function AmortizationScheduleTable({ monthlySchedule, annualSchedule }: A
             onClick={handleExportCsv}
             className="h-8 text-xs border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 gap-1 bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800"
           >
-            <Download className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" /> CSV
+            <Download className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" /> {overlay.exportCsvBtn}
           </Button>
           <Button
             type="button"
@@ -221,7 +262,7 @@ export function AmortizationScheduleTable({ monthlySchedule, annualSchedule }: A
             onClick={handleExportExcel}
             className="h-8 text-xs border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 gap-1 bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800"
           >
-            <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" /> Excel
+            <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" /> {overlay.exportExcelBtn}
           </Button>
         </div>
       </div>
@@ -237,43 +278,43 @@ export function AmortizationScheduleTable({ monthlySchedule, annualSchedule }: A
                     onClick={() => handleSort("paymentNumber")}
                     className="text-xs font-bold text-zinc-700 dark:text-zinc-300 cursor-pointer hover:bg-zinc-200/50 dark:hover:bg-zinc-700/50 select-none"
                   >
-                    Payment Number {renderSortIcon("paymentNumber")}
+                    {overlay.paymentNumberCol} {renderSortIcon("paymentNumber")}
                   </TableHead>
                   <TableHead
                     onClick={() => handleSort("paymentDate")}
                     className="text-xs font-bold text-zinc-700 dark:text-zinc-300 cursor-pointer hover:bg-zinc-200/50 dark:hover:bg-zinc-700/50 select-none"
                   >
-                    Payment Date {renderSortIcon("paymentDate")}
+                    {overlay.paymentDateCol} {renderSortIcon("paymentDate")}
                   </TableHead>
                   <TableHead
                     onClick={() => handleSort("beginningBalance")}
                     className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right cursor-pointer hover:bg-zinc-200/50 dark:hover:bg-zinc-700/50 select-none"
                   >
-                    Beginning Balance {renderSortIcon("beginningBalance")}
+                    {overlay.beginningBalanceCol} {renderSortIcon("beginningBalance")}
                   </TableHead>
                   <TableHead
                     onClick={() => handleSort("paymentAmount")}
                     className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right cursor-pointer hover:bg-zinc-200/50 dark:hover:bg-zinc-700/50 select-none"
                   >
-                    Payment Amount {renderSortIcon("paymentAmount")}
+                    {overlay.paymentAmountCol} {renderSortIcon("paymentAmount")}
                   </TableHead>
                   <TableHead
                     onClick={() => handleSort("principalPaid")}
                     className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right cursor-pointer hover:bg-zinc-200/50 dark:hover:bg-zinc-700/50 select-none"
                   >
-                    Principal Paid {renderSortIcon("principalPaid")}
+                    {overlay.principalPaidCol} {renderSortIcon("principalPaid")}
                   </TableHead>
                   <TableHead
                     onClick={() => handleSort("interestPaid")}
                     className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right cursor-pointer hover:bg-zinc-200/50 dark:hover:bg-zinc-700/50 select-none"
                   >
-                    Interest Paid {renderSortIcon("interestPaid")}
+                    {overlay.interestPaidCol} {renderSortIcon("interestPaid")}
                   </TableHead>
                   <TableHead
                     onClick={() => handleSort("endingBalance")}
                     className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right cursor-pointer hover:bg-zinc-200/50 dark:hover:bg-zinc-700/50 select-none"
                   >
-                    Ending Balance {renderSortIcon("endingBalance")}
+                    {overlay.endingBalanceCol} {renderSortIcon("endingBalance")}
                   </TableHead>
                 </>
               ) : (
@@ -282,25 +323,25 @@ export function AmortizationScheduleTable({ monthlySchedule, annualSchedule }: A
                     onClick={() => handleSort("year")}
                     className="text-xs font-bold text-zinc-700 dark:text-zinc-300 cursor-pointer hover:bg-zinc-200/50 dark:hover:bg-zinc-700/50 select-none"
                   >
-                    Year {renderSortIcon("year")}
+                    {overlay.yearCol} {renderSortIcon("year")}
                   </TableHead>
                   <TableHead
                     onClick={() => handleSort("principalPaid")}
                     className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right cursor-pointer hover:bg-zinc-200/50 dark:hover:bg-zinc-700/50 select-none"
                   >
-                    Principal Paid {renderSortIcon("principalPaid")}
+                    {overlay.principalPaidCol} {renderSortIcon("principalPaid")}
                   </TableHead>
                   <TableHead
                     onClick={() => handleSort("interestPaid")}
                     className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right cursor-pointer hover:bg-zinc-200/50 dark:hover:bg-zinc-700/50 select-none"
                   >
-                    Interest Paid {renderSortIcon("interestPaid")}
+                    {overlay.interestPaidCol} {renderSortIcon("interestPaid")}
                   </TableHead>
                   <TableHead
                     onClick={() => handleSort("endingBalance")}
                     className="text-xs font-bold text-zinc-700 dark:text-zinc-300 text-right cursor-pointer hover:bg-zinc-200/50 dark:hover:bg-zinc-700/50 select-none"
                   >
-                    Ending Balance {renderSortIcon("endingBalance")}
+                    {overlay.endingBalanceCol} {renderSortIcon("endingBalance")}
                   </TableHead>
                 </>
               )}
@@ -310,7 +351,7 @@ export function AmortizationScheduleTable({ monthlySchedule, annualSchedule }: A
             {paginatedRows.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={activeTab === "monthly" ? 7 : 4} className="text-center text-xs text-zinc-500 py-8">
-                  No amortization entries found for "{searchTerm}".
+                  No records found.
                 </TableCell>
               </TableRow>
             ) : activeTab === "monthly" ? (
@@ -323,22 +364,22 @@ export function AmortizationScheduleTable({ monthlySchedule, annualSchedule }: A
                     {row.paymentNumber}
                   </TableCell>
                   <TableCell className="text-xs text-zinc-500 dark:text-zinc-400 font-sans tabular-nums">
-                    {row.paymentDate}
+                    {getFormattedRowDate(row)}
                   </TableCell>
                   <TableCell className="text-xs font-sans tabular-nums text-zinc-600 dark:text-zinc-400 text-right">
-                    {formatCurrency(row.beginningBalance)}
+                    {formatCurrency(row.beginningBalance, "$", 2, activeIntlLocale)}
                   </TableCell>
                   <TableCell className="text-xs font-sans tabular-nums font-semibold text-zinc-900 dark:text-zinc-100 text-right">
-                    {formatCurrency(row.paymentAmount)}
+                    {formatCurrency(row.paymentAmount, "$", 2, activeIntlLocale)}
                   </TableCell>
                   <TableCell className="text-xs font-sans tabular-nums text-emerald-600 dark:text-emerald-400 font-medium text-right">
-                    {formatCurrency(row.principalPaid)}
+                    {formatCurrency(row.principalPaid, "$", 2, activeIntlLocale)}
                   </TableCell>
                   <TableCell className="text-xs font-sans tabular-nums text-amber-600 dark:text-amber-400 font-medium text-right">
-                    {formatCurrency(row.interestPaid)}
+                    {formatCurrency(row.interestPaid, "$", 2, activeIntlLocale)}
                   </TableCell>
                   <TableCell className="text-xs font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400 text-right">
-                    {formatCurrency(row.endingBalance)}
+                    {formatCurrency(row.endingBalance, "$", 2, activeIntlLocale)}
                   </TableCell>
                 </TableRow>
               ))
@@ -349,16 +390,16 @@ export function AmortizationScheduleTable({ monthlySchedule, annualSchedule }: A
                   className="border-zinc-100 dark:border-zinc-800/60 hover:bg-blue-50/50 dark:hover:bg-blue-950/20 transition-colors"
                 >
                   <TableCell className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
-                    Year {row.year}
+                    {overlay.yearCol} {row.year}
                   </TableCell>
                   <TableCell className="text-xs font-sans tabular-nums text-emerald-600 dark:text-emerald-400 font-medium text-right">
-                    {formatCurrency(row.principalPaid)}
+                    {formatCurrency(row.principalPaid, "$", 2, activeIntlLocale)}
                   </TableCell>
                   <TableCell className="text-xs font-sans tabular-nums text-amber-600 dark:text-amber-400 font-medium text-right">
-                    {formatCurrency(row.interestPaid)}
+                    {formatCurrency(row.interestPaid, "$", 2, activeIntlLocale)}
                   </TableCell>
                   <TableCell className="text-xs font-sans tabular-nums font-bold text-blue-600 dark:text-blue-400 text-right">
-                    {formatCurrency(row.endingBalance)}
+                    {formatCurrency(row.endingBalance, "$", 2, activeIntlLocale)}
                   </TableCell>
                 </TableRow>
               ))
@@ -370,7 +411,7 @@ export function AmortizationScheduleTable({ monthlySchedule, annualSchedule }: A
       {/* Pagination Footer & Page Size Selector */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
         <div className="flex items-center gap-2 text-xs text-zinc-500">
-          <span>Rows per page:</span>
+          <span>{overlay.showingRecords}:</span>
           <select
             value={itemsPerPage}
             onChange={(e) => {
@@ -379,17 +420,17 @@ export function AmortizationScheduleTable({ monthlySchedule, annualSchedule }: A
             }}
             className="h-7 rounded bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 text-xs px-2 text-zinc-900 dark:text-zinc-100"
           >
-            <option value={12}>12 rows</option>
-            <option value={24}>24 rows</option>
-            <option value={50}>50 rows</option>
-            <option value={-1}>All rows ({processedRows.length})</option>
+            <option value={12}>12 {overlay.paymentsLabel}</option>
+            <option value={24}>24 {overlay.paymentsLabel}</option>
+            <option value={50}>50 {overlay.paymentsLabel}</option>
+            <option value={-1}>All ({processedRows.length})</option>
           </select>
         </div>
 
         {itemsPerPage !== -1 && totalPages > 1 && (
           <div className="flex items-center gap-3">
             <span className="text-xs text-zinc-500 font-sans tabular-nums">
-              Page {currentPage} of {totalPages} ({processedRows.length} total entries)
+              {overlay.pageOf} {currentPage} / {totalPages} ({processedRows.length})
             </span>
             <div className="flex items-center gap-1.5">
               <Button
@@ -398,9 +439,9 @@ export function AmortizationScheduleTable({ monthlySchedule, annualSchedule }: A
                 size="sm"
                 disabled={currentPage === 1}
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                className="h-7 text-xs px-2.5 border-zinc-200 dark:border-zinc-700"
+                className="h-7 text-xs px-2.5 border-zinc-200 dark:border-zinc-700 cursor-pointer"
               >
-                Previous
+                {overlay.prevPage}
               </Button>
               <Button
                 type="button"
@@ -408,9 +449,9 @@ export function AmortizationScheduleTable({ monthlySchedule, annualSchedule }: A
                 size="sm"
                 disabled={currentPage === totalPages}
                 onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                className="h-7 text-xs px-2.5 border-zinc-200 dark:border-zinc-700"
+                className="h-7 text-xs px-2.5 border-zinc-200 dark:border-zinc-700 cursor-pointer"
               >
-                Next
+                {overlay.nextPage}
               </Button>
             </div>
           </div>

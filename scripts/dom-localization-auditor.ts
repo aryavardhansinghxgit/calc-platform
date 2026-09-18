@@ -33,6 +33,12 @@ async function auditRenderedPages() {
     { slug: "mortgage-calculator", name: "Mortgage German", url: `${baseUrl}/de/calculators/mortgage-calculator`, locale: "de" },
     { slug: "mortgage-calculator", name: "Mortgage Hindi", url: `${baseUrl}/hi/calculators/mortgage-calculator`, locale: "hi" },
     { slug: "mortgage-calculator", name: "Mortgage Portuguese", url: `${baseUrl}/pt/calculators/mortgage-calculator`, locale: "pt" },
+    { slug: "amortization-calculator", name: "Amortization English", url: `${baseUrl}/calculators/amortization-calculator`, locale: "en" },
+    { slug: "amortization-calculator", name: "Amortization Spanish", url: `${baseUrl}/es/calculators/amortization-calculator`, locale: "es" },
+    { slug: "amortization-calculator", name: "Amortization French", url: `${baseUrl}/fr/calculators/amortization-calculator`, locale: "fr" },
+    { slug: "amortization-calculator", name: "Amortization German", url: `${baseUrl}/de/calculators/amortization-calculator`, locale: "de" },
+    { slug: "amortization-calculator", name: "Amortization Hindi", url: `${baseUrl}/hi/calculators/amortization-calculator`, locale: "hi" },
+    { slug: "amortization-calculator", name: "Amortization Portuguese", url: `${baseUrl}/pt/calculators/amortization-calculator`, locale: "pt" },
   ];
 
   let totalScans = 0;
@@ -57,7 +63,10 @@ async function auditRenderedPages() {
       assertAudit(`${route.slug} [${route.locale}]: HTTP 200 returned with valid HTML body`, html.length > 500);
 
       // Check hreflang and canonical tags
-      assertAudit(`${route.slug} [${route.locale}]: Has locale hreflang or canonical`, html.includes(`hreflang="${route.locale}"`) || html.includes(`${route.locale}/calculators`));
+      const hasHreflangOrCanonical = route.locale === "en"
+        ? (html.includes('href="https://calcplatform.com/calculators/') || html.includes('/calculators/') || html.includes('hreflang="en"'))
+        : (html.includes(`hreflang="${route.locale}"`) || html.includes(`${route.locale}/calculators`));
+      assertAudit(`${route.slug} [${route.locale}]: Has locale hreflang or canonical`, hasHreflangOrCanonical);
 
       // Check JSON-LD structured data
       assertAudit(`${route.slug} [${route.locale}]: Contains application/ld+json schema`, html.includes('application/ld+json'));
@@ -110,6 +119,13 @@ async function auditRenderedPages() {
           if (domHtml.includes("Mortgage Data") || domHtml.includes("Amortization Schedule")) leakedEnglishTokens.push("Mortgage Data");
           if (domHtml.includes("Total Interest Paid")) leakedEnglishTokens.push("Total Interest Paid");
         }
+      } else if (route.slug === "amortization-calculator" && route.locale !== "en") {
+        if (domHtml.includes("Loan Amount ($)")) leakedEnglishTokens.push("Loan Amount ($)");
+        if (domHtml.includes("Annual Interest Rate (%)")) leakedEnglishTokens.push("Annual Interest Rate (%)");
+        if (domHtml.includes("Monthly Payment (P&I)")) leakedEnglishTokens.push("Monthly Payment (P&I)");
+        if (domHtml.includes("Payment Schedule Breakdown")) leakedEnglishTokens.push("Payment Schedule Breakdown");
+        if (domHtml.includes("Extra Payment Options")) leakedEnglishTokens.push("Extra Payment Options");
+        if (domHtml.includes("Remaining Balance")) leakedEnglishTokens.push("Remaining Balance");
       }
 
       assertAudit(

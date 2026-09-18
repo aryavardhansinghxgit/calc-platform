@@ -127,6 +127,8 @@ export function calculateAmortizationModule(inputs: AmortizationInput): Amortiza
     monthlySchedule.push({
       paymentNumber: currentMonthIndex,
       paymentDate: dateStr,
+      paymentMonth: mNum,
+      paymentYear: yNum,
       beginningBalance,
       paymentAmount: actualTotalPaymentThisMonth,
       principalPaid: totalPrincipalPaid,
@@ -188,11 +190,15 @@ export function calculateAmortizationModule(inputs: AmortizationInput): Amortiza
     totalInterest,
     totalAmountPaid,
     loanPayoffDate,
+    payoffMonth: activeFinalM + 1,
+    payoffYear: activeFinalY,
 
     baselineMonthlyPayment: baseMonthlyPayment,
     baselineTotalInterest,
     baselineTotalAmountPaid,
     baselinePayoffDate,
+    baselinePayoffMonth: baselineFinalM + 1,
+    baselinePayoffYear: baselineFinalY,
     baselineTotalPaymentsCount: baselinePaymentsCount,
 
     interestSaved,

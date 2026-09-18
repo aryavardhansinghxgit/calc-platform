@@ -65,6 +65,13 @@ import { GERMAN_MORTGAGE_SEO, GERMAN_MORTGAGE_FAQS, GermanMortgageContent } from
 import { HINDI_MORTGAGE_SEO, HINDI_MORTGAGE_FAQS, HindiMortgageContent } from "./mortgage/hi";
 import { PORTUGUESE_MORTGAGE_SEO, PORTUGUESE_MORTGAGE_FAQS, PortugueseMortgageContent } from "./mortgage/pt";
 
+// Amortization
+import { SPANISH_AMORTIZATION_SEO, SPANISH_AMORTIZATION_FAQS, SpanishAmortizationContent } from "./amortization/es";
+import { FRENCH_AMORTIZATION_SEO, FRENCH_AMORTIZATION_FAQS, FrenchAmortizationContent } from "./amortization/fr";
+import { GERMAN_AMORTIZATION_SEO, GERMAN_AMORTIZATION_FAQS, GermanAmortizationContent } from "./amortization/de";
+import { HINDI_AMORTIZATION_SEO, HINDI_AMORTIZATION_FAQS, HindiAmortizationContent } from "./amortization/hi";
+import { PORTUGUESE_AMORTIZATION_SEO, PORTUGUESE_AMORTIZATION_FAQS, PortugueseAmortizationContent } from "./amortization/pt";
+
 // Fuel Cost
 import { SPANISH_FUEL_COST_SEO, SPANISH_FUEL_COST_FAQS, SpanishFuelCostContent } from "./fuel-cost/es";
 
@@ -79,6 +86,13 @@ export interface LocalizedCalculatorContentPack {
 }
 
 export const LOCALIZED_CONTENT_REGISTRY: Record<string, Record<string, LocalizedCalculatorContentPack>> = {
+  "amortization-calculator": {
+    es: { seo: SPANISH_AMORTIZATION_SEO, faqs: SPANISH_AMORTIZATION_FAQS, ContentComponent: SpanishAmortizationContent },
+    fr: { seo: FRENCH_AMORTIZATION_SEO, faqs: FRENCH_AMORTIZATION_FAQS, ContentComponent: FrenchAmortizationContent },
+    de: { seo: GERMAN_AMORTIZATION_SEO, faqs: GERMAN_AMORTIZATION_FAQS, ContentComponent: GermanAmortizationContent },
+    hi: { seo: HINDI_AMORTIZATION_SEO, faqs: HINDI_AMORTIZATION_FAQS, ContentComponent: HindiAmortizationContent },
+    pt: { seo: PORTUGUESE_AMORTIZATION_SEO, faqs: PORTUGUESE_AMORTIZATION_FAQS, ContentComponent: PortugueseAmortizationContent },
+  },
   "percentage-calculator": {
     es: { seo: SPANISH_PERCENTAGE_SEO, faqs: SPANISH_PERCENTAGE_FAQS, ContentComponent: SpanishPercentageContent },
     fr: { seo: FRENCH_PERCENTAGE_SEO, faqs: FRENCH_PERCENTAGE_FAQS, ContentComponent: FrenchPercentageContent },

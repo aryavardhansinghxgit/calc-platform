@@ -17,6 +17,8 @@ export interface AmortizationInput {
 export interface AmortizationRow {
   paymentNumber: number;
   paymentDate: string;
+  paymentMonth?: number;
+  paymentYear?: number;
   beginningBalance: number;
   paymentAmount: number;
   principalPaid: number;
@@ -52,12 +54,16 @@ export interface AmortizationOutput {
   totalInterest: number;
   totalAmountPaid: number;
   loanPayoffDate: string;
+  payoffMonth?: number;
+  payoffYear?: number;
 
   // Comparison metrics (Baseline vs Extra Payment)
   baselineMonthlyPayment: number;
   baselineTotalInterest: number;
   baselineTotalAmountPaid: number;
   baselinePayoffDate: string;
+  baselinePayoffMonth?: number;
+  baselinePayoffYear?: number;
   baselineTotalPaymentsCount: number;
 
   interestSaved: number;

@@ -168,3 +168,109 @@ export interface MortgageLocaleOverlay {
   deleteBtn: string;
   clearAllSavedBtn: string;
 }
+
+export interface AmortizationLocaleOverlay {
+  locale: Locale;
+  title?: string;
+  description?: string;
+
+  // Action Bar
+  managerTitle: string;
+  savedCountBadge: string;
+  printPdfBtn: string;
+  saveBtn: string;
+  savedBtn: string;
+  shareSuccessMsg: string;
+
+  // Input Card
+  inputsTitle: string;
+  inputsSubtitle: string;
+  loanAmount: string;
+  loanTermYears: string;
+  loanTermMonths: string;
+  interestRate: string;
+  startMonth: string;
+  startYear: string;
+  monthOptions: Array<{ value: number; label: string }>;
+  fullMonthNames: Array<string>;
+
+  // Extra Payments
+  optionalExtraPayments: string;
+  extraMonthlyPayment: string;
+  extraYearlyPayment: string;
+  extraOneTimePayment: string;
+  extraStartMonth: string;
+  extraStartYear: string;
+
+  // Actions & Validation
+  calculateBtn: string;
+  clearBtn: string;
+  validationErrorAmount: string;
+  validationErrorRate: string;
+  validationErrorTerm: string;
+  validationErrorMaxTerm: string;
+
+  // Results
+  monthlyPaymentTitle: string;
+  totalPaymentsCount: string;
+  paymentsLabel: string;
+  totalPrincipal: string;
+  totalInterest: string;
+  totalAmountPaid: string;
+  loanPayoffDate: string;
+  interestSaved: string;
+
+  // Comparison
+  comparisonTitle: string;
+  originalInterestVsNew: string;
+  savedLabel: string;
+  originalPayoffVsNew: string;
+  timeSavedLabel: string;
+  yearsLabel: string;
+  monthsLabel: string;
+
+  // Visual Charts
+  chartsTitle: string;
+  tabBreakdown: string;
+  tabProgress: string;
+  loadingPieChart: string;
+  loadingProgressChart: string;
+
+  // Schedule Table
+  scheduleTitle: string;
+  scheduleSubtitle: string;
+  annualTab: string;
+  monthlyTab: string;
+  searchYearPlaceholder: string;
+  searchPaymentPlaceholder: string;
+  exportCsvBtn: string;
+  exportExcelBtn: string;
+  yearCol: string;
+  paymentNumberCol: string;
+  paymentDateCol: string;
+  beginningBalanceCol: string;
+  paymentAmountCol: string;
+  principalPaidCol: string;
+  interestPaidCol: string;
+  extraPaidCol: string;
+  endingBalanceCol: string;
+  prevPage: string;
+  nextPage: string;
+  pageOf: string;
+  showingRecords: string;
+
+  // Save Modal
+  saveModalTitle: string;
+  saveModalSubtitle: string;
+  calcSummaryLabel: string;
+  monthlyPaySummary: string;
+  saveNameLabel: string;
+  saveNamePlaceholder: string;
+  cancelBtn: string;
+  confirmSaveBtn: string;
+  saveSuccessMsg: string;
+  savedCalculationsTitle: string;
+  restoreBtn: string;
+  deleteBtnTitle: string;
+}
+

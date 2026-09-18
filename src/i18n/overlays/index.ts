@@ -8,6 +8,7 @@ import { getAutoLoanOverlay } from "./auto-loan";
 import { getOhmsLawOverlay } from "./ohms-law";
 import { getMortgageOverlay } from "./mortgage";
 import { getFuelCostOverlay } from "./fuel-cost";
+import { getAmortizationOverlay } from "./amortization";
 
 export {
   getPercentageOverlay,
@@ -20,12 +21,15 @@ export {
   getOhmsLawOverlay,
   getMortgageOverlay,
   getFuelCostOverlay,
+  getAmortizationOverlay,
 };
 
 export function getCalculatorOverlay(slug: string, locale: string): any {
   switch (slug) {
     case "mortgage-calculator":
       return getMortgageOverlay(locale);
+    case "amortization-calculator":
+      return getAmortizationOverlay(locale);
     case "percentage-calculator":
       return getPercentageOverlay(locale);
     case "bmi-calculator":

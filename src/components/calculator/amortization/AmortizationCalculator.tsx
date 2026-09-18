@@ -13,21 +13,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
   Table as TableIcon,
   DollarSign,
-  Calendar,
   Percent,
   TrendingUp,
-  PlusCircle,
-  BarChart2,
   PieChart as PieIcon,
   Sparkles,
   Bookmark,
@@ -35,10 +24,7 @@ import {
   RotateCcw,
   Check,
   X,
-  Share2,
-  Copy,
   AlertCircle,
-  SlidersHorizontal,
   FolderOpen,
   Printer,
 } from "lucide-react";
@@ -48,10 +34,12 @@ import {
   AmortizationOutput,
   SavedAmortizationCalculation,
 } from "@/modules/amortization/types";
-import { formatCurrency } from "@/lib/calculator-engine/formatters";
+import { formatCurrency, formatMonthYear } from "@/lib/calculator-engine/formatters";
 import AmortizationScheduleTable from "./AmortizationScheduleTable";
 import ReportModal from "@/components/report/ReportModal";
 import { generateLoanReportData } from "@/lib/report-generator/loan-report";
+import { AmortizationLocaleOverlay } from "@/i18n/types";
+import { getAmortizationOverlay } from "@/i18n/overlays/amortization";
 
 // Lazy load visual chart components
 const AmortizationPieChart = dynamic(
@@ -78,7 +66,29 @@ const AmortizationProgressChart = dynamic(
   }
 );
 
-export function AmortizationCalculator() {
+export interface AmortizationCalculatorProps {
+  overlay?: AmortizationLocaleOverlay;
+  locale?: string;
+}
+
+export function AmortizationCalculator({
+  overlay: propOverlay,
+  locale = "en",
+}: AmortizationCalculatorProps = {}) {
+  const overlay = propOverlay || getAmortizationOverlay(locale);
+  const activeIntlLocale =
+    locale === "es"
+      ? "es-ES"
+      : locale === "fr"
+      ? "fr-FR"
+      : locale === "de"
+      ? "de-DE"
+      : locale === "hi"
+      ? "hi-IN"
+      : locale === "pt"
+      ? "pt-BR"
+      : "en-US";
+
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth() + 1;
 
@@ -139,19 +149,19 @@ export function AmortizationCalculator() {
   // Validate inputs
   const validateInputs = () => {
     if (loanAmount <= 0) {
-      setValidationError("Loan amount must be greater than $0.");
+      setValidationError(overlay.validationErrorAmount);
       return false;
     }
     if (interestRate < 0 || interestRate > 100) {
-      setValidationError("Interest rate must be between 0% and 100%.");
+      setValidationError(overlay.validationErrorRate);
       return false;
     }
     if (loanTermYears <= 0 && loanTermMonths <= 0) {
-      setValidationError("Loan term must be greater than 0.");
+      setValidationError(overlay.validationErrorTerm);
       return false;
     }
     if (loanTermYears > 50) {
-      setValidationError("Maximum supported loan term is 50 years.");
+      setValidationError(overlay.validationErrorMaxTerm);
       return false;
     }
     setValidationError("");
@@ -194,7 +204,11 @@ export function AmortizationCalculator() {
   const reportData = useMemo(() => {
     return generateLoanReportData(
       { loanAmount, interestRate, loanTermYears, loanTermMonths },
-      { monthlyPayment: results.monthlyPayment, totalInterest: results.totalInterest, totalPayment: results.totalInterest + loanAmount }
+      {
+        monthlyPayment: results.monthlyPayment,
+        totalInterest: results.totalInterest,
+        totalPayment: results.totalInterest + loanAmount,
+      }
     );
   }, [loanAmount, interestRate, loanTermYears, loanTermMonths, results]);
 
@@ -226,8 +240,10 @@ export function AmortizationCalculator() {
     e.preventDefault();
     const newSave: SavedAmortizationCalculation = {
       id: `amort-${Date.now()}`,
-      name: saveName.trim() || `Amortization ($${loanAmount.toLocaleString()})`,
-      dateSaved: new Date().toLocaleDateString("en-US", {
+      name:
+        saveName.trim() ||
+        `${overlay.title || "Amortization"} (${formatCurrency(loanAmount, "$", 0, activeIntlLocale)})`,
+      dateSaved: new Date().toLocaleDateString(activeIntlLocale, {
         month: "short",
         day: "numeric",
         year: "numeric",
@@ -257,7 +273,7 @@ export function AmortizationCalculator() {
       console.error(err);
     }
 
-    setSaveSuccessMsg("Calculation saved successfully!");
+    setSaveSuccessMsg(overlay.saveSuccessMsg);
     setTimeout(() => {
       setSaveSuccessMsg("");
       setIsSaveModalOpen(false);
@@ -297,46 +313,20 @@ export function AmortizationCalculator() {
     }
   };
 
-  // Action: Share / Copy URL
-  const handleShareUrl = () => {
-    const params = new URLSearchParams();
-    params.set("amount", loanAmount.toString());
-    params.set("years", loanTermYears.toString());
-    params.set("months", loanTermMonths.toString());
-    params.set("rate", interestRate.toString());
-    if (showExtraPayments && extraMonthlyPayment > 0) {
-      params.set("extraMonthly", extraMonthlyPayment.toString());
+  // Payoff date localized strings
+  const formattedPayoffDate = useMemo(() => {
+    if (results.payoffMonth && results.payoffYear) {
+      return formatMonthYear(results.payoffMonth, results.payoffYear, activeIntlLocale, "long");
     }
+    return results.loanPayoffDate;
+  }, [results.payoffMonth, results.payoffYear, results.loanPayoffDate, activeIntlLocale]);
 
-    const shareUrl = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
-
-    if (navigator.share) {
-      navigator.share({
-        title: "Amortization Calculation",
-        text: `Check out this loan amortization calculation on CalcPlatform`,
-        url: shareUrl,
-      });
-    } else {
-      navigator.clipboard.writeText(shareUrl);
-      setShareSuccessMsg("Shareable link copied to clipboard!");
-      setTimeout(() => setShareSuccessMsg(""), 2000);
+  const formattedBaselinePayoffDate = useMemo(() => {
+    if (results.baselinePayoffMonth && results.baselinePayoffYear) {
+      return formatMonthYear(results.baselinePayoffMonth, results.baselinePayoffYear, activeIntlLocale, "long");
     }
-  };
-
-  const monthOptions = [
-    { value: 1, label: "Jan" },
-    { value: 2, label: "Feb" },
-    { value: 3, label: "Mar" },
-    { value: 4, label: "Apr" },
-    { value: 5, label: "May" },
-    { value: 6, label: "Jun" },
-    { value: 7, label: "Jul" },
-    { value: 8, label: "Aug" },
-    { value: 9, label: "Sep" },
-    { value: 10, label: "Oct" },
-    { value: 11, label: "Nov" },
-    { value: 12, label: "Dec" },
-  ];
+    return results.baselinePayoffDate;
+  }, [results.baselinePayoffMonth, results.baselinePayoffYear, results.baselinePayoffDate, activeIntlLocale]);
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
@@ -345,11 +335,11 @@ export function AmortizationCalculator() {
         <div className="flex items-center gap-2">
           <TableIcon className="h-4 w-4 text-blue-600 dark:text-blue-400" />
           <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
-            Amortization Manager
+            {overlay.managerTitle}
           </span>
           {savedCalculations.length > 0 && (
             <span className="text-[10px] font-sans tabular-nums bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full font-semibold">
-              {savedCalculations.length} Saved
+              {savedCalculations.length} {overlay.savedCountBadge}
             </span>
           )}
         </div>
@@ -360,7 +350,7 @@ export function AmortizationCalculator() {
               {shareSuccessMsg}
             </span>
           )}
-          
+
           <Button
             type="button"
             variant="outline"
@@ -368,7 +358,7 @@ export function AmortizationCalculator() {
             onClick={() => setIsReportModalOpen(true)}
             className="h-8 text-xs gap-1.5 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 cursor-pointer"
           >
-            <Printer className="h-3.5 w-3.5 text-purple-500" /> Print / PDF
+            <Printer className="h-3.5 w-3.5 text-purple-500" /> {overlay.printPdfBtn}
           </Button>
           <Button
             type="button"
@@ -376,7 +366,7 @@ export function AmortizationCalculator() {
             onClick={() => setIsSaveModalOpen(true)}
             className="h-8 text-xs gap-1.5 bg-blue-600 hover:bg-blue-700 text-white shadow-xs cursor-pointer"
           >
-            <Bookmark className="h-3.5 w-3.5" /> Save
+            <Bookmark className="h-3.5 w-3.5" /> {overlay.saveBtn}
           </Button>
         </div>
       </div>
@@ -393,10 +383,10 @@ export function AmortizationCalculator() {
                 </div>
                 <div>
                   <CardTitle className="text-base font-bold text-zinc-900 dark:text-zinc-100">
-                    Loan Inputs
+                    {overlay.inputsTitle}
                   </CardTitle>
                   <CardDescription className="text-xs text-zinc-500">
-                    Modify the values and click the Calculate button to use
+                    {overlay.inputsSubtitle}
                   </CardDescription>
                 </div>
               </div>
@@ -413,7 +403,7 @@ export function AmortizationCalculator() {
                 {/* Loan Amount */}
                 <div>
                   <Label htmlFor="loanAmount" className="text-zinc-700 dark:text-zinc-300 font-medium">
-                    Loan Amount ($)
+                    {overlay.loanAmount}
                   </Label>
                   <div className="relative mt-1">
                     <DollarSign className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-zinc-400" />
@@ -428,7 +418,7 @@ export function AmortizationCalculator() {
                         setValidationError("");
                       }}
                       className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
-                      aria-label="Loan Amount"
+                      aria-label={overlay.loanAmount}
                     />
                   </div>
                 </div>
@@ -437,7 +427,7 @@ export function AmortizationCalculator() {
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <Label htmlFor="loanTermYears" className="text-zinc-700 dark:text-zinc-300 font-medium">
-                      Loan Term (Years)
+                      {overlay.loanTermYears}
                     </Label>
                     <Input
                       id="loanTermYears"
@@ -450,12 +440,12 @@ export function AmortizationCalculator() {
                         setValidationError("");
                       }}
                       className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
-                      aria-label="Loan Term Years"
+                      aria-label={overlay.loanTermYears}
                     />
                   </div>
                   <div>
                     <Label htmlFor="loanTermMonths" className="text-zinc-700 dark:text-zinc-300 font-medium">
-                      Loan Term (Months)
+                      {overlay.loanTermMonths}
                     </Label>
                     <Input
                       id="loanTermMonths"
@@ -468,7 +458,7 @@ export function AmortizationCalculator() {
                         setValidationError("");
                       }}
                       className="mt-1 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
-                      aria-label="Loan Term Months"
+                      aria-label={overlay.loanTermMonths}
                     />
                   </div>
                 </div>
@@ -476,7 +466,7 @@ export function AmortizationCalculator() {
                 {/* Interest Rate */}
                 <div>
                   <Label htmlFor="interestRate" className="text-zinc-700 dark:text-zinc-300 font-medium">
-                    Interest Rate (%)
+                    {overlay.interestRate}
                   </Label>
                   <div className="relative mt-1">
                     <Percent className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-zinc-400" />
@@ -492,7 +482,7 @@ export function AmortizationCalculator() {
                         setValidationError("");
                       }}
                       className="pl-8 bg-zinc-50 dark:bg-zinc-800/80 border-zinc-200 dark:border-zinc-700 font-sans tabular-nums text-xs"
-                      aria-label="Interest Rate"
+                      aria-label={overlay.interestRate}
                     />
                   </div>
                 </div>
@@ -501,7 +491,7 @@ export function AmortizationCalculator() {
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <Label htmlFor="startMonth" className="text-zinc-700 dark:text-zinc-300 font-medium">
-                      Start Month
+                      {overlay.startMonth}
                     </Label>
                     <select
                       id="startMonth"
@@ -509,7 +499,7 @@ export function AmortizationCalculator() {
                       onChange={(e) => setStartMonth(Number(e.target.value))}
                       className="mt-1 w-full h-9 rounded-md bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 px-3 text-xs text-zinc-900 dark:text-zinc-100 font-medium focus:outline-none focus:ring-1 focus:ring-blue-500"
                     >
-                      {monthOptions.map((m) => (
+                      {overlay.monthOptions.map((m) => (
                         <option key={m.value} value={m.value}>
                           {m.label}
                         </option>
@@ -518,7 +508,7 @@ export function AmortizationCalculator() {
                   </div>
                   <div>
                     <Label htmlFor="startYear" className="text-zinc-700 dark:text-zinc-300 font-medium">
-                      Start Year
+                      {overlay.startYear}
                     </Label>
                     <Input
                       id="startYear"
@@ -542,7 +532,7 @@ export function AmortizationCalculator() {
                       className="h-4 w-4 rounded border-zinc-300 text-blue-600 focus:ring-blue-500"
                     />
                     <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
-                      Optional: make extra payments
+                      {overlay.optionalExtraPayments}
                     </span>
                   </label>
                 </div>
@@ -552,7 +542,7 @@ export function AmortizationCalculator() {
                   <div className="space-y-3 p-3 bg-zinc-50/80 dark:bg-zinc-800/50 rounded-xl border border-zinc-200 dark:border-zinc-700/80 pt-3">
                     <div>
                       <Label htmlFor="extraMonthlyPayment" className="text-zinc-700 dark:text-zinc-300 font-medium">
-                        Extra Monthly Payment ($)
+                        {overlay.extraMonthlyPayment}
                       </Label>
                       <Input
                         id="extraMonthlyPayment"
@@ -567,7 +557,7 @@ export function AmortizationCalculator() {
 
                     <div>
                       <Label htmlFor="extraYearlyPayment" className="text-zinc-700 dark:text-zinc-300 font-medium">
-                        Extra Yearly Payment ($)
+                        {overlay.extraYearlyPayment}
                       </Label>
                       <Input
                         id="extraYearlyPayment"
@@ -582,7 +572,7 @@ export function AmortizationCalculator() {
 
                     <div>
                       <Label htmlFor="extraOneTimePayment" className="text-zinc-700 dark:text-zinc-300 font-medium">
-                        One-Time Extra Payment ($)
+                        {overlay.extraOneTimePayment}
                       </Label>
                       <Input
                         id="extraOneTimePayment"
@@ -597,13 +587,13 @@ export function AmortizationCalculator() {
 
                     <div className="grid grid-cols-2 gap-3 pt-1">
                       <div>
-                        <Label className="text-[10px] text-zinc-500">Extra Start Month</Label>
+                        <Label className="text-[10px] text-zinc-500">{overlay.extraStartMonth}</Label>
                         <select
                           value={extraStartMonth}
                           onChange={(e) => setExtraStartMonth(Number(e.target.value))}
                           className="mt-0.5 w-full h-8 rounded bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 text-[11px] px-2 text-zinc-900 dark:text-zinc-100"
                         >
-                          {monthOptions.map((m) => (
+                          {overlay.monthOptions.map((m) => (
                             <option key={m.value} value={m.value}>
                               {m.label}
                             </option>
@@ -611,7 +601,7 @@ export function AmortizationCalculator() {
                         </select>
                       </div>
                       <div>
-                        <Label className="text-[10px] text-zinc-500">Extra Start Year</Label>
+                        <Label className="text-[10px] text-zinc-500">{overlay.extraStartYear}</Label>
                         <Input
                           type="number"
                           min={2000}
@@ -629,17 +619,17 @@ export function AmortizationCalculator() {
                 <div className="flex items-center gap-3 pt-2">
                   <Button
                     type="submit"
-                    className="flex-1 h-9 text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-xs"
+                    className="flex-1 h-9 text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-xs cursor-pointer"
                   >
-                    Calculate
+                    {overlay.calculateBtn}
                   </Button>
                   <Button
                     type="button"
                     variant="outline"
                     onClick={handleClear}
-                    className="h-9 text-xs font-semibold border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 bg-white dark:bg-zinc-900"
+                    className="h-9 text-xs font-semibold border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 bg-white dark:bg-zinc-900 cursor-pointer"
                   >
-                    <RotateCcw className="h-3.5 w-3.5 mr-1" /> Clear
+                    <RotateCcw className="h-3.5 w-3.5 mr-1" /> {overlay.clearBtn}
                   </Button>
                 </div>
               </form>
@@ -655,59 +645,59 @@ export function AmortizationCalculator() {
               <div>
                 <div className="flex items-center justify-between">
                   <span className="text-xs uppercase font-bold tracking-wider text-blue-600 dark:text-blue-400">
-                    Monthly Loan Payment
+                    {overlay.monthlyPaymentTitle}
                   </span>
                   <Button
                     type="button"
                     variant="ghost"
                     size="sm"
                     onClick={() => setIsSaveModalOpen(true)}
-                    className="h-6 text-[10px] font-bold text-blue-600 dark:text-blue-400 hover:bg-blue-100/50 dark:hover:bg-blue-950 gap-1 px-2"
+                    className="h-6 text-[10px] font-bold text-blue-600 dark:text-blue-400 hover:bg-blue-100/50 dark:hover:bg-blue-950 gap-1 px-2 cursor-pointer"
                   >
-                    <Bookmark className="h-3 w-3" /> Save
+                    <Bookmark className="h-3 w-3" /> {overlay.saveBtn}
                   </Button>
                 </div>
                 <div className="text-4xl sm:text-5xl font-extrabold text-zinc-900 dark:text-zinc-100 font-sans tabular-nums mt-2 tracking-tight">
-                  {formatCurrency(results.monthlyPayment)}
+                  {formatCurrency(results.monthlyPayment, "$", 2, activeIntlLocale)}
                 </div>
               </div>
 
               {/* Responsive Summary Cards Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-3 border-t border-blue-100 dark:border-zinc-800">
                 <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
-                  <span className="text-[10px] text-zinc-500 block">Total Payments</span>
+                  <span className="text-[10px] text-zinc-500 block">{overlay.totalPaymentsCount}</span>
                   <span className="text-sm font-bold font-sans tabular-nums text-zinc-900 dark:text-zinc-100">
-                    {results.totalPaymentsCount} payments
+                    {results.totalPaymentsCount} {overlay.paymentsLabel}
                   </span>
                 </div>
                 <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
-                  <span className="text-[10px] text-zinc-500 block">Total Principal</span>
+                  <span className="text-[10px] text-zinc-500 block">{overlay.totalPrincipal}</span>
                   <span className="text-sm font-bold font-sans tabular-nums text-blue-600 dark:text-blue-400">
-                    {formatCurrency(results.totalPrincipal)}
+                    {formatCurrency(results.totalPrincipal, "$", 2, activeIntlLocale)}
                   </span>
                 </div>
                 <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
-                  <span className="text-[10px] text-zinc-500 block">Total Interest</span>
+                  <span className="text-[10px] text-zinc-500 block">{overlay.totalInterest}</span>
                   <span className="text-sm font-bold font-sans tabular-nums text-emerald-600 dark:text-emerald-400">
-                    {formatCurrency(results.totalInterest)}
+                    {formatCurrency(results.totalInterest, "$", 2, activeIntlLocale)}
                   </span>
                 </div>
                 <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
-                  <span className="text-[10px] text-zinc-500 block">Total Amount Paid</span>
+                  <span className="text-[10px] text-zinc-500 block">{overlay.totalAmountPaid}</span>
                   <span className="text-sm font-bold font-sans tabular-nums text-zinc-900 dark:text-zinc-100">
-                    {formatCurrency(results.totalAmountPaid)}
+                    {formatCurrency(results.totalAmountPaid, "$", 2, activeIntlLocale)}
                   </span>
                 </div>
                 <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
-                  <span className="text-[10px] text-zinc-500 block">Loan Payoff Date</span>
+                  <span className="text-[10px] text-zinc-500 block">{overlay.loanPayoffDate}</span>
                   <span className="text-sm font-bold font-sans tabular-nums text-amber-600 dark:text-amber-400 truncate block">
-                    {results.loanPayoffDate}
+                    {formattedPayoffDate}
                   </span>
                 </div>
                 <div className="bg-white/80 dark:bg-zinc-800/80 p-2.5 rounded-xl border border-blue-50 dark:border-zinc-700/50">
-                  <span className="text-[10px] text-zinc-500 block">Interest Saved</span>
+                  <span className="text-[10px] text-zinc-500 block">{overlay.interestSaved}</span>
                   <span className="text-sm font-bold font-sans tabular-nums text-emerald-600 dark:text-emerald-400">
-                    {formatCurrency(results.interestSaved)}
+                    {formatCurrency(results.interestSaved, "$", 2, activeIntlLocale)}
                   </span>
                 </div>
               </div>
@@ -722,7 +712,7 @@ export function AmortizationCalculator() {
                   <div className="flex items-center gap-2">
                     <Sparkles className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                     <span className="text-xs uppercase font-bold text-emerald-900 dark:text-emerald-200">
-                      Comparison: Original Loan vs. Extra Payments Loan
+                      {overlay.comparisonTitle}
                     </span>
                   </div>
                 </div>
@@ -730,35 +720,35 @@ export function AmortizationCalculator() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                   <div className="p-3 bg-white/80 dark:bg-zinc-900/80 rounded-xl border border-emerald-100 dark:border-emerald-900 space-y-1">
                     <span className="font-semibold text-zinc-700 dark:text-zinc-300 block">
-                      Original Interest vs. New Interest
+                      {overlay.originalInterestVsNew}
                     </span>
                     <div className="flex items-center justify-between font-sans tabular-nums">
                       <span className="text-zinc-500 line-through">
-                        {formatCurrency(results.baselineTotalInterest)}
+                        {formatCurrency(results.baselineTotalInterest, "$", 2, activeIntlLocale)}
                       </span>
                       <span className="font-bold text-emerald-600 dark:text-emerald-400">
-                        {formatCurrency(results.totalInterest)}
+                        {formatCurrency(results.totalInterest, "$", 2, activeIntlLocale)}
                       </span>
                     </div>
                     <div className="text-[11px] font-bold text-emerald-700 dark:text-emerald-300 pt-1 border-t border-zinc-100 dark:border-zinc-800">
-                      Saved: {formatCurrency(results.interestSaved)}
+                      {overlay.savedLabel}: {formatCurrency(results.interestSaved, "$", 2, activeIntlLocale)}
                     </div>
                   </div>
 
                   <div className="p-3 bg-white/80 dark:bg-zinc-900/80 rounded-xl border border-emerald-100 dark:border-emerald-900 space-y-1">
                     <span className="font-semibold text-zinc-700 dark:text-zinc-300 block">
-                      Original Payoff Date vs. New Payoff Date
+                      {overlay.originalPayoffVsNew}
                     </span>
                     <div className="flex items-center justify-between font-sans tabular-nums">
                       <span className="text-zinc-500 line-through">
-                        {results.baselinePayoffDate}
+                        {formattedBaselinePayoffDate}
                       </span>
                       <span className="font-bold text-emerald-600 dark:text-emerald-400">
-                        {results.loanPayoffDate}
+                        {formattedPayoffDate}
                       </span>
                     </div>
                     <div className="text-[11px] font-bold text-emerald-700 dark:text-emerald-300 pt-1 border-t border-zinc-100 dark:border-zinc-800">
-                      Time Saved: {results.timeSavedYears} Years ({results.timeSavedMonths} Months)
+                      {overlay.timeSavedLabel}: {results.timeSavedYears} {overlay.yearsLabel} ({results.timeSavedMonths} {overlay.monthsLabel})
                     </div>
                   </div>
                 </div>
@@ -770,30 +760,30 @@ export function AmortizationCalculator() {
           <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 shadow-xs space-y-3">
             <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-2.5">
               <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300">
-                Visual Charts & Loan Breakdown
+                {overlay.chartsTitle}
               </h3>
               <div className="flex items-center gap-1 bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-lg border border-zinc-200 dark:border-zinc-700">
                 <button
                   type="button"
                   onClick={() => setActiveChartTab("pie")}
-                  className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-md transition-colors ${
+                  className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-md transition-colors cursor-pointer ${
                     activeChartTab === "pie"
                       ? "bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs"
                       : "text-zinc-500"
                   }`}
                 >
-                  <PieIcon className="h-3 w-3" /> Chart 1: Breakdown
+                  <PieIcon className="h-3 w-3" /> {overlay.tabBreakdown}
                 </button>
                 <button
                   type="button"
                   onClick={() => setActiveChartTab("progress")}
-                  className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-md transition-colors ${
+                  className={`flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-md transition-colors cursor-pointer ${
                     activeChartTab === "progress"
                       ? "bg-white dark:bg-zinc-700 text-blue-600 dark:text-blue-400 shadow-xs"
                       : "text-zinc-500"
                   }`}
                 >
-                  <TrendingUp className="h-3 w-3" /> Chart 2: Progress
+                  <TrendingUp className="h-3 w-3" /> {overlay.tabProgress}
                 </button>
               </div>
             </div>
@@ -818,10 +808,10 @@ export function AmortizationCalculator() {
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="text-base font-bold text-zinc-900 dark:text-zinc-100">
-                Amortization Schedule
+                {overlay.scheduleTitle}
               </CardTitle>
               <CardDescription className="text-xs text-zinc-500">
-                Annual & Monthly breakdown tables with search, sorting, pagination, and CSV / Excel / PDF / Print export
+                {overlay.scheduleSubtitle}
               </CardDescription>
             </div>
           </div>
@@ -830,6 +820,8 @@ export function AmortizationCalculator() {
           <AmortizationScheduleTable
             monthlySchedule={results.monthlySchedule}
             annualSchedule={results.annualSchedule}
+            overlay={overlay}
+            locale={locale}
           />
         </CardContent>
       </Card>
@@ -841,7 +833,7 @@ export function AmortizationCalculator() {
             <button
               type="button"
               onClick={() => setIsSaveModalOpen(false)}
-              className="absolute top-4 right-4 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"
+              className="absolute top-4 right-4 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 cursor-pointer"
             >
               <X className="h-5 w-5" />
             </button>
@@ -852,10 +844,10 @@ export function AmortizationCalculator() {
               </div>
               <div>
                 <h3 className="text-base font-bold text-blue-600 dark:text-blue-400">
-                  Save
+                  {overlay.saveModalTitle}
                 </h3>
                 <p className="text-xs text-zinc-500">
-                  Save your amortization calculation setup locally to restore later
+                  {overlay.saveModalSubtitle}
                 </p>
               </div>
             </div>
@@ -867,23 +859,23 @@ export function AmortizationCalculator() {
             ) : (
               <form onSubmit={handleSaveCalculation} className="space-y-3 pt-1">
                 <div className="p-3 bg-zinc-50 dark:bg-zinc-800/60 rounded-xl border border-zinc-200 dark:border-zinc-700/80 text-xs">
-                  <span className="text-zinc-500 block">Calculation Summary:</span>
+                  <span className="text-zinc-500 block">{overlay.calcSummaryLabel}:</span>
                   <span className="font-bold text-zinc-900 dark:text-zinc-100 text-sm block font-sans tabular-nums">
-                    Monthly Pay: {formatCurrency(results.monthlyPayment)}
+                    {overlay.monthlyPaySummary}: {formatCurrency(results.monthlyPayment, "$", 2, activeIntlLocale)}
                   </span>
-                  <span className="text-[11px] text-zinc-500">
-                    ${loanAmount.toLocaleString()} loan, {loanTermYears} yrs @ {interestRate}% rate
+                  <span className="text-[11px] text-zinc-500 font-sans tabular-nums">
+                    {formatCurrency(loanAmount, "$", 0, activeIntlLocale)}, {loanTermYears} {overlay.yearsLabel} @ {interestRate}%
                   </span>
                 </div>
 
                 <div>
                   <Label htmlFor="saveName" className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
-                    Calculation Name
+                    {overlay.saveNameLabel}
                   </Label>
                   <Input
                     id="saveName"
                     type="text"
-                    placeholder="e.g. 15-Year Mortgage Setup"
+                    placeholder={overlay.saveNamePlaceholder}
                     value={saveName}
                     onChange={(e) => setSaveName(e.target.value)}
                     className="mt-1 text-xs bg-zinc-50 dark:bg-zinc-800"
@@ -895,12 +887,12 @@ export function AmortizationCalculator() {
                     type="button"
                     variant="outline"
                     onClick={() => setIsSaveModalOpen(false)}
-                    className="h-8 text-xs"
+                    className="h-8 text-xs cursor-pointer"
                   >
-                    Cancel
+                    {overlay.cancelBtn}
                   </Button>
-                  <Button type="submit" className="h-8 text-xs bg-blue-600 hover:bg-blue-700 text-white">
-                    Save
+                  <Button type="submit" className="h-8 text-xs bg-blue-600 hover:bg-blue-700 text-white cursor-pointer">
+                    {overlay.confirmSaveBtn}
                   </Button>
                 </div>
               </form>
@@ -910,7 +902,7 @@ export function AmortizationCalculator() {
             {savedCalculations.length > 0 && (
               <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800 space-y-2">
                 <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5">
-                  <FolderOpen className="h-3.5 w-3.5 text-blue-500" /> Saved Calculations ({savedCalculations.length})
+                  <FolderOpen className="h-3.5 w-3.5 text-blue-500" /> {overlay.savedCalculationsTitle} ({savedCalculations.length})
                 </span>
                 <div className="max-h-48 overflow-y-auto space-y-2 pr-1">
                   {savedCalculations.map((item) => (
@@ -923,7 +915,7 @@ export function AmortizationCalculator() {
                           {item.name}
                         </span>
                         <span className="text-[10px] text-zinc-400 block font-sans tabular-nums">
-                          {formatCurrency(item.monthlyPayment)}/mo • {item.dateSaved}
+                          {formatCurrency(item.monthlyPayment, "$", 2, activeIntlLocale)} • {item.dateSaved}
                         </span>
                       </div>
                       <div className="flex items-center gap-1">
@@ -932,15 +924,15 @@ export function AmortizationCalculator() {
                           variant="ghost"
                           size="sm"
                           onClick={() => handleLoadCalculation(item)}
-                          className="h-6 text-[10px] px-2 text-blue-600 dark:text-blue-400"
+                          className="h-6 text-[10px] px-2 text-blue-600 dark:text-blue-400 cursor-pointer"
                         >
-                          Restore
+                          {overlay.restoreBtn}
                         </Button>
                         <button
                           type="button"
                           onClick={() => handleDeleteSavedCalculation(item.id)}
-                          className="p-1 text-zinc-400 hover:text-red-500"
-                          title="Delete saved calculation"
+                          className="p-1 text-zinc-400 hover:text-red-500 cursor-pointer"
+                          title={overlay.deleteBtnTitle}
                         >
                           <Trash2 className="h-3.5 w-3.5" />
                         </button>

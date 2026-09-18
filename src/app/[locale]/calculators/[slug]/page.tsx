@@ -12,6 +12,7 @@ import { generateCalculatorMetadata, generateJsonLdSchema } from "@/lib/seo-help
 
 // Calculator Configurations
 import { MORTGAGE_CALCULATOR } from "@/calculators/finance/mortgage";
+import { AMORTIZATION_CALCULATOR } from "@/calculators/finance/amortization";
 import { percentage_calculatorConfig } from "@/app/calculators/percentage-calculator/config";
 import { bmi_calculatorConfig } from "@/app/calculators/bmi-calculator/config";
 import { scientific_calculatorConfig } from "@/app/calculators/scientific-calculator/config";
@@ -25,6 +26,7 @@ import { SPANISH_MORTGAGE_SEO, SPANISH_MORTGAGE_FAQS } from "@/i18n/content/mort
 
 const CONFIG_MAP: Record<string, any> = {
   "mortgage-calculator": MORTGAGE_CALCULATOR,
+  "amortization-calculator": AMORTIZATION_CALCULATOR,
   "percentage-calculator": percentage_calculatorConfig,
   "bmi-calculator": bmi_calculatorConfig,
   "scientific-calculator": scientific_calculatorConfig,

@@ -14,6 +14,14 @@ export const PUBLISHED_MATRIX: Record<string, Partial<Record<Locale, boolean>>> 
     hi: true,
     pt: true,
   },
+  "amortization-calculator": {
+    en: true,
+    es: true,
+    fr: true,
+    de: true,
+    hi: true,
+    pt: true,
+  },
   "percentage-calculator": {
     en: true,
     es: true,
