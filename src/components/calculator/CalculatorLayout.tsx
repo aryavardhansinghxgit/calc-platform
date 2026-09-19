@@ -582,91 +582,91 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
   const isNumberSequence = idLower === "number-sequence" || idLower === "number-sequence-calculator" || slugLower === "number-sequence-calculator";
 
   const CustomContent = (definition as any).ContentComponent || (
-      isResistor
-        ? ResistorContent
-        : isBandwidth
-          ? BandwidthContent
-          : isIpSubnet
-            ? IPSubnetContent
-            : isOhmsLaw
-              ? OhmsLawContent
-              : isVoltageDrop
-                ? VoltageDropContent
-                : isShoeSize
-                  ? ShoeSizeContent
-                  : (
-                    isVat ? VatContent :
+    isResistor
+      ? ResistorContent
+      : isBandwidth
+        ? BandwidthContent
+        : isIpSubnet
+          ? IPSubnetContent
+          : isOhmsLaw
+            ? OhmsLawContent
+            : isVoltageDrop
+              ? VoltageDropContent
+              : isShoeSize
+                ? ShoeSizeContent
+                : (
+                  isVat ? VatContent :
                     isGst ? GstContent :
-                    isStudentLoan ? StudentLoanContent :
-                    isBudget ? BudgetContent :
-                    isBusinessLoan ? BusinessLoanContent :
-                    isCommission ? CommissionContent :
-                    isAnnuityPayout ? AnnuityPayoutContent :
-                    isPension ? PensionContent :
-                    isIra ? TraditionalIraContent :
-                    isRmd ? RmdContent :
-                    isAutoLease ? AutoLeaseContent :
-                    isSimpleInterest ? SimpleInterestContent :
-                    isSocialSecurity ? SocialSecurityContent :
-                    isInterest ? InterestContent :
-                    isRothIra ? RothIraContent :
-                    isTimeDuration ? TimeDurationContent :
-                    isInvestment ? InvestmentContent :
-                      isRetirement ? RetirementContent :
-                        isDebtPayoff ? DebtPayoffContent :
-                        isCurrency ? CurrencyContent :
-                        isGdp ? GDPContent :
-                          isCreditCardPayoff ? CreditCardPayoffContent :
-                            isBoatLoan ? BoatLoanContent :
-                              isDepreciation ? DepreciationContent :
-                                isCollegeCost ? CollegeCostContent :
-                                  isLease ? LeaseContent :
-                                    isRepayment ? RepaymentContent :
-                                      isCreditCard ? CreditCardContent :
-                                        isRoman ? RomanNumeralContent :
-                                          isSpeed ? SpeedContent :
-                                            isMass ? MassContent :
-                                              isDensity ? DensityContent :
-                                                isConversion ? ConversionContent :
-                                                  isHeight ? HeightContent :
-                                                    isElectricity ? ElectricityContent :
-                                                      isGravel ? GravelContent :
-                                                        isMulch ? MulchContent :
-                                                          isTile ? TileContent :
-                                                            isRoofing ? RoofingContent :
-                                                              isStair ? StairContent :
-                                                                isSquareFootage ? SquareFootageContent :
-                                                                  isBtu ? BTUContent :
-                                                                    isConcrete ? ConcreteContent :
-                                                                      isMolecularWeight ? MolecularWeightContent :
-                                                                        isMolarity ? MolarityContent :
-                                                                          isGrade ? GradeContent :
-                                                                            isGPA ? GPAContent :
-                                                                              isDate ? DateContent :
-                                                                                isHours ? HoursContent :
-                                                                                  isLove ? LoveContent :
-                                                                                    isDiceRoller ? DiceRollerContent :
-                                                                                      isTireSize ? TireSizeContent :
-                                                                                        isMileage ? MileageContent :
-                                                                                          isEngineHorsepower ? EngineHorsepowerContent :
-                                                                                            isHorsepower ? HorsepowerContent :
-                                                                                            isGasMileage ? GasMileageContent :
-                                                                                              isFuelCost ? FuelCostContent :
-                                                                                                isDewPoint ? DewPointContent :
-                                                                                                  isHeatIndex ? HeatIndexContent :
-                                                                                                    isWindChill ? WindChillContent :
-                                                                                                      isSleep ? SleepContent :
-                                                                                                      isIncomeTax ? IncomeTaxContent :
-                                                                                                      isSalary ? SalaryContent :
-                                                                                                      isEstateTax ? EstateTaxContent :
-                                                                                                      isMarriageTax ? MarriageTaxContent :
-                                                                                                      isCashBack ? CashBackContent :
-                                                                                                          isMargin ? MarginContent :
-                                                                                                          isDiscount ? DiscountContent :
-                                                                                                          isAutoLoan ? AutoLoanContentSection :
-                                                                                                               isDebtConsolidation ? DebtConsolidationContent : isScientific ? ScientificCalculatorContent : isFraction ? FractionContent : isStatistics ? StatisticsContent : isPercentError ? PercentErrorContent : isDownPayment ? DownPaymentContent : isRentVsBuy ? RentVsBuyContent : isBac ? BacContent : isBsa ? BsaContent : isBodyType ? BodyTypeContent : isGfr ? GfrContent : isTdee ? TdeeContent : isFatIntake ? FatIntakeContent : isProtein ? ProteinContent : isCarbohydrate ? CarbohydrateContent : isMacro ? MacroContent : isPeriod ? PeriodContent : isConception ? ConceptionContent : isOvulation ? OvulationContent : isDueDate ? DueDateContent : isPregnancyConception ? PregnancyConceptionContent : isPregnancyWeightGain ? PregnancyWeightGainContent : isPregnancy ? PregnancyContent : isTargetHeartRate ? TargetHeartRateContent : isOneRepMax ? OneRepMaxContent : isCaloriesBurned ? CaloriesBurnedContent : isHealthyWeight ? HealthyWeightContent : isLeanBodyMass ? LeanBodyMassContent : isArmyBodyFat ? ArmyBodyFatContent : isPace ? PaceContent : isIdealWeight ? IdealWeightContent : isBmr ? BmrContent : isBodyFat ? BodyFatContent : isCalorie ? CalorieContent : isBmi ? BmiContent : isBudget ? BudgetContent : isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null
-                                                  )
-      );
+                      isStudentLoan ? StudentLoanContent :
+                        isBudget ? BudgetContent :
+                          isBusinessLoan ? BusinessLoanContent :
+                            isCommission ? CommissionContent :
+                              isAnnuityPayout ? AnnuityPayoutContent :
+                                isPension ? PensionContent :
+                                  isIra ? TraditionalIraContent :
+                                    isRmd ? RmdContent :
+                                      isAutoLease ? AutoLeaseContent :
+                                        isSimpleInterest ? SimpleInterestContent :
+                                          isSocialSecurity ? SocialSecurityContent :
+                                            isInterest ? InterestContent :
+                                              isRothIra ? RothIraContent :
+                                                isTimeDuration ? TimeDurationContent :
+                                                  isInvestment ? InvestmentContent :
+                                                    isRetirement ? RetirementContent :
+                                                      isDebtPayoff ? DebtPayoffContent :
+                                                        isCurrency ? CurrencyContent :
+                                                          isGdp ? GDPContent :
+                                                            isCreditCardPayoff ? CreditCardPayoffContent :
+                                                              isBoatLoan ? BoatLoanContent :
+                                                                isDepreciation ? DepreciationContent :
+                                                                  isCollegeCost ? CollegeCostContent :
+                                                                    isLease ? LeaseContent :
+                                                                      isRepayment ? RepaymentContent :
+                                                                        isCreditCard ? CreditCardContent :
+                                                                          isRoman ? RomanNumeralContent :
+                                                                            isSpeed ? SpeedContent :
+                                                                              isMass ? MassContent :
+                                                                                isDensity ? DensityContent :
+                                                                                  isConversion ? ConversionContent :
+                                                                                    isHeight ? HeightContent :
+                                                                                      isElectricity ? ElectricityContent :
+                                                                                        isGravel ? GravelContent :
+                                                                                          isMulch ? MulchContent :
+                                                                                            isTile ? TileContent :
+                                                                                              isRoofing ? RoofingContent :
+                                                                                                isStair ? StairContent :
+                                                                                                  isSquareFootage ? SquareFootageContent :
+                                                                                                    isBtu ? BTUContent :
+                                                                                                      isConcrete ? ConcreteContent :
+                                                                                                        isMolecularWeight ? MolecularWeightContent :
+                                                                                                          isMolarity ? MolarityContent :
+                                                                                                            isGrade ? GradeContent :
+                                                                                                              isGPA ? GPAContent :
+                                                                                                                isDate ? DateContent :
+                                                                                                                  isHours ? HoursContent :
+                                                                                                                    isLove ? LoveContent :
+                                                                                                                      isDiceRoller ? DiceRollerContent :
+                                                                                                                        isTireSize ? TireSizeContent :
+                                                                                                                          isMileage ? MileageContent :
+                                                                                                                            isEngineHorsepower ? EngineHorsepowerContent :
+                                                                                                                              isHorsepower ? HorsepowerContent :
+                                                                                                                                isGasMileage ? GasMileageContent :
+                                                                                                                                  isFuelCost ? FuelCostContent :
+                                                                                                                                    isDewPoint ? DewPointContent :
+                                                                                                                                      isHeatIndex ? HeatIndexContent :
+                                                                                                                                        isWindChill ? WindChillContent :
+                                                                                                                                          isSleep ? SleepContent :
+                                                                                                                                            isIncomeTax ? IncomeTaxContent :
+                                                                                                                                              isSalary ? SalaryContent :
+                                                                                                                                                isEstateTax ? EstateTaxContent :
+                                                                                                                                                  isMarriageTax ? MarriageTaxContent :
+                                                                                                                                                    isCashBack ? CashBackContent :
+                                                                                                                                                      isMargin ? MarginContent :
+                                                                                                                                                        isDiscount ? DiscountContent :
+                                                                                                                                                          isAutoLoan ? AutoLoanContentSection :
+                                                                                                                                                            isDebtConsolidation ? DebtConsolidationContent : isScientific ? ScientificCalculatorContent : isFraction ? FractionContent : isStatistics ? StatisticsContent : isPercentError ? PercentErrorContent : isDownPayment ? DownPaymentContent : isRentVsBuy ? RentVsBuyContent : isBac ? BacContent : isBsa ? BsaContent : isBodyType ? BodyTypeContent : isGfr ? GfrContent : isTdee ? TdeeContent : isFatIntake ? FatIntakeContent : isProtein ? ProteinContent : isCarbohydrate ? CarbohydrateContent : isMacro ? MacroContent : isPeriod ? PeriodContent : isConception ? ConceptionContent : isOvulation ? OvulationContent : isDueDate ? DueDateContent : isPregnancyConception ? PregnancyConceptionContent : isPregnancyWeightGain ? PregnancyWeightGainContent : isPregnancy ? PregnancyContent : isTargetHeartRate ? TargetHeartRateContent : isOneRepMax ? OneRepMaxContent : isCaloriesBurned ? CaloriesBurnedContent : isHealthyWeight ? HealthyWeightContent : isLeanBodyMass ? LeanBodyMassContent : isArmyBodyFat ? ArmyBodyFatContent : isPace ? PaceContent : isIdealWeight ? IdealWeightContent : isBmr ? BmrContent : isBodyFat ? BodyFatContent : isCalorie ? CalorieContent : isBmi ? BmiContent : isBudget ? BudgetContent : isRoi ? RoiContent : isCagr ? CagrContent : isRd ? RdContent : isFd ? FdContent : isSip ? SipContent : isSavings ? SavingsContent : isMortgage ? MortgageContentSection : null
+                )
+  );
   const CustomChart = definition.ChartComponent;
 
   return (
@@ -701,10 +701,10 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
             {isLoan
               ? "Loan Calculator & Amortization Payment Analyzer"
               : isPersonalLoan
-              ? "Personal Loan Calculator & Amortization Payment Suite"
-              : isTimeDuration
-              ? "Time Duration Calculator – Calculate Elapsed Time Between Two Times and Dates"
-              : (definition?.title || "")}
+                ? "Personal Loan Calculator & Amortization Payment Suite"
+                : isTimeDuration
+                  ? "Time Duration Calculator – Calculate Elapsed Time Between Two Times and Dates"
+                  : (definition?.title || "")}
           </h1>
           <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5 max-w-xl leading-normal font-medium">
             {definition?.description || ""}
@@ -1122,53 +1122,53 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
           </div>
         )}
 
-          {/* Educational Content & Examples */}
-          {CustomContent && (
-            <div className="space-y-3 text-slate-900 dark:text-slate-100 font-medium leading-relaxed">
-              <div className="prose prose-slate dark:prose-invert max-w-none text-slate-900 dark:text-slate-100 font-medium leading-relaxed">
-                <CustomContent />
-              </div>
+        {/* Educational Content & Examples */}
+        {CustomContent && (
+          <div className="space-y-3 text-slate-900 dark:text-slate-100 font-medium leading-relaxed">
+            <div className="prose prose-slate dark:prose-invert max-w-none text-slate-900 dark:text-slate-100 font-medium leading-relaxed">
+              <CustomContent />
             </div>
-          )}
+          </div>
+        )}
 
-          {/* Frequently Asked Questions: Custom Domain FAQs or Fallback */}
-          {Boolean(definition.faqs && definition.faqs.length > 0) && !CustomContent && !isMortgage && !isAmortization && !isLoan && !isPayment && !isEmi && !isHouseAffordability && !isRefinance && !isAutoLoan && !isAutoLease && !isLease && !isBoatLoan && !isCollegeCost && !isDepreciation && !isCompoundInterest && !isSimpleInterest && !isInterest && !isInvestment && !isSavings && !isSip && !isRoi && !isFutureValue && !isPresentValue && !isIncomeTax && !isTakeHomePay && !isSalesTax && !isRepayment && !isRepaymentMatch && !isCreditCard && !isCreditCardPayoff && !isDebtPayoff && !isDebtConsolidation && !isRetirement && !isFourZeroOneK && !isMargin && !isDiscount && !isPersonalLoan && !isStudentLoan && !isBmi && !isAge && !isNumberSequence && !isBond && !isMutualFund && !isAverageReturn && !isIrr && !isPaybackPeriod && !isSalary && !isMarriageTax && !isEstateTax && !isCashBack && !isAnnuity && !isCurrency && !isCalorie && !isTime && !isTimeZone && !isDayCounter && !isDayOfWeek && !isBac && !isBodyType && !isArmyBodyFat && !isOneRepMax && !isTargetHeartRate && !isLove && !isSleep && !isTip && !isPermutationCombination && !isConfidenceInterval && !isSampleSize && !isZScore && !isMMM && !isRatio && !isLog && !isExponent && !isQuadratic && !isStdDev && !isPeriod && !isPregnancy && !isPregnancyWeightGain && !isConception && !isBsa && !isCarbohydrate && !isFatIntake && !isOvulation && !isPregnancyConception && !isGfr && !isLeanBodyMass && !isCaloriesBurned && !isHealthyWeight && !is401k && !isDiceRoller && !isRounding && !isBigNumber && !isBinary && !isHex && !isHalfLife && !isRightTriangle && !isIra && !isPension && !isAnnuityPayout && !isCommission && !isBusinessLoan && !isBudget && !isGst && !isVat && !isPace && !isBodyFat && !isTdee && !isBmr && !isMacro && !isProtein && !isIdealWeight && !isTriangle && !isVolume && !isArea && !isPythagorean && !isDistance && !isMatrix && !isCircle && !isSurfaceArea && !isLcm && !isGcf && !isFactor && !isRoot && !isScientificNotation && !isRandomNumberGenerator && !isConcrete && !isSquareFootage && !isRoofing && !isBtu && !isTile && !isStair && !isGravel && !isMulch && !isConversion && !isMass && !isSpeed && !isHeight && !isDensity && !isRoman && !isShoeSize && !isElectricity && !isFuelCost && !isGasMileage && !isVoltageDrop && !isOhmsLaw && !isIpSubnet && !isBandwidth && !isResistor && !isBase64 && !isUrlEncoder && !isPasswordGenerator && !isMileage && !isHorsepower && !isEngineHorsepower && !isTireSize && !isGPA && !isGrade && !isWindChill && !isHeatIndex && !isDewPoint && !isMolarity && !isMolecularWeight && !isGdp ? (
-            <div className="space-y-4 pt-2">
-              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
-                Frequently Asked Questions
-              </h3>
-              <div className="space-y-3">
-                {definition.faqs!.map((faq, idx) => (
-                  <div key={idx} className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1.5">
-                    <h4 className="font-bold text-sm text-slate-900 dark:text-slate-100">
-                      {faq.question}
-                    </h4>
-                    <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-normal">
-                      {faq.answer}
-                    </p>
-                  </div>
-                ))}
-              </div>
+        {/* Frequently Asked Questions: Custom Domain FAQs or Fallback */}
+        {Boolean(definition.faqs && definition.faqs.length > 0) && !CustomContent && !isMortgage && !isAmortization && !isLoan && !isPayment && !isEmi && !isHouseAffordability && !isRefinance && !isAutoLoan && !isAutoLease && !isLease && !isBoatLoan && !isCollegeCost && !isDepreciation && !isCompoundInterest && !isSimpleInterest && !isInterest && !isInvestment && !isSavings && !isSip && !isRoi && !isFutureValue && !isPresentValue && !isIncomeTax && !isTakeHomePay && !isSalesTax && !isRepayment && !isRepaymentMatch && !isCreditCard && !isCreditCardPayoff && !isDebtPayoff && !isDebtConsolidation && !isRetirement && !isFourZeroOneK && !isMargin && !isDiscount && !isPersonalLoan && !isStudentLoan && !isBmi && !isAge && !isNumberSequence && !isBond && !isMutualFund && !isAverageReturn && !isIrr && !isPaybackPeriod && !isSalary && !isMarriageTax && !isEstateTax && !isCashBack && !isAnnuity && !isCurrency && !isCalorie && !isTime && !isTimeZone && !isDayCounter && !isDayOfWeek && !isBac && !isBodyType && !isArmyBodyFat && !isOneRepMax && !isTargetHeartRate && !isLove && !isSleep && !isTip && !isPermutationCombination && !isConfidenceInterval && !isSampleSize && !isZScore && !isMMM && !isRatio && !isLog && !isExponent && !isQuadratic && !isStdDev && !isPeriod && !isPregnancy && !isPregnancyWeightGain && !isConception && !isBsa && !isCarbohydrate && !isFatIntake && !isOvulation && !isPregnancyConception && !isGfr && !isLeanBodyMass && !isCaloriesBurned && !isHealthyWeight && !is401k && !isDiceRoller && !isRounding && !isBigNumber && !isBinary && !isHex && !isHalfLife && !isRightTriangle && !isIra && !isPension && !isAnnuityPayout && !isCommission && !isBusinessLoan && !isBudget && !isGst && !isVat && !isPace && !isBodyFat && !isTdee && !isBmr && !isMacro && !isProtein && !isIdealWeight && !isTriangle && !isVolume && !isArea && !isPythagorean && !isDistance && !isMatrix && !isCircle && !isSurfaceArea && !isLcm && !isGcf && !isFactor && !isRoot && !isScientificNotation && !isRandomNumberGenerator && !isConcrete && !isSquareFootage && !isRoofing && !isBtu && !isTile && !isStair && !isGravel && !isMulch && !isConversion && !isMass && !isSpeed && !isHeight && !isDensity && !isRoman && !isShoeSize && !isElectricity && !isFuelCost && !isGasMileage && !isVoltageDrop && !isOhmsLaw && !isIpSubnet && !isBandwidth && !isResistor && !isBase64 && !isUrlEncoder && !isPasswordGenerator && !isMileage && !isHorsepower && !isEngineHorsepower && !isTireSize && !isGPA && !isGrade && !isWindChill && !isHeatIndex && !isDewPoint && !isMolarity && !isMolecularWeight && !isGdp ? (
+          <div className="space-y-4 pt-2">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
+              Frequently Asked Questions
+            </h3>
+            <div className="space-y-3">
+              {definition.faqs!.map((faq, idx) => (
+                <div key={idx} className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1.5">
+                  <h4 className="font-bold text-sm text-slate-900 dark:text-slate-100">
+                    {faq.question}
+                  </h4>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-normal">
+                    {faq.answer}
+                  </p>
+                </div>
+              ))}
             </div>
-          ) : !CustomContent && !isMortgage && !isAmortization && !isLoan && !isPayment && !isEmi && !isHouseAffordability && !isRefinance && !isAutoLoan && !isAutoLease && !isLease && !isBoatLoan && !isCollegeCost && !isDepreciation && !isCompoundInterest && !isSimpleInterest && !isInterest && !isInvestment && !isSavings && !isSip && !isRoi && !isFutureValue && !isPresentValue && !isIncomeTax && !isTakeHomePay && !isSalesTax && !isRepayment && !isRepaymentMatch && !isCreditCard && !isCreditCardPayoff && !isDebtPayoff && !isDebtConsolidation && !isRetirement && !isFourZeroOneK && !isMargin && !isDiscount && !isPersonalLoan && !isStudentLoan && !isBmi && !isAge && !isNumberSequence && !isBond && !isMutualFund && !isAverageReturn && !isIrr && !isPaybackPeriod && !isSalary && !isMarriageTax && !isEstateTax && !isCashBack && !isAnnuity && !isCurrency && !isCalorie && !isTime && !isTimeZone && !isDayCounter && !isDayOfWeek && !isBac && !isBodyType && !isArmyBodyFat && !isOneRepMax && !isTargetHeartRate && !isLove && !isSleep && !isTip && !isPermutationCombination && !isConfidenceInterval && !isSampleSize && !isZScore && !isMMM && !isRatio && !isLog && !isExponent && !isQuadratic && !isStdDev && !isPeriod && !isPregnancy && !isPregnancyWeightGain && !isConception && !isBsa && !isCarbohydrate && !isFatIntake && !isOvulation && !isPregnancyConception && !isGfr && !isLeanBodyMass && !isCaloriesBurned && !isHealthyWeight && !is401k && !isDiceRoller && !isRounding && !isBigNumber && !isBinary && !isHex && !isHalfLife && !isRightTriangle && !isIra && !isPension && !isAnnuityPayout && !isCommission && !isBusinessLoan && !isBudget && !isGst && !isVat && !isPace && !isBodyFat && !isTdee && !isBmr && !isMacro && !isProtein && !isIdealWeight && !isTriangle && !isVolume && !isArea && !isPythagorean && !isDistance && !isMatrix && !isCircle && !isSurfaceArea && !isLcm && !isGcf && !isFactor && !isRoot && !isScientificNotation && !isRandomNumberGenerator && !isConcrete && !isSquareFootage && !isRoofing && !isBtu && !isTile && !isStair && !isGravel && !isMulch && !isConversion && !isMass && !isSpeed && !isHeight && !isDensity && !isRoman && !isShoeSize && !isElectricity && !isFuelCost && !isGasMileage && !isVoltageDrop && !isOhmsLaw && !isIpSubnet && !isBandwidth && !isResistor && !isBase64 && !isUrlEncoder && !isPasswordGenerator && !isMileage && !isHorsepower && !isEngineHorsepower && !isTireSize && !isGPA && !isGrade && !isWindChill && !isHeatIndex && !isDewPoint && !isMolarity && !isMolecularWeight && !isGdp && definition.category !== "Math" ? (
-            <div className="space-y-4 pt-2">
-              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
-                Frequently Asked Questions
-              </h3>
-              <div className="space-y-3">
-                {getTenHighQualityFaqs(definition.title, definition.category).slice(0, 10).map((faq, idx) => (
-                  <div key={idx} className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1.5">
-                    <h4 className="font-bold text-sm text-slate-900 dark:text-slate-100">
-                      {faq.question}
-                    </h4>
-                    <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-normal">
-                      {faq.answer}
-                    </p>
-                  </div>
-                ))}
-              </div>
+          </div>
+        ) : !CustomContent && !isMortgage && !isAmortization && !isLoan && !isPayment && !isEmi && !isHouseAffordability && !isRefinance && !isAutoLoan && !isAutoLease && !isLease && !isBoatLoan && !isCollegeCost && !isDepreciation && !isCompoundInterest && !isSimpleInterest && !isInterest && !isInvestment && !isSavings && !isSip && !isRoi && !isFutureValue && !isPresentValue && !isIncomeTax && !isTakeHomePay && !isSalesTax && !isRepayment && !isRepaymentMatch && !isCreditCard && !isCreditCardPayoff && !isDebtPayoff && !isDebtConsolidation && !isRetirement && !isFourZeroOneK && !isMargin && !isDiscount && !isPersonalLoan && !isStudentLoan && !isBmi && !isAge && !isNumberSequence && !isBond && !isMutualFund && !isAverageReturn && !isIrr && !isPaybackPeriod && !isSalary && !isMarriageTax && !isEstateTax && !isCashBack && !isAnnuity && !isCurrency && !isCalorie && !isTime && !isTimeZone && !isDayCounter && !isDayOfWeek && !isBac && !isBodyType && !isArmyBodyFat && !isOneRepMax && !isTargetHeartRate && !isLove && !isSleep && !isTip && !isPermutationCombination && !isConfidenceInterval && !isSampleSize && !isZScore && !isMMM && !isRatio && !isLog && !isExponent && !isQuadratic && !isStdDev && !isPeriod && !isPregnancy && !isPregnancyWeightGain && !isConception && !isBsa && !isCarbohydrate && !isFatIntake && !isOvulation && !isPregnancyConception && !isGfr && !isLeanBodyMass && !isCaloriesBurned && !isHealthyWeight && !is401k && !isDiceRoller && !isRounding && !isBigNumber && !isBinary && !isHex && !isHalfLife && !isRightTriangle && !isIra && !isPension && !isAnnuityPayout && !isCommission && !isBusinessLoan && !isBudget && !isGst && !isVat && !isPace && !isBodyFat && !isTdee && !isBmr && !isMacro && !isProtein && !isIdealWeight && !isTriangle && !isVolume && !isArea && !isPythagorean && !isDistance && !isMatrix && !isCircle && !isSurfaceArea && !isLcm && !isGcf && !isFactor && !isRoot && !isScientificNotation && !isRandomNumberGenerator && !isConcrete && !isSquareFootage && !isRoofing && !isBtu && !isTile && !isStair && !isGravel && !isMulch && !isConversion && !isMass && !isSpeed && !isHeight && !isDensity && !isRoman && !isShoeSize && !isElectricity && !isFuelCost && !isGasMileage && !isVoltageDrop && !isOhmsLaw && !isIpSubnet && !isBandwidth && !isResistor && !isBase64 && !isUrlEncoder && !isPasswordGenerator && !isMileage && !isHorsepower && !isEngineHorsepower && !isTireSize && !isGPA && !isGrade && !isWindChill && !isHeatIndex && !isDewPoint && !isMolarity && !isMolecularWeight && !isGdp && definition.category !== "Math" ? (
+          <div className="space-y-4 pt-2">
+            <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
+              Frequently Asked Questions
+            </h3>
+            <div className="space-y-3">
+              {getTenHighQualityFaqs(definition.title, definition.category).slice(0, 10).map((faq, idx) => (
+                <div key={idx} className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1.5">
+                  <h4 className="font-bold text-sm text-slate-900 dark:text-slate-100">
+                    {faq.question}
+                  </h4>
+                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed font-normal">
+                    {faq.answer}
+                  </p>
+                </div>
+              ))}
             </div>
-          ) : null}
+          </div>
+        ) : null}
 
       </div>
 
