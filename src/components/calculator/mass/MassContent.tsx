@@ -25,32 +25,8 @@ export function MassContent() {
 
   return (
     <article className="mt-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-7 text-slate-800 dark:text-slate-200 leading-relaxed text-xs sm:text-sm space-y-8 divide-y divide-slate-100 dark:divide-slate-800 max-w-4xl mx-auto">
-      {/* ─── RELATED CALCULATORS — COMPACT PLACEMENT #1 (ABOVE ARTICLE) ─── */}
-      <nav aria-label="Related Calculators" className="pb-2">
-        <div className="p-3.5 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-800">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1.5">
-            RELATED CALCULATORS:
-          </span>
-          <div className="flex flex-wrap items-center gap-2 text-xs font-semibold">
-            <Link
-              href="/calculators/conversion-calculator"
-              className="text-blue-600 dark:text-blue-400 hover:underline"
-            >
-              Conversion Calculator
-            </Link>
-            <span className="text-slate-300 dark:text-slate-700">|</span>
-            <Link
-              href="/calculators/scientific-notation-calculator"
-              className="text-blue-600 dark:text-blue-400 hover:underline"
-            >
-              Scientific Notation Calculator &amp; Converter
-            </Link>
-          </div>
-        </div>
-      </nav>
-
       {/* ─── CORE EDUCATIONAL ARTICLE (SECTIONS 1–21) ─── */}
-      <div className="pt-6 space-y-8">
+      <div className="space-y-8">
         {/* Section 1 */}
         <section className="space-y-3">
           <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
@@ -883,29 +859,6 @@ export function MassContent() {
         </section>
       </div>
 
-      {/* ─── RELATED CALCULATORS — COMPACT PLACEMENT #2 (BELOW ARTICLE) ─── */}
-      <nav aria-label="Additional Related Calculators" className="pt-6">
-        <div className="p-3.5 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-800">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1.5">
-            RELATED CALCULATORS:
-          </span>
-          <div className="flex flex-wrap items-center gap-2 text-xs font-semibold">
-            <Link
-              href="/calculators/conversion-calculator"
-              className="text-blue-600 dark:text-blue-400 hover:underline"
-            >
-              Conversion Calculator
-            </Link>
-            <span className="text-slate-300 dark:text-slate-700">|</span>
-            <Link
-              href="/calculators/scientific-notation-calculator"
-              className="text-blue-600 dark:text-blue-400 hover:underline"
-            >
-              Scientific Notation Calculator &amp; Converter
-            </Link>
-          </div>
-        </div>
-      </nav>
     </article>
   );
 }
