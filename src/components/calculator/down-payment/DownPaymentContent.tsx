@@ -1,28 +1,40 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
+import {
+  DollarSign,
+  Calculator,
+  Building,
+  HelpCircle,
+  ChevronDown,
+  Sparkles,
+  ShieldCheck,
+  Scale,
+  CheckCircle2,
+  Percent,
+} from "lucide-react";
+import { downPaymentFaqs } from "@/app/calculators/down-payment-calculator/faq";
+
+export { downPaymentFaqs };
 
 export function DownPaymentContent() {
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  const toggleFaq = (index: number) => {
+    setOpenFaq(openFaq === index ? null : index);
+  };
+
   return (
     <div className="space-y-10 text-slate-800 dark:text-slate-200 font-medium leading-relaxed max-w-4xl mx-auto">
-      {/* H1 Title */}
-      <div className="border-b border-slate-200 dark:border-slate-800 pb-4">
-        <h1 className="text-3xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
-          Down Payment Calculator — Mortgage Down Payment &amp; PMI Payoff Suite
-        </h1>
-        <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-          Comprehensive Guide to Home Purchase Equity, Loan Program Minimums, 78% LTV PMI Removal &amp; Cash-to-Close.
-        </p>
-      </div>
-
       {/* SECTION 1: WHAT IS A DOWN PAYMENT */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
-          What is a Down Payment &amp; How Does it Work?
-        </h2>
-        <p className="text-sm leading-relaxed">
-          A down payment is the upfront cash contribution paid by a homebuyer toward the total purchase price of real estate. The remaining balance is financed through a primary mortgage loan secured by the property. The down payment establishes your initial home equity position and directly dictates your Loan-to-Value (LTV) ratio. For evaluating overall borrowing limits, use our <Link href="/calculators/mortgage-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">Mortgage Calculator</Link> or <Link href="/calculators/house-affordability-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">House Affordability Calculator</Link>.
+        <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-lg sm:text-xl">
+          <DollarSign className="h-6 w-6" />
+          <h2>1. What is a Down Payment &amp; How Does it Work?</h2>
+        </div>
+        <p className="text-sm sm:text-base leading-relaxed text-slate-700 dark:text-slate-300">
+          A down payment is the initial upfront cash contribution paid by a homebuyer toward the total purchase price of real estate. The remaining balance is financed through a primary mortgage loan secured by the property. The down payment establishes your initial home equity position and directly dictates your Loan-to-Value (LTV) ratio.
         </p>
 
         <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3 font-mono">
@@ -30,23 +42,24 @@ export function DownPaymentContent() {
           
           <div className="p-3 bg-white dark:bg-slate-950 rounded-lg text-xs font-bold text-blue-600 dark:text-blue-400 space-y-2">
             <div><strong>1. Down Payment Amount ($):</strong></div>
-            <div className="text-center font-mono">{"Down Payment = Purchase Price (P) \\times \\frac{Down \\%}{100}"}</div>
+            <div className="text-center font-mono">Down Payment = Purchase Price (P) × (Down % ÷ 100)</div>
             
             <div className="pt-2"><strong>2. Loan Principal Financed ($):</strong></div>
-            <div className="text-center font-mono">{"Loan Amount = Purchase Price - Down Payment"}</div>
+            <div className="text-center font-mono">Loan Amount = Purchase Price − Down Payment</div>
 
             <div className="pt-2"><strong>3. Total Cash Required at Closing ($):</strong></div>
-            <div className="text-center font-mono">{"Cash to Close = Down Payment + Upfront Closing Costs (2\\% - 5\\%)"}</div>
+            <div className="text-center font-mono">Cash to Close = Down Payment + Upfront Closing Costs (2% − 5%)</div>
           </div>
         </div>
       </section>
 
       {/* SECTION 2: HOW MUCH DOWN PAYMENT DO YOU REALLY NEED */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
-          How Much Down Payment Do You Really Need?
-        </h2>
-        <p className="text-sm leading-relaxed">
+        <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-lg sm:text-xl">
+          <Building className="h-6 w-6" />
+          <h2>2. How Much Down Payment Do You Really Need?</h2>
+        </div>
+        <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
           The required down payment varies based on loan program guidelines, borrower credit score, occupancy type, and property classification:
         </p>
 
@@ -76,10 +89,11 @@ export function DownPaymentContent() {
 
       {/* SECTION 3: THE 20% DOWN PAYMENT MYTH VS REALITY */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
-          The 20% Down Payment Myth vs. Reality
-        </h2>
-        <p className="text-sm leading-relaxed">
+        <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-lg sm:text-xl">
+          <Scale className="h-6 w-6" />
+          <h2>3. The 20% Down Payment Myth vs. Reality</h2>
+        </div>
+        <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
           While putting 20% down eliminates PMI, waiting years to accumulate 20% involves trade-offs regarding market entry timing and capital liquidity.
         </p>
 
@@ -107,9 +121,10 @@ export function DownPaymentContent() {
 
       {/* SECTION 4: LOAN PROGRAM COMPARISON MATRIX TABLE */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
-          Mortgage Programs &amp; Minimum Down Payment Requirements
-        </h2>
+        <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-lg sm:text-xl">
+          <Calculator className="h-6 w-6" />
+          <h2>4. Mortgage Programs &amp; Minimum Down Payment Requirements</h2>
+        </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-xs text-left border-collapse font-sans">
@@ -158,10 +173,11 @@ export function DownPaymentContent() {
 
       {/* SECTION 5: PMI REMOVAL GUIDELINES */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
-          Private Mortgage Insurance (PMI) &amp; How to Remove It (80% vs. 78% LTV)
-        </h2>
-        <p className="text-sm leading-relaxed">
+        <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-lg sm:text-xl">
+          <ShieldCheck className="h-6 w-6" />
+          <h2>5. Private Mortgage Insurance (PMI) &amp; How to Remove It (80% vs. 78% LTV)</h2>
+        </div>
+        <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
           Federal protections under the <strong>Homeowners Protection Act of 1998</strong> dictate when Private Mortgage Insurance (PMI) on conventional loans must be cancelled:
         </p>
 
@@ -175,7 +191,7 @@ export function DownPaymentContent() {
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1">
             <h3 className="font-extrabold text-blue-600">78% LTV Automatic Lender Termination</h3>
             <p className="text-slate-600 dark:text-slate-400 leading-relaxed font-normal">
-              Lenders are legally required to automatically terminate PMI once your loan balance reaches 78% of original value based on the scheduled amortization table. If you are considering refinancing to remove PMI, check our <Link href="/calculators/refinance-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">Refinance Calculator</Link>.
+              Lenders are legally required to automatically terminate PMI once your loan balance reaches 78% of original value based on the scheduled amortization table.
             </p>
           </div>
         </div>
@@ -183,27 +199,74 @@ export function DownPaymentContent() {
 
       {/* SECTION 6: DOWN PAYMENT ASSISTANCE */}
       <section className="space-y-4">
-        <h2 className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
-          Down Payment Assistance (DPA) Programs
-        </h2>
-        <p className="text-sm leading-relaxed">
+        <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-lg sm:text-xl">
+          <Percent className="h-6 w-6" />
+          <h2>6. Down Payment Assistance (DPA) Programs</h2>
+        </div>
+        <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
           Numerous state, county, and municipal Down Payment Assistance (DPA) programs exist across the U.S. to help qualified buyers cover upfront cash needs:
         </p>
         <ul className="list-disc list-inside text-xs text-slate-700 dark:text-slate-300 space-y-1 font-medium">
           <li><strong>DPA Grants:</strong> Outright gift funds that never require repayment.</li>
           <li><strong>Forgivable 2nd Loans:</strong> Zero-interest secondary liens forgiven after residing in the property for a specified period (typically 3 to 5 years).</li>
-          <li><strong>Deferred Payment Loans:</strong> Second liens with 0% interest repaid when the home is sold, refinanced, or the first mortgage is satisfied. To evaluate home equity lines, see our <Link href="/calculators/home-equity-loan-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">Home Equity Loan Calculator</Link>.</li>
+          <li><strong>Deferred Payment Loans:</strong> Second liens with 0% interest repaid when the home is sold, refinanced, or the first mortgage is satisfied.</li>
         </ul>
       </section>
 
-      {/* SECTION 7: SUMMARY */}
-      <section className="p-6 rounded-2xl bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 space-y-2 text-xs">
-        <h2 className="font-extrabold text-sm text-blue-700 dark:text-blue-300">
-          Educational Summary
-        </h2>
-        <p className="text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
-          Understanding down payment requirements, PMI drop-off milestones, closing costs, and investment opportunity costs allows buyers to choose a balanced down payment strategy tailored to their personal financial goals. For general financing calculations, explore our <Link href="/calculators/loan-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">Loan Calculator</Link>.
+      {/* SECTION 7: FREQUENTLY ASKED QUESTIONS */}
+      <section className="space-y-4">
+        <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-lg sm:text-xl">
+          <HelpCircle className="h-6 w-6" />
+          <h2>7. Frequently Asked Questions (FAQ)</h2>
+        </div>
+        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+          Explore essential answers to common questions about mortgage down payments, loan programs, and PMI requirements.
         </p>
+
+        <div className="space-y-3 pt-2">
+          {downPaymentFaqs.map((faq, index) => {
+            const isOpen = openFaq === index;
+            return (
+              <div
+                key={index}
+                className="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden transition-colors"
+              >
+                <button
+                  type="button"
+                  onClick={() => toggleFaq(index)}
+                  className="w-full flex items-center justify-between p-4 text-left font-semibold text-xs sm:text-sm text-slate-900 dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
+                  aria-expanded={isOpen}
+                >
+                  <span className="pr-4">{faq.question}</span>
+                  <ChevronDown
+                    className={`h-4 w-4 shrink-0 text-slate-500 transition-transform duration-200 ${
+                      isOpen ? "rotate-180 text-blue-600 dark:text-blue-400" : ""
+                    }`}
+                  />
+                </button>
+                {isOpen && (
+                  <div className="p-4 pt-0 text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-800/60 bg-slate-50/50 dark:bg-slate-800/20">
+                    {faq.answer}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* SECTION 8: SUMMARY */}
+      <section className="p-6 sm:p-8 rounded-2xl bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 space-y-3 text-xs sm:text-sm">
+        <h3 className="font-bold uppercase tracking-wider text-blue-700 dark:text-blue-300 flex items-center gap-2">
+          <Sparkles className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+          8. Educational Key Takeaways
+        </h3>
+        <ul className="space-y-2 text-slate-700 dark:text-slate-300 list-disc pl-5 leading-relaxed">
+          <li><strong>20% Is Not Mandatory:</strong> Conventional 97 (3%), FHA (3.5%), and VA/USDA (0%) offer viable paths to homeownership.</li>
+          <li><strong>PMI Removal Milestone:</strong> Conventional loan PMI is cancellable at 80% LTV by request and cancels automatically at 78% LTV.</li>
+          <li><strong>Upfront Cash to Close:</strong> Remember to reserve 2% to 5% of purchase price for closing costs on top of the down payment.</li>
+          <li><strong>Liquidity vs Down Payment:</strong> Avoid depleting all emergency cash reserves just to reach a higher down payment tier.</li>
+        </ul>
       </section>
     </div>
   );
