@@ -1,9 +1,28 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
+import { HelpCircle, ChevronDown } from "lucide-react";
+import { bmi_calculatorFaqs } from "@/app/calculators/bmi-calculator/faq";
 
 export function BmiContent() {
+  // All 20 FAQs open by default (unfolded)
+  const [openFaqIndices, setOpenFaqIndices] = useState<Set<number>>(
+    new Set(Array.from({ length: bmi_calculatorFaqs.length }, (_, i) => i))
+  );
+
+  const toggleFaq = (index: number) => {
+    setOpenFaqIndices((prev) => {
+      const next = new Set(prev);
+      if (next.has(index)) {
+        next.delete(index);
+      } else {
+        next.add(index);
+      }
+      return next;
+    });
+  };
+
   return (
     <article className="space-y-12 text-zinc-700 dark:text-zinc-300 leading-relaxed text-sm sm:text-base">
       {/* SECTION 1: WHAT IS BODY MASS INDEX (BMI)? */}
@@ -366,13 +385,52 @@ export function BmiContent() {
       </section>
 
       {/* SECTION 11: FREQUENTLY ASKED QUESTIONS */}
-      <section className="space-y-2">
-        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
-          11. Frequently Asked Questions
-        </h2>
+      <section className="space-y-4 pt-6 border-t border-zinc-200 dark:border-zinc-800">
+        <div className="flex items-center gap-2 mb-2">
+          <HelpCircle className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
+            11. Frequently Asked Questions
+          </h2>
+        </div>
         <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400">
           Below are 20 clinical and educational questions regarding BMI calculation, pediatric percentiles, adult reference ranges, and anthropometric methodologies:
         </p>
+
+        <div className="space-y-3 pt-2">
+          {bmi_calculatorFaqs.map((faq, idx) => {
+            const isOpen = openFaqIndices.has(idx);
+            return (
+              <div
+                key={idx}
+                className="border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden bg-white dark:bg-zinc-900 shadow-xs"
+              >
+                <button
+                  type="button"
+                  onClick={() => toggleFaq(idx)}
+                  className="w-full p-4 text-left text-xs sm:text-sm font-semibold text-zinc-900 dark:text-zinc-100 flex items-center justify-between hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer"
+                  aria-expanded={isOpen}
+                >
+                  <span className="flex items-center gap-2 pr-4">
+                    <span className="text-blue-600 dark:text-blue-400 font-sans tabular-nums text-xs font-bold shrink-0">
+                      Q{idx + 1}.
+                    </span>
+                    {faq.question}
+                  </span>
+                  <ChevronDown
+                    className={`h-4 w-4 text-zinc-400 shrink-0 transition-transform duration-200 ${
+                      isOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+                {isOpen && (
+                  <div className="p-4 pt-0 text-xs sm:text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed bg-zinc-50/50 dark:bg-zinc-900/50 font-normal">
+                    {faq.answer}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </section>
     </article>
   );

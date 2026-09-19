@@ -1,6 +1,7 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateBMICalculator } from "./calculator";
 import { bmi_calculatorFaqs } from "./faq";
+import { BmiContent } from "@/components/calculator/bmi/BmiContent";
 
 export const bmi_calculatorConfig: CalculatorModuleDefinition = {
   id: "bmi-calculator",
@@ -35,6 +36,7 @@ export const bmi_calculatorConfig: CalculatorModuleDefinition = {
   ],
   formulaDescription: "BMI = Weight (kg) / [Height (m)]² | Imperial: 703 × Weight (lbs) / [Height (in)]²",
   faqs: bmi_calculatorFaqs,
+  ContentComponent: BmiContent,
   inputs: [
     {
       name: "unitSystem",
