@@ -1,13 +1,14 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
 import { calculateCashBackOrLowInterestCalculator } from "./calculator";
-import { cashBackFaqs } from "./faq";
 import { CashBackCalculator } from "@/components/calculator/cash-back/CashBackCalculator";
 import { CashBackContent } from "@/components/calculator/cash-back/CashBackContent";
+import { cashBackFaqs } from "./faq";
 
 export const cashBackConfig: CalculatorModuleDefinition = {
   id: "cash-back-or-low-interest-calculator",
   title: "Cash Back or Low Interest Calculator — Auto Loan Incentive Comparison",
   slug: "cash-back-or-low-interest-calculator",
+  faqs: cashBackFaqs,
   category: "Finance",
   subcategory: "Auto",
   description:
@@ -33,7 +34,6 @@ export const cashBackConfig: CalculatorModuleDefinition = {
   ],
   formulaDescription:
     "Total Cost = Upfront Payment (Down Payment + Trade-In + Tax + Fees) + Total Monthly Amortized Loan Payments.",
-  faqs: cashBackFaqs,
   inputs: [
     {
       name: "autoPrice",
