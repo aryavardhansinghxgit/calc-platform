@@ -41,64 +41,15 @@ export function AnnuityContent() {
     });
   };
 
-  const relatedCalculators = [
-    {
-      name: "Mortgage Calculator",
-      slug: "/calculators/mortgage-calculator",
-    },
-    {
-      name: "Home Equity Loan Calculator",
-      slug: "/calculators/home-equity-loan-calculator",
-    },
-    {
-      name: "HELOC Calculator",
-      slug: "/calculators/heloc-calculator",
-    },
-    {
-      name: "Down Payment Calculator",
-      slug: "/calculators/down-payment-calculator",
-    },
-    {
-      name: "Rent vs Buy Calculator",
-      slug: "/calculators/rent-vs-buy-calculator",
-    },
-    {
-      name: "VA Mortgage Calculator",
-      slug: "/calculators/va-mortgage-calculator",
-    },
-    {
-      name: "FHA Loan Calculator",
-      slug: "/calculators/fha-loan-calculator",
-    },
-  ];
-
   return (
     <article className="mt-8 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-10 divide-y divide-slate-100 dark:divide-slate-800 shadow-xs">
-      {/* 1. SINGLE CANONICAL RELATED CALCULATORS BLOCK (AT TOP - Exactly 7 Verified Live Routes) */}
-      <div>
-        <h2 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-3">
-          Related Valuation &amp; Financing Tools
-        </h2>
-        <div className="flex flex-wrap gap-2 text-xs">
-          {relatedCalculators.map((calc, idx) => (
-            <Link
-              key={idx}
-              href={calc.slug}
-              className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-            >
-              {calc.name}
-            </Link>
-          ))}
-        </div>
-      </div>
-
-      {/* 2. What Is an Annuity Calculator? */}
-      <section className="pt-8 space-y-4">
+      {/* 1. What Is an Annuity Calculator? */}
+      <section className="space-y-4">
         <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-xs uppercase tracking-wider">
           <BookOpen className="h-4 w-4" /> Comprehensive Financial &amp; Insurance Annuity Guide
         </div>
         <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
-          2. What Is an Annuity Calculator?
+          1. What Is an Annuity Calculator?
         </h2>
         <p>
           An annuity calculator is a time-value-of-money tool for understanding how a starting balance and a stream of recurring contributions can accumulate over time. Instead of looking only at one deposit and one future value, it follows the interaction between an initial principal amount, repeated contributions, a growth rate, the timing of those contributions, and the number of periods over which the money remains invested.

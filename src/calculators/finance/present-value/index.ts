@@ -1,5 +1,7 @@
 import { CalculatorModuleDefinition } from "../../types";
 import { calculatePresentValue } from "@/lib/calculator-engine/formulas/present-value";
+import { PresentValueCalculator } from "@/components/calculator/present-value/PresentValueCalculator";
+import { PresentValueContent } from "@/components/calculator/present-value/PresentValueContent";
 import { present_valueFaqs } from "./faq";
 
 export const PRESENT_VALUE_CALCULATOR: CalculatorModuleDefinition = {
@@ -25,6 +27,8 @@ export const PRESENT_VALUE_CALCULATOR: CalculatorModuleDefinition = {
     "annuity due",
   ],
   formulaDescription: "PV = FV / (1 + r/n)^(n×t) + PMT × [1 - (1 + r/n)^(-n×t)] / (r/n)",
+  CustomComponent: PresentValueCalculator,
+  ContentComponent: PresentValueContent,
   faqs: present_valueFaqs,
   inputs: [
     { name: "futureValue", label: "Future Value (FV)", type: "currency", defaultValue: 50000, unit: "$", min: 0, max: 10000000, step: 1000 },

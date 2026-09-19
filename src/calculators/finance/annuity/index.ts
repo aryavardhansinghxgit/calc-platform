@@ -1,5 +1,7 @@
 import { CalculatorModuleDefinition } from "../../types";
 import { calculateAnnuity } from "@/lib/calculator-engine/formulas/annuity";
+import { AnnuityCalculator } from "@/components/calculator/annuity/AnnuityCalculator";
+import { AnnuityContent } from "@/components/calculator/annuity/AnnuityContent";
 import { annuityFaqs } from "./faq";
 
 export const ANNUITY_CALCULATOR: CalculatorModuleDefinition = {
@@ -23,6 +25,8 @@ export const ANNUITY_CALCULATOR: CalculatorModuleDefinition = {
   ],
   formulaDescription:
     "Annuity Due: FV = P(1+r)^n + PMT × [((1+r)^n - 1) / r] × (1+r). Ordinary Annuity: FV = P(1+r)^n + PMT × [((1+r)^n - 1) / r].",
+  CustomComponent: AnnuityCalculator,
+  ContentComponent: AnnuityContent,
   faqs: annuityFaqs,
   inputs: [
     { name: "startingPrincipal", label: "Starting Principal ($)", type: "currency", defaultValue: 20000, unit: "$", min: 0, max: 10000000, step: 5000 },

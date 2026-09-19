@@ -25,62 +25,10 @@ export function PresentValueContent() {
 
   return (
     <article className="mt-8 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-10 divide-y divide-slate-100 dark:divide-slate-800 shadow-xs">
-      
-      {/* 1. SINGLE CANONICAL RELATED CALCULATORS BLOCK (Exactly 7 Verified Live Routes) */}
-      <div>
-        <h2 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-3">
-          Related Valuation &amp; Financing Tools
-        </h2>
-        <div className="flex flex-wrap gap-2 text-xs">
-          <Link
-            href="/calculators/mortgage-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Mortgage Calculator
-          </Link>
-          <Link
-            href="/calculators/home-equity-loan-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Home Equity Loan Calculator
-          </Link>
-          <Link
-            href="/calculators/heloc-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            HELOC Calculator
-          </Link>
-          <Link
-            href="/calculators/down-payment-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Down Payment Calculator
-          </Link>
-          <Link
-            href="/calculators/rent-vs-buy-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Rent vs Buy Calculator
-          </Link>
-          <Link
-            href="/calculators/va-mortgage-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            VA Mortgage Calculator
-          </Link>
-          <Link
-            href="/calculators/fha-loan-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            FHA Loan Calculator
-          </Link>
-        </div>
-      </div>
-
-      {/* 2. Present Value: The Question Behind the Calculator */}
-      <section className="pt-8 space-y-4">
+      {/* 1. Present Value: The Question Behind the Calculator */}
+      <section className="space-y-4">
         <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
-          2. Present Value: The Question Behind the Calculator
+          1. Present Value: The Question Behind the Calculator
         </h2>
         <p>
           Money that arrives in the future is not directly comparable with money available today. A dollar received today can potentially be
