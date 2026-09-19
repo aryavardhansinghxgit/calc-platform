@@ -36,44 +36,9 @@ export function TriangleContent() {
   return (
     <article className="mt-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-7 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-8 divide-y divide-slate-100 dark:divide-slate-800">
       {/* ========================================================================= */}
-      {/* 1. RELATED CALCULATORS — ABOVE THE MAIN CONTENT                           */}
-      {/* ========================================================================= */}
-      <div className="pb-6">
-        <div className="p-4 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-200/80 dark:border-slate-800 space-y-2.5">
-          <div className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 flex items-center gap-1.5">
-            <Calculator className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
-            <span>Related Calculators</span>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
-            <Link
-              href="/calculators/pythagorean-theorem-calculator"
-              className="p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700/70 hover:border-blue-500 hover:shadow-xs transition-all flex items-center justify-between text-xs sm:text-sm font-semibold text-slate-900 dark:text-slate-100 group"
-            >
-              <span>Pythagorean Theorem Calculator</span>
-              <ArrowRight className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400 group-hover:translate-x-0.5 transition-transform shrink-0 ml-1.5" />
-            </Link>
-            <Link
-              href="/calculators/right-triangle-calculator"
-              className="p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700/70 hover:border-blue-500 hover:shadow-xs transition-all flex items-center justify-between text-xs sm:text-sm font-semibold text-slate-900 dark:text-slate-100 group"
-            >
-              <span>Right Triangle Calculator</span>
-              <ArrowRight className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400 group-hover:translate-x-0.5 transition-transform shrink-0 ml-1.5" />
-            </Link>
-            <Link
-              href="/calculators/area-calculator"
-              className="p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700/70 hover:border-blue-500 hover:shadow-xs transition-all flex items-center justify-between text-xs sm:text-sm font-semibold text-slate-900 dark:text-slate-100 group"
-            >
-              <span>Area Calculator</span>
-              <ArrowRight className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400 group-hover:translate-x-0.5 transition-transform shrink-0 ml-1.5" />
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* ========================================================================= */}
       {/* 2. MAIN EDUCATIONAL CONTENT                                               */}
       {/* ========================================================================= */}
-      <div className="space-y-8 pt-8 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200">
+      <div className="space-y-8 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200">
         {/* Section 1: Main Introduction */}
         <section className="space-y-3">
           <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
@@ -767,41 +732,6 @@ export function TriangleContent() {
               </div>
             );
           })}
-        </div>
-      </div>
-
-      {/* ========================================================================= */}
-      {/* 4. RELATED CALCULATORS — AFTER MAIN CONTENT & FAQ                         */}
-      {/* ========================================================================= */}
-      <div className="pt-6">
-        <div className="p-4 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-200/80 dark:border-slate-800 space-y-2.5">
-          <div className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 flex items-center gap-1.5">
-            <Calculator className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
-            <span>Related Calculators</span>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
-            <Link
-              href="/calculators/pythagorean-theorem-calculator"
-              className="p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700/70 hover:border-blue-500 hover:shadow-xs transition-all flex items-center justify-between text-xs sm:text-sm font-semibold text-slate-900 dark:text-slate-100 group"
-            >
-              <span>Pythagorean Theorem Calculator</span>
-              <ArrowRight className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400 group-hover:translate-x-0.5 transition-transform shrink-0 ml-1.5" />
-            </Link>
-            <Link
-              href="/calculators/right-triangle-calculator"
-              className="p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700/70 hover:border-blue-500 hover:shadow-xs transition-all flex items-center justify-between text-xs sm:text-sm font-semibold text-slate-900 dark:text-slate-100 group"
-            >
-              <span>Right Triangle Calculator</span>
-              <ArrowRight className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400 group-hover:translate-x-0.5 transition-transform shrink-0 ml-1.5" />
-            </Link>
-            <Link
-              href="/calculators/area-calculator"
-              className="p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700/70 hover:border-blue-500 hover:shadow-xs transition-all flex items-center justify-between text-xs sm:text-sm font-semibold text-slate-900 dark:text-slate-100 group"
-            >
-              <span>Area Calculator</span>
-              <ArrowRight className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400 group-hover:translate-x-0.5 transition-transform shrink-0 ml-1.5" />
-            </Link>
-          </div>
         </div>
       </div>
     </article>

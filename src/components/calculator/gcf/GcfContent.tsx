@@ -684,60 +684,6 @@ export function GcfContent() {
           The Greatest Common Factor is the largest integer that divides every number in a set without a remainder. GCF, GCD, and HCF are interchangeable names for the exact same integer concept. For two positive integers, GCF is directly linked to the Least Common Multiple through <code className="font-mono font-bold text-blue-700 dark:text-blue-300">{"GCF(a, b) × LCM(a, b) = a × b"}</code>. A reliable GCF calculation does more than return a number: it establishes a precise divisibility relationship among your numbers across arithmetic, fraction reduction, and discrete mathematics.
         </p>
       </section>
-
-      {/* ========================================================================= */}
-      {/* 28. BOTTOM RELATED-CALCULATOR BLOCK (Once at the very end) */}
-      {/* ========================================================================= */}
-      <section className="bg-slate-50 dark:bg-slate-900/50 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
-        <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-2">
-          <Compass className="h-4 w-4" />
-          <span>Related Integer &amp; Arithmetic Calculators</span>
-        </h3>
-        <p className="text-xs text-slate-600 dark:text-slate-400">
-          Continue your mathematical exploration with these related tools:
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
-          <Link
-            href="/calculators/lcm-calculator"
-            className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-500 hover:shadow-xs transition-all group"
-          >
-            <h4 className="font-bold text-blue-600 dark:text-blue-400 text-sm group-hover:underline mb-1 flex items-center justify-between">
-              <span>Least Common Multiple (LCM) Calculator</span>
-              <ArrowRight className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400 group-hover:translate-x-0.5 transition-transform" />
-            </h4>
-            <p className="text-xs text-slate-600 dark:text-slate-400">
-              Find the smallest positive common multiple for 2 or more numbers with step-by-step methods.
-            </p>
-          </Link>
-
-          <Link
-            href="/calculators/factor-calculator"
-            className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-500 hover:shadow-xs transition-all group"
-          >
-            <h4 className="font-bold text-blue-600 dark:text-blue-400 text-sm group-hover:underline mb-1 flex items-center justify-between">
-              <span>Factor Calculator &amp; Prime Factorization</span>
-              <ArrowRight className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400 group-hover:translate-x-0.5 transition-transform" />
-            </h4>
-            <p className="text-xs text-slate-600 dark:text-slate-400">
-              Decompose any integer into prime factor trees, discover all divisor pairs, and check primality.
-            </p>
-          </Link>
-
-          <Link
-            href="/calculators/fraction-calculator"
-            className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-blue-500 hover:shadow-xs transition-all group"
-          >
-            <h4 className="font-bold text-blue-600 dark:text-blue-400 text-sm group-hover:underline mb-1 flex items-center justify-between">
-              <span>Fraction Calculator</span>
-              <ArrowRight className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400 group-hover:translate-x-0.5 transition-transform" />
-            </h4>
-            <p className="text-xs text-slate-600 dark:text-slate-400">
-              Add, subtract, multiply, and simplify fractions to irreducible lowest terms using common factors.
-            </p>
-          </Link>
-        </div>
-      </section>
-
     </article>
   );
 }

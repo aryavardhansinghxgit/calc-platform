@@ -26,61 +26,6 @@ export function VolumeContent() {
   return (
     <article className="mt-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 sm:p-8 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-10">
       {/* ========================================================================= */}
-      {/* 2. RELATED CALCULATORS — DIRECTLY ABOVE EDUCATIONAL CONTENT */}
-      {/* ========================================================================= */}
-      <section className="bg-slate-50 dark:bg-slate-900/60 p-4 sm:p-6 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
-        <h2 className="text-xs font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-          Related Calculators
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-          <Link
-            href="/calculators/surface-area-calculator"
-            className="group p-3.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 hover:shadow-xs transition-all flex flex-col justify-between"
-          >
-            <div className="space-y-1">
-              <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 group-hover:underline flex items-center justify-between">
-                <span>Surface Area Calculator &amp; 3D Solids Net Suite</span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </h3>
-              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                Calculate the surface area of common 3D solids and compare the exposed area with the volume of the same shape.
-              </p>
-            </div>
-          </Link>
-
-          <Link
-            href="/calculators/area-calculator"
-            className="group p-3.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 hover:shadow-xs transition-all flex flex-col justify-between"
-          >
-            <div className="space-y-1">
-              <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 group-hover:underline flex items-center justify-between">
-                <span>Area Calculator &amp; 2D Geometry Suite</span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </h3>
-              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                Calculate the area of rectangles, circles, triangles and other two-dimensional shapes used as bases for volume calculations.
-              </p>
-            </div>
-          </Link>
-
-          <Link
-            href="/calculators/density-calculator"
-            className="group p-3.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 hover:shadow-xs transition-all flex flex-col justify-between"
-          >
-            <div className="space-y-1">
-              <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 group-hover:underline flex items-center justify-between">
-                <span>Density Calculator</span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </h3>
-              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                Convert between mass, volume and density when a volume measurement needs to be combined with material properties.
-              </p>
-            </div>
-          </Link>
-        </div>
-      </section>
-
-      {/* ========================================================================= */}
       {/* 3. MAIN EDUCATIONAL CONTENT */}
       {/* ========================================================================= */}
       <div className="space-y-8 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200">
@@ -584,61 +529,6 @@ export function VolumeContent() {
         <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed pt-1">
           Keeping these measurements separate avoids one of the most common errors in tank-capacity calculations.
         </p>
-      </section>
-
-      {/* ========================================================================= */}
-      {/* 12. RELATED CALCULATORS — AFTER THE CONTENT */}
-      {/* ========================================================================= */}
-      <section className="bg-slate-50 dark:bg-slate-900/60 p-4 sm:p-6 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
-        <h2 className="text-xs font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-          Explore More Calculators
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-          <Link
-            href="/calculators/surface-area-calculator"
-            className="group p-3.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 hover:shadow-xs transition-all flex flex-col justify-between"
-          >
-            <div className="space-y-1">
-              <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 group-hover:underline flex items-center justify-between">
-                <span>Surface Area Calculator &amp; 3D Solids Net Suite</span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </h3>
-              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                Calculate exterior surface area for common three-dimensional solids.
-              </p>
-            </div>
-          </Link>
-
-          <Link
-            href="/calculators/area-calculator"
-            className="group p-3.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 hover:shadow-xs transition-all flex flex-col justify-between"
-          >
-            <div className="space-y-1">
-              <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 group-hover:underline flex items-center justify-between">
-                <span>Area Calculator &amp; 2D Geometry Suite</span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </h3>
-              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                Calculate the area of circles, rectangles, triangles and other 2D shapes used in geometry.
-              </p>
-            </div>
-          </Link>
-
-          <Link
-            href="/calculators/density-calculator"
-            className="group p-3.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 hover:shadow-xs transition-all flex flex-col justify-between"
-          >
-            <div className="space-y-1">
-              <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 group-hover:underline flex items-center justify-between">
-                <span>Density Calculator</span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </h3>
-              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                Use volume together with mass and density for material and physics calculations.
-              </p>
-            </div>
-          </Link>
-        </div>
       </section>
     </article>
   );

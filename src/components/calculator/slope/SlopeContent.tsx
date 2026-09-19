@@ -83,36 +83,8 @@ export function SlopeContent() {
 
   return (
     <article className="space-y-8 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base">
-      {/* 1. RELATED CALCULATORS — ABOVE CONTENT (SINGLE SIDE SECTION) */}
-      <div className="pb-2">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-2 flex items-center gap-1.5">
-          <Compass className="w-3.5 h-3.5 text-blue-600" />
-          Related Calculators:
-        </span>
-        <div className="flex flex-wrap gap-2 text-xs font-bold">
-          <Link
-            href="/calculators/distance-calculator"
-            className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-blue-700 dark:text-blue-300 border border-slate-200 dark:border-slate-700 transition-colors"
-          >
-            Distance Calculator
-          </Link>
-          <Link
-            href="/calculators/triangle-calculator"
-            className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-blue-700 dark:text-blue-300 border border-slate-200 dark:border-slate-700 transition-colors"
-          >
-            Triangle Calculator
-          </Link>
-          <Link
-            href="/calculators/pythagorean-calculator"
-            className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-blue-700 dark:text-blue-300 border border-slate-200 dark:border-slate-700 transition-colors"
-          >
-            Pythagorean Calculator
-          </Link>
-        </div>
-      </div>
-
       {/* 2. SHORT INTRO & ON-PAGE ANCHOR NAVIGATION */}
-      <div className="pt-6 space-y-6">
+      <div className="space-y-6">
         <div className="space-y-3">
           <p className="text-sm sm:text-base text-slate-700 dark:text-slate-300 leading-relaxed">
             Calculate the slope of a line from two points using the rise-over-run formula. This Slope Calculator also determines the horizontal and vertical change, distance between points, incline angle, y-intercept, and line equation. Use the additional tools to find a missing endpoint, construct parallel and perpendicular lines, or calculate the angle between two intersecting lines.
@@ -690,34 +662,6 @@ export function SlopeContent() {
               </div>
             );
           })}
-        </div>
-      </div>
-
-      {/* 6. RELATED CALCULATORS — AFTER CONTENT (SINGLE SIDE SECTION) */}
-      <div className="pt-6">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-2 flex items-center gap-1.5">
-          <Compass className="w-3.5 h-3.5 text-blue-600" />
-          Related Calculators:
-        </span>
-        <div className="flex flex-wrap gap-2 text-xs font-bold">
-          <Link
-            href="/calculators/distance-calculator"
-            className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-blue-700 dark:text-blue-300 border border-slate-200 dark:border-slate-700 transition-colors"
-          >
-            Distance Calculator
-          </Link>
-          <Link
-            href="/calculators/triangle-calculator"
-            className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-blue-700 dark:text-blue-300 border border-slate-200 dark:border-slate-700 transition-colors"
-          >
-            Triangle Calculator
-          </Link>
-          <Link
-            href="/calculators/pythagorean-calculator"
-            className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-blue-700 dark:text-blue-300 border border-slate-200 dark:border-slate-700 transition-colors"
-          >
-            Pythagorean Calculator
-          </Link>
         </div>
       </div>
     </article>

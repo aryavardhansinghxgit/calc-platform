@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { ChevronDown, ChevronUp, Sliders, BookOpen, ShieldAlert, Search } from "lucide-react";
+import { ChevronDown, ChevronUp, BookOpen, ShieldAlert, Search } from "lucide-react";
 import { normalCDF } from "@/app/calculators/z-score-calculator/z-score-logic";
 import { z_score_calculatorFaqs } from "@/app/calculators/z-score-calculator/faq";
 
@@ -62,62 +62,6 @@ export function ZScoreContent() {
 
   return (
     <article className="space-y-12 text-slate-800 dark:text-slate-200 leading-relaxed font-sans max-w-4xl mx-auto pt-4">
-      {/* 401(k)-STYLE RELATED CALCULATORS MID-BAR */}
-      <section className="bg-slate-50 dark:bg-slate-900/60 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
-        <div className="flex items-center gap-2 mb-3">
-          <Sliders className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-          <span className="text-xs font-extrabold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-            Related Statistical Solvers
-          </span>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <Link
-            href="/calculators/standard-deviation-calculator"
-            className="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-400 transition-colors shadow-xs group"
-          >
-            <div>
-              <span className="font-bold text-sm text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400">
-                Standard Deviation
-              </span>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Population &amp; sample dispersion
-              </p>
-            </div>
-            <span className="text-blue-600 dark:text-blue-400 font-bold text-xs">&rarr;</span>
-          </Link>
-
-          <Link
-            href="/calculators/confidence-interval-calculator"
-            className="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-400 transition-colors shadow-xs group"
-          >
-            <div>
-              <span className="font-bold text-sm text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400">
-                Confidence Interval
-              </span>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Margin of error &amp; bounds
-              </p>
-            </div>
-            <span className="text-blue-600 dark:text-blue-400 font-bold text-xs">&rarr;</span>
-          </Link>
-
-          <Link
-            href="/calculators/statistics-calculator"
-            className="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-400 transition-colors shadow-xs group"
-          >
-            <div>
-              <span className="font-bold text-sm text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400">
-                Statistics Calculator
-              </span>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Full descriptive summary suite
-              </p>
-            </div>
-            <span className="text-blue-600 dark:text-blue-400 font-bold text-xs">&rarr;</span>
-          </Link>
-        </div>
-      </section>
-
       {/* INTRO */}
       <section className="space-y-4">
         <p className="text-base text-slate-700 dark:text-slate-300 leading-relaxed">
@@ -693,59 +637,6 @@ export function ZScoreContent() {
               </div>
             );
           })}
-        </div>
-      </section>
-
-      {/* RELATED CALCULATORS CARDS (BOTTOM) */}
-      <section className="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-800">
-        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
-          Related Calculators
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="p-5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs space-y-2 flex flex-col justify-between">
-            <div>
-              <h3 className="font-bold text-base text-slate-900 dark:text-slate-100">Standard Deviation Calculator</h3>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                Calculate population and sample variance and standard deviation directly from raw data series.
-              </p>
-            </div>
-            <Link
-              href="/calculators/standard-deviation-calculator"
-              className="inline-block mt-3 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold text-xs hover:bg-slate-200 transition-colors w-fit"
-            >
-              Open Standard Deviation &rarr;
-            </Link>
-          </div>
-
-          <div className="p-5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs space-y-2 flex flex-col justify-between">
-            <div>
-              <h3 className="font-bold text-base text-slate-900 dark:text-slate-100">Confidence Interval Calculator</h3>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                Construct two-sided and one-sided confidence intervals using critical z-values and margin of error.
-              </p>
-            </div>
-            <Link
-              href="/calculators/confidence-interval-calculator"
-              className="inline-block mt-3 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold text-xs hover:bg-slate-200 transition-colors w-fit"
-            >
-              Open Confidence Interval &rarr;
-            </Link>
-          </div>
-
-          <div className="p-5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs space-y-2 flex flex-col justify-between">
-            <div>
-              <h3 className="font-bold text-base text-slate-900 dark:text-slate-100">Statistics Calculator</h3>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                Comprehensive descriptive statistics, quartile analysis, interquartile ranges, and summary metrics.
-              </p>
-            </div>
-            <Link
-              href="/calculators/statistics-calculator"
-              className="inline-block mt-3 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-bold text-xs hover:bg-slate-200 transition-colors w-fit"
-            >
-              Open Statistics &rarr;
-            </Link>
-          </div>
         </div>
       </section>
 
