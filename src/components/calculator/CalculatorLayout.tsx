@@ -736,6 +736,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
             <CollegeCostCalculator />
           ) : isCurrency ? (
             <CurrencyCalculator />
+          ) : isRepayment ? (
+            <RepaymentCalculator />
           ) : (definition as any).CustomComponent ? (
             React.createElement((definition as any).CustomComponent)
           ) : isMolecularWeight ? (
