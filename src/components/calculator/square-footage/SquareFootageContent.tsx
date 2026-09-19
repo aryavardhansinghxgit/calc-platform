@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { HelpCircle, ChevronDown, ShieldCheck, Layers, BookOpen } from "lucide-react";
+import { HelpCircle, ChevronDown, ShieldCheck, BookOpen } from "lucide-react";
 
 export function SquareFootageContent() {
   // All 15 FAQs open (unfolded) by default
@@ -98,32 +98,8 @@ export function SquareFootageContent() {
 
   return (
     <article className="mt-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-7 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-8 divide-y divide-slate-100 dark:divide-slate-800">
-      {/* ── RELATED CALCULATORS (ABOVE CONTENT) ── */}
-      <div className="no-print p-4 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 space-y-2">
-        <div className="flex items-center gap-2">
-          <Layers className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-            Related Calculators
-          </span>
-        </div>
-        <div className="flex flex-wrap gap-2.5 pt-1">
-          <Link
-            href="/calculators/tile-calculator"
-            className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/40 shadow-xs transition-colors"
-          >
-            Tile Calculator
-          </Link>
-          <Link
-            href="/calculators/roofing-calculator"
-            className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/40 shadow-xs transition-colors"
-          >
-            Roofing Calculator
-          </Link>
-        </div>
-      </div>
-
       {/* ── MAIN EDUCATIONAL CONTENT BODY ── */}
-      <div className="pt-8 space-y-8 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200">
+      <div className="space-y-8 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200">
         {/* Section 1: Understanding Square Footage */}
         <section className="space-y-3">
           <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
@@ -838,32 +814,6 @@ export function SquareFootageContent() {
               </div>
             );
           })}
-        </div>
-      </div>
-
-      {/* ── RELATED CALCULATORS (AFTER CONTENT) ── */}
-      <div className="no-print pt-6">
-        <div className="p-4 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 space-y-2">
-          <div className="flex items-center gap-2">
-            <Layers className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-              Related Calculators
-            </span>
-          </div>
-          <div className="flex flex-wrap gap-2.5 pt-1">
-            <Link
-              href="/calculators/tile-calculator"
-              className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/40 shadow-xs transition-colors"
-            >
-              Tile Calculator
-            </Link>
-            <Link
-              href="/calculators/roofing-calculator"
-              className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/40 shadow-xs transition-colors"
-            >
-              Roofing Calculator
-            </Link>
-          </div>
         </div>
       </div>
     </article>

@@ -25,29 +25,8 @@ export function StairContent() {
 
   return (
     <article className="mt-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-7 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-8 divide-y divide-slate-100 dark:divide-slate-800">
-
-      {/* ── 0. RELATED CALCULATORS (BEFORE CONTENT BLOCK) ── */}
-      <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-600 dark:text-slate-400 p-3 bg-slate-50 dark:bg-slate-800/40 rounded-lg border border-slate-200 dark:border-slate-700/60 not-prose no-print">
-        <span className="text-slate-900 dark:text-slate-100 uppercase tracking-wider text-[11px] font-bold">
-          Related Calculators:
-        </span>
-        <Link
-          href="/calculators/square-footage-calculator"
-          className="text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-0.5"
-        >
-          Square Footage Calculator
-        </Link>
-        <span className="text-slate-300 dark:text-slate-600">|</span>
-        <Link
-          href="/calculators/concrete-calculator"
-          className="text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-0.5"
-        >
-          Concrete Calculator
-        </Link>
-      </div>
-
       {/* ── 1. MAIN EDUCATIONAL CONTENT (19 COMPLETE SECTIONS) ── */}
-      <div className="space-y-8 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200 pt-6">
+      <div className="space-y-8 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200">
 
         {/* Section 1 */}
         <section className="space-y-3">
@@ -680,27 +659,6 @@ export function StairContent() {
           })}
         </div>
       </section>
-
-      {/* ── 3. RELATED CALCULATORS (AFTER CONTENT / FAQ BLOCK) ── */}
-      <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-600 dark:text-slate-400 p-3 bg-slate-50 dark:bg-slate-800/40 rounded-lg border border-slate-200 dark:border-slate-700/60 not-prose no-print">
-        <span className="text-slate-900 dark:text-slate-100 uppercase tracking-wider text-[11px] font-bold">
-          Related Calculators:
-        </span>
-        <Link
-          href="/calculators/square-footage-calculator"
-          className="text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-0.5"
-        >
-          Square Footage Calculator
-        </Link>
-        <span className="text-slate-300 dark:text-slate-600">|</span>
-        <Link
-          href="/calculators/concrete-calculator"
-          className="text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-0.5"
-        >
-          Concrete Calculator
-        </Link>
-      </div>
-
     </article>
   );
 }

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { HelpCircle, ChevronDown, BookOpen, ShieldCheck, Calculator } from "lucide-react";
+import { HelpCircle, ChevronDown, BookOpen, ShieldCheck } from "lucide-react";
 
 export const concreteFaqs = [
   {
@@ -67,27 +67,8 @@ export function ConcreteContent() {
 
   return (
     <article className="mt-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-7 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-8 divide-y divide-slate-100 dark:divide-slate-800">
-      {/* ── TOP RELATED CALCULATORS BAR ── */}
-      <div className="no-print pb-2">
-        <div className="p-3 bg-slate-50 dark:bg-slate-800/40 rounded-lg border border-slate-200 dark:border-slate-700/60 flex flex-wrap items-center justify-between gap-2 text-xs">
-          <span className="font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-            <Calculator className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
-            RELATED CALCULATORS:
-          </span>
-          <div className="flex flex-wrap items-center gap-3 font-semibold text-blue-600 dark:text-blue-400">
-            <Link href="/calculators/square-footage-calculator" className="hover:underline">
-              Square Footage Calculator
-            </Link>
-            <span className="text-slate-300 dark:text-slate-600">|</span>
-            <Link href="/calculators/gravel-calculator" className="hover:underline">
-              Gravel Calculator
-            </Link>
-          </div>
-        </div>
-      </div>
-
       {/* ── 1. MAIN EDUCATIONAL CONTENT ── */}
-      <div className="space-y-8 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200 pt-6">
+      <div className="space-y-8 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200">
         {/* Intro */}
         <section className="space-y-3">
           <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
@@ -534,27 +515,6 @@ export function ConcreteContent() {
               </div>
             );
           })}
-        </div>
-      </div>
-
-      {/* ── 3. BOTTOM RELATED CALCULATORS SECTION ── */}
-      <div className="no-print pt-6">
-        <div className="p-4 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-200 dark:border-slate-700/60 space-y-2 text-xs">
-          <span className="font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-            <Calculator className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
-            RELATED CONSTRUCTION CALCULATORS
-          </span>
-          <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-            Planning a multi-stage construction project? Calculate your foundational aggregate and surface requirements with these tools:
-          </p>
-          <div className="flex flex-wrap items-center gap-4 pt-1 font-semibold text-blue-600 dark:text-blue-400">
-            <Link href="/calculators/square-footage-calculator" className="hover:underline flex items-center gap-1">
-              → Square Footage Calculator
-            </Link>
-            <Link href="/calculators/gravel-calculator" className="hover:underline flex items-center gap-1">
-              → Gravel Calculator
-            </Link>
-          </div>
         </div>
       </div>
     </article>
