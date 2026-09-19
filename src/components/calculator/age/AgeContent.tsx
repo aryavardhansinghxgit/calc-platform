@@ -25,10 +25,8 @@ export function AgeContent() {
 
   return (
     <article className="mt-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-7 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-6 divide-y divide-slate-100 dark:divide-slate-800">
-
-
-      {/* 2. 18 LONG-FORM EDUCATIONAL SECTIONS */}
-      <div className="space-y-6 pt-6 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200">
+      {/* 18 LONG-FORM EDUCATIONAL SECTIONS */}
+      <div className="space-y-6 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200">
         {/* Section 1 */}
         <section className="space-y-2">
           <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
