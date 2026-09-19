@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   BookOpen,
   Clock,
@@ -14,9 +14,29 @@ import {
   Layers,
   Activity,
   Zap,
+  HelpCircle,
+  ChevronDown,
 } from "lucide-react";
+import { due_date_calculatorFaqs } from "@/app/calculators/due-date-calculator/faq";
 
 export function DueDateContent() {
+  // All FAQs open by default (unfolded, 401(k) executive style)
+  const [openFaqIndices, setOpenFaqIndices] = useState<Set<number>>(
+    new Set(Array.from({ length: due_date_calculatorFaqs.length }, (_, i) => i))
+  );
+
+  const toggleFaq = (index: number) => {
+    setOpenFaqIndices((prev) => {
+      const next = new Set(prev);
+      if (next.has(index)) {
+        next.delete(index);
+      } else {
+        next.add(index);
+      }
+      return next;
+    });
+  };
+
   return (
     <article className="prose prose-zinc dark:prose-invert max-w-none space-y-10 text-zinc-700 dark:text-zinc-300 leading-relaxed">
       {/* 1. Header Banner */}
@@ -188,6 +208,55 @@ export function DueDateContent() {
         <p className="m-0 leading-relaxed">
           This calculator provides estimations based on ACOG Committee Opinion No. 700 and ASRM standards. Only ~4% of women deliver on their exact due date. Always consult your Obstetrician/Gynecologist or Certified Nurse-Midwife for formal ultrasound confirmation and individualized prenatal management.
         </p>
+      </section>
+
+      {/* 7. Frequently Asked Questions (25 FAQs) */}
+      <section className="pt-6 border-t border-zinc-200 dark:border-zinc-800 space-y-4 not-prose">
+        <div className="flex items-center gap-2 mb-2">
+          <HelpCircle className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 m-0">
+            Frequently Asked Questions
+          </h2>
+        </div>
+        <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400">
+          Find answers to common medical and clinical questions about pregnancy dating, gestational milestones, ultrasound accuracy, and delivery probabilities.
+        </p>
+
+        <div className="space-y-3 pt-2">
+          {due_date_calculatorFaqs.map((faq, idx) => {
+            const isOpen = openFaqIndices.has(idx);
+            return (
+              <div
+                key={idx}
+                className="border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden bg-white dark:bg-zinc-900 shadow-xs"
+              >
+                <button
+                  type="button"
+                  onClick={() => toggleFaq(idx)}
+                  className="w-full p-4 text-left text-xs sm:text-sm font-semibold text-zinc-900 dark:text-zinc-100 flex items-center justify-between hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors cursor-pointer"
+                  aria-expanded={isOpen}
+                >
+                  <span className="flex items-center gap-2 pr-4">
+                    <span className="text-blue-600 dark:text-blue-400 font-sans tabular-nums text-xs font-bold shrink-0">
+                      Q{idx + 1}.
+                    </span>
+                    {faq.question}
+                  </span>
+                  <ChevronDown
+                    className={`h-4 w-4 text-zinc-400 shrink-0 transition-transform duration-200 ${
+                      isOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+                {isOpen && (
+                  <div className="p-4 pt-0 text-xs sm:text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed bg-zinc-50/50 dark:bg-zinc-900/50 font-normal">
+                    {faq.answer}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </section>
     </article>
   );
