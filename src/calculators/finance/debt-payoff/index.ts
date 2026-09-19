@@ -1,5 +1,7 @@
 import { CalculatorModuleDefinition } from "../../types";
 import { calculateDebtPayoff } from "@/lib/calculator-engine/formulas/debt-payoff";
+import { DebtPayoffCalculator } from "@/components/calculator/debt-payoff/DebtPayoffCalculator";
+import { DebtPayoffContent, debtPayoffFaqs } from "@/components/calculator/debt-payoff/DebtPayoffContent";
 
 export const DEBT_PAYOFF_CALCULATOR: CalculatorModuleDefinition = {
   id: "debt-payoff",
@@ -11,6 +13,8 @@ export const DEBT_PAYOFF_CALCULATOR: CalculatorModuleDefinition = {
     "Calculate multi-debt payoff schedules, compare Debt Avalanche (highest interest first) vs. Debt Snowball (lowest balance first), test payment rollover reallocation, extra payments, and debt consolidation loan savings.",
   iconName: "TrendingDown",
   featured: true,
+  CustomComponent: DebtPayoffCalculator,
+  ContentComponent: DebtPayoffContent,
   tags: [
     "debt payoff calculator",
     "debt avalanche calculator",
@@ -23,18 +27,7 @@ export const DEBT_PAYOFF_CALCULATOR: CalculatorModuleDefinition = {
   ],
   formulaDescription:
     "Debt Avalanche sorts by APR descending; Debt Snowball sorts by Balance ascending. Rollover reallocation rolls freed minimum payments into remaining debt target payments.",
-  faqs: [
-    {
-      question: "Which strategy is better: Debt Avalanche or Debt Snowball?",
-      answer:
-        "Debt Avalanche mathematically minimizes total interest paid by prioritizing highest APR debts first. Debt Snowball prioritizes lowest balance debts first to build rapid psychological momentum.",
-    },
-    {
-      question: "What is payment rollover reallocation in debt payoff?",
-      answer:
-        "When a debt is paid off, its monthly minimum payment is added to the extra payment pool targeting the next debt, keeping your total monthly debt budget constant.",
-    },
-  ],
+  faqs: debtPayoffFaqs,
   inputs: [
     { name: "balance1", label: "Auto Loan Balance ($)", type: "currency", defaultValue: 25000, unit: "$", min: 0, max: 1000000, step: 500 },
     { name: "balance2", label: "Home Mortgage Balance ($)", type: "currency", defaultValue: 250000, unit: "$", min: 0, max: 10000000, step: 1000 },

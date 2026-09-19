@@ -1,247 +1,460 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import {
-  BookOpen,
-  HelpCircle,
   TrendingDown,
+  TrendingUp,
   DollarSign,
   PieChart as PieIcon,
+  BookOpen,
+  HelpCircle,
   ShieldCheck,
   Zap,
-  Info,
   CheckCircle2,
   AlertTriangle,
   ChevronDown,
   ChevronUp,
-  Award,
+  Target,
+  Scale,
+  Calculator,
+  FileText,
   Clock,
   Layers,
-  Globe,
-  Lock,
+  Award,
 } from "lucide-react";
 
+export const debtPayoffFaqs = [
+  {
+    question: "What is the mathematical difference between Debt Avalanche and Debt Snowball?",
+    answer:
+      "Debt Avalanche prioritizes debts by highest interest rate (APR) descending. This mathematically minimizes total interest charges and achieves debt freedom in the absolute shortest time. Debt Snowball prioritizes debts by lowest balance ascending. While it may cost slightly more in total interest, it produces rapid psychological milestones that help borrowers stay motivated.",
+  },
+  {
+    question: "What is the payment rollover (snowball acceleration) effect?",
+    answer:
+      "When a debt is fully paid off, you keep your total monthly debt budget constant. The freed minimum payment from the eliminated account is rolled directly into the payment pool for the next target debt. This causes your principal repayment power to compound exponentially as each debt is cleared.",
+  },
+  {
+    question: "Should I pay off high-interest debt or invest in the stock market first?",
+    answer:
+      "Paying off high-interest consumer debt (e.g., credit cards at 18%–29% APR) delivers a guaranteed, risk-free, tax-free return equal to the debt's APR. Because historical stock market returns average 8%–10% before taxes, eliminating high-interest debt should almost always precede non-matched investing.",
+  },
+  {
+    question: "How does a Debt Consolidation Loan compare to Avalanche/Snowball payoff?",
+    answer:
+      "A debt consolidation loan combines multiple unsecured balances into a single new loan with a fixed repayment term and lower APR (e.g., 7%–12% vs. 20%+ credit cards). It simplifies payments into a single monthly installment and locks in fixed interest savings, provided you avoid accumulating new charges on the cleared cards.",
+  },
+  {
+    question: "How do Debt Management Plans (DMPs) work?",
+    answer:
+      "Offered by accredited non-profit credit counseling agencies (NFCC/FCAA), a DMP consolidates payments into a single monthly disbursement while the agency negotiates reduced interest rates (often 0%–8%) and waived fees with credit card issuers.",
+  },
+  {
+    question: "What are the risks of Debt Settlement?",
+    answer:
+      "Debt settlement involves intentionally stopping payments to negotiate paying a lump sum (often 45%–55% of balance). Severe risks include steep credit score drops (100–150+ points), aggressive collection actions, potential creditor lawsuits, and federal income tax liability on forgiven debt exceeding $600.",
+  },
+  {
+    question: "How does paying off debt improve my credit score?",
+    answer:
+      "Paying down revolving balances reduces your credit utilization ratio (which accounts for 30% of your FICO score). Reducing overall credit utilization below 10%–30% typically triggers rapid credit score increases of 40 to 100+ points.",
+  },
+  {
+    question: "Should I keep an emergency fund while aggressively paying down debt?",
+    answer:
+      "Yes. Financial advisors recommend maintaining a starter emergency fund of $1,000 to $2,500 (or one month of essential expenses) in a high-yield savings account to prevent unexpected expenses from forcing you into new high-interest credit card debt.",
+  },
+  {
+    question: "Can annual lump-sum payments accelerate my debt-free date?",
+    answer:
+      "Yes. Directing tax refunds, annual work bonuses, or inheritance windfalls directly toward high-APR principal balances eliminates future compounding interest immediately, cutting months or years off your repayment timeline.",
+  },
+  {
+    question: "What is a Hybrid Debt Payoff Strategy?",
+    answer:
+      "A hybrid strategy clears one or two small balances first using the Snowball method to build psychological momentum and simplify monthly cash flow, and then switches to the Avalanche method to maximize mathematical interest savings across larger remaining balances.",
+  },
+  {
+    question: "What happens if my monthly payment is less than monthly accrued interest?",
+    answer:
+      "If your monthly payment fails to cover accrued interest, your balance experiences negative amortization and grows larger over time. You must increase your monthly payment, negotiate hardship terms with creditors, or explore consolidation relief immediately.",
+  },
+  {
+    question: "How does my Debt-to-Income (DTI) ratio affect mortgage and auto loan approvals?",
+    answer:
+      "Your back-end DTI ratio is the percentage of gross monthly income required to service all debt payments. Mortgage lenders typically enforce a maximum DTI cap of 36% to 43%. Eliminating consumer debt lowers your DTI and dramatically expands your borrowing power.",
+  },
+];
+
 export function DebtPayoffContent() {
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [openFaqIndices, setOpenFaqIndices] = useState<Set<number>>(new Set([0, 1]));
 
   const toggleFaq = (index: number) => {
-    setOpenFaq(openFaq === index ? null : index);
+    setOpenFaqIndices((prev) => {
+      const next = new Set(prev);
+      if (next.has(index)) {
+        next.delete(index);
+      } else {
+        next.add(index);
+      }
+      return next;
+    });
   };
 
-  const faqs = [
-    {
-      question: "What is the difference between Debt Avalanche and Debt Snowball?",
-      answer: "Debt Avalanche orders debt elimination by highest interest rate (APR) first, mathematically minimizing total interest paid. Debt Snowball orders debts by lowest balance first, providing fast psychological wins as individual accounts reach zero balance.",
-    },
-    {
-      question: "What is the Snowball Reallocation (Rollover) effect?",
-      answer: "When you pay off Debt #1, you don't reduce your total monthly debt budget. Instead, you add Debt #1's minimum payment to the extra payment pool targeting Debt #2, accelerating payoff like a rolling snowball.",
-    },
-    {
-      question: "Should I pay off high-interest debt or invest in stocks first?",
-      answer: "Paying off high-interest consumer debt (e.g. credit cards at 18% to 29% APR) yields a guaranteed tax-free return equal to your APR. This far exceeds historical stock market returns (8% to 10%), so high-interest debt should almost always be paid off first.",
-    },
-    {
-      question: "What is a Debt Consolidation Loan?",
-      answer: "A debt consolidation loan replaces multiple high-interest debts (credit cards, store cards, personal loans) with a single new loan at a lower fixed APR and fixed monthly payment.",
-    },
-    {
-      question: "How does Credit Counseling & Debt Management Plans (DMP) work?",
-      answer: "Non-profit credit counseling agencies (approved by the U.S. Department of Justice) negotiate reduced interest rates (often 0% to 8%) with card issuers and consolidate your monthly payments into one single payment managed by the agency.",
-    },
-    {
-      question: "What is Debt Settlement and what are the risks?",
-      answer: "Debt settlement involves negotiating with creditors to settle accounts for less than full balance (often 45% to 50%). Risks include severe credit score damage, late fees during negotiation, and federal income tax liability on forgiven debt.",
-    },
-    {
-      question: "What is Chapter 7 vs. Chapter 13 Bankruptcy?",
-      answer: "Chapter 7 is liquidation bankruptcy (liquidating non-exempt assets to erase eligible debts in 3 to 6 months). Chapter 13 is wage-earner reorganization (a 3 to 5 year court-supervised repayment plan allowing you to keep property).",
-    },
-    {
-      question: "How long does bankruptcy stay on a credit report?",
-      answer: "Chapter 7 bankruptcy remains on your credit report for 10 years from the filing date. Chapter 13 bankruptcy remains for 7 years.",
-    },
-    {
-      question: "How does paying off debt affect my credit score?",
-      answer: "Paying off revolving credit card debt lowers your overall credit utilization ratio (which accounts for 30% of your FICO score), often increasing your credit score by 40 to 100+ points.",
-    },
-    {
-      question: "What is Debt-to-Income (DTI) ratio and why is it important?",
-      answer: "DTI is the percentage of your gross monthly income that goes toward monthly debt payments. Lenders require a DTI ratio below 36% to 43% for mortgage approval.",
-    },
-    {
-      question: "Should I keep an emergency fund while paying off debt?",
-      answer: "Yes. Financial experts recommend maintaining a small starter emergency fund ($1,000 to $2,000) to cover unexpected car or medical expenses without accumulating new credit card debt.",
-    },
-    {
-      question: "Can extra annual or lump-sum payments accelerate debt payoff?",
-      answer: "Yes. Directing tax refunds, annual work bonuses, or inheritance lump sums directly toward debt principal dramatically reduces total interest and cuts years off your debt-free date.",
-    },
-    {
-      question: "What is a Balance Transfer Card?",
-      answer: "A balance transfer card offers 0% introductory APR for 12 to 21 months on transferred credit card balances, allowing 100% of your payments to go toward principal reduction.",
-    },
-    {
-      question: "Are medical debts treated differently than credit cards?",
-      answer: "Yes. Major U.S. credit bureaus (Equifax, Experian, TransUnion) no longer report paid medical debt or unpaid medical debt under $500, giving consumers extra leverage to negotiate interest-free payment plans.",
-    },
-    {
-      question: "What is a Hybrid Debt Payoff Strategy?",
-      answer: "A hybrid strategy combines Snowball and Avalanche: you pay off one or two small balances first for motivation, then switch to high-APR debts to maximize mathematical interest savings.",
-    },
-    {
-      question: "What should I do if my monthly payment is less than monthly interest?",
-      answer: "If your monthly payment doesn't cover interest, your balance grows indefinitely (negative amortization). You must increase your payment, negotiate a lower rate, or seek debt counseling immediately.",
-    },
-    {
-      question: "Do student loans qualify for Debt Avalanche?",
-      answer: "Yes. Private and federal student loans can be included in your debt avalanche or snowball payoff schedule alongside credit cards and personal loans.",
-    },
-    {
-      question: "What is the 50/30/20 Budgeting Rule?",
-      answer: "The 50/30/20 rule allocates 50% of net income to Needs (rent, utilities, groceries), 30% to Wants, and 20% to Savings and Debt Elimination.",
-    },
-    {
-      question: "Can I negotiate a lower interest rate with my credit card company?",
-      answer: "Yes. Calling customer service and requesting a rate reduction based on on-time payment history or hardship programs often results in temporary or permanent APR drops.",
-    },
-    {
-      question: "Why use an online Debt Payoff Calculator?",
-      answer: "An online debt payoff calculator handles complex multi-debt interest math, compares Avalanche vs Snowball side-by-side, models payment rollover reallocation, and generates printable PDF debt-free roadmaps.",
-    },
-  ];
-
   return (
-    <div className="space-y-10 mt-8  dark:border-zinc-800 pt-8 text-zinc-700 dark:text-zinc-300">
-      {/* Overview Banner */}
-      <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-950 text-white rounded-2xl p-6 md:p-8 shadow-lg">
-        <div className="flex items-center gap-3 text-blue-400 font-semibold text-xs tracking-wider uppercase mb-2">
-          <BookOpen className="h-4 w-4" /> Financial Freedom &amp; Debt Elimination Masterclass
+    <article className="mt-8 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-10 divide-y divide-slate-100 dark:divide-slate-800 shadow-xs">
+      
+      {/* 1. INTRODUCTION */}
+      <section className="space-y-4">
+        <div className="flex items-center gap-2.5 text-blue-600 dark:text-blue-400 font-semibold text-xs tracking-wider uppercase">
+          <TrendingDown className="w-4 h-4" />
+          <span>Debt Elimination Masterclass</span>
         </div>
-        <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-3">
-          The Science of Becoming Debt-Free: Strategies, Mathematics &amp; Relief
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
+          1. Introduction: The Mathematics of Accelerated Debt Freedom
         </h2>
-        <p className="text-zinc-300 text-sm leading-relaxed max-w-4xl">
-          Carrying multiple debts across credit cards, auto loans, personal loans, and student debt creates compounding interest drag. 
-          Understanding the mathematical difference between Debt Avalanche and Debt Snowball, payment rollover reallocation, 
-          consolidation loan economics, and formal relief options empowers you to achieve total financial freedom years ahead of schedule.
+        <p>
+          Carrying multiple debts across credit cards, auto loans, personal loans, and student debt creates significant interest drag on household wealth. When borrowers pay only the minimum required payments across all accounts, credit card balances can take <strong>20 to 30 years</strong> to extinguish, with cumulative interest charges often exceeding the original principal borrowed.
         </p>
-      </div>
-
-      {/* Main Content Grid */}
-      <div className="space-y-8 text-sm leading-relaxed">
-        {/* Section 1 & 2 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-3">
-            <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-base">
-              <TrendingDown className="h-5 w-5" /> 1. Debt Avalanche vs. Debt Snowball Comparison
-            </div>
-            <p>
-              Both methods eliminate debt, but target different human motivators:
+        <p>
+          Achieving accelerated debt freedom requires structured algorithmic repayment strategies. By establishing a fixed total monthly debt budget and channeling all discretionary surplus cash into a single targeted account—while systematically rolling over freed minimum payments as each balance hits zero—borrowers can cut years off their repayment horizon and save thousands of dollars in compounding interest charges.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+          <div className="p-4 bg-blue-50/60 dark:bg-blue-950/20 rounded-xl border border-blue-200 dark:border-blue-800 space-y-2">
+            <h3 className="font-bold text-slate-900 dark:text-slate-100 text-base flex items-center gap-2">
+              <Zap className="w-4 h-4 text-blue-600" />
+              Debt Avalanche (Mathematical Optimum)
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+              Orders debts by <strong>highest APR first</strong>. Eliminates the most expensive interest drain first, guaranteeing the absolute lowest lifetime interest paid and fastest mathematical debt-free date.
             </p>
-            <ul className="text-xs space-y-2 text-slate-900 dark:text-slate-100">
-              <li>• <strong>Debt Avalanche (Highest APR First):</strong> Pays off debts starting with the highest interest rate. Mathematically minimizes interest paid and achieves debt freedom in the absolute shortest time.</li>
-              <li>• <strong>Debt Snowball (Lowest Balance First):</strong> Pays off debts starting with the smallest balance. Creates quick psychological wins, building emotional momentum to stick with your plan.</li>
-            </ul>
           </div>
-
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-3">
-            <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-base">
-              <Zap className="h-5 w-5" /> 2. The Snowball Payment Rollover Effect
-            </div>
-            <p>
-              The key engine of rapid debt elimination is payment rollover reallocation:
+          <div className="p-4 bg-emerald-50/60 dark:bg-emerald-950/20 rounded-xl border border-emerald-200 dark:border-emerald-800 space-y-2">
+            <h3 className="font-bold text-slate-900 dark:text-slate-100 text-base flex items-center gap-2">
+              <Award className="w-4 h-4 text-emerald-600" />
+              Debt Snowball (Behavioral Optimum)
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+              Orders debts by <strong>lowest balance first</strong>. Produces rapid psychological victories as small balances reach zero, building emotional momentum to maintain long-term discipline.
             </p>
-            <ul className="text-xs space-y-1.5 text-slate-900 dark:text-slate-100">
-              <li>• When a debt (e.g. $150/mo minimum) is paid off to $0, <strong>do not spend that $150</strong>.</li>
-              <li>• Reallocate that $150 directly into the monthly payment for your next target debt.</li>
-              <li>• Your monthly debt budget remains constant while your principal reduction power compounds exponentially!</li>
-            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* 2. MATHEMATICAL CONCEPTS */}
+      <section className="pt-8 space-y-4">
+        <div className="flex items-center gap-2.5 text-blue-600 dark:text-blue-400 font-semibold text-xs tracking-wider uppercase">
+          <Scale className="w-4 h-4" />
+          <span>Underlying Financial Mechanics</span>
+        </div>
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
+          2. Mathematical Foundations: Multi-Debt Amortization &amp; Rollover Pooling
+        </h2>
+        <p>
+          In a multi-debt portfolio with <em>K</em> active credit accounts, each account <em>k</em> has an outstanding balance $B_k(t)$, an annual interest rate $r_k$, and a contractual minimum payment $M_k(t)$.
+        </p>
+        <p>
+          In each monthly billing period, monthly periodic interest accrues on every unpaid balance:
+        </p>
+
+        <div className="p-5 bg-slate-900 text-slate-100 rounded-xl font-mono text-xs sm:text-sm space-y-3 shadow-inner">
+          <div className="text-slate-400 font-sans text-xs uppercase tracking-wider border-b border-slate-700 pb-1">
+            Monthly Debt Interest &amp; Principal Reduction Equations
+          </div>
+          <div>
+            <span className="text-rose-400">Periodic Interest Charge (I_k)</span> = B_k(t) × (r_k / 12)
+          </div>
+          <div>
+            <span className="text-blue-400">Principal Reduction (ΔB_k)</span> = Payment_k(t) - I_k
+          </div>
+          <div className="text-slate-300 text-xs font-sans">
+            Where: If Payment_k &le; I_k, the balance experiences negative amortization and expands infinitely.
           </div>
         </div>
 
-        {/* Section 3: Alternative Relief Options */}
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">3. Overview of Debt Relief &amp; Bankruptcy Options
-          </h3>
-          
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs border-collapse border border-zinc-200 dark:border-zinc-800">
-              <thead>
-                <tr className="bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200">
-                  <th className="p-3 border border-zinc-200 dark:border-zinc-700">Relief Mechanism</th>
-                  <th className="p-3 border border-zinc-200 dark:border-zinc-700">How It Works</th>
-                  <th className="p-3 border border-zinc-200 dark:border-zinc-700">Credit Score Impact</th>
-                  <th className="p-3 border border-zinc-200 dark:border-zinc-700">Key Trade-offs</th>
-                </tr>
-              </thead>
-              <tbody className=" dark:divide-zinc-800">
-                <tr>
-                  <td className="p-3 font-semibold text-blue-600">Debt Consolidation Loan</td>
-                  <td className="p-3">Refinances multiple debts into 1 low-rate loan</td>
-                  <td className="p-3 font-bold text-blue-600">Positive (Lowers utilization)</td>
-                  <td className="p-3 text-slate-900">Requires good credit score (660+)</td>
-                </tr>
-                <tr>
-                  <td className="p-3 font-semibold text-blue-600">Debt Management Plan (DMP)</td>
-                  <td className="p-3">Non-profit agency negotiates 0%–8% interest rates</td>
-                  <td className="p-3 text-blue-600 font-medium">Mild Temporary Drop</td>
-                  <td className="p-3 text-slate-900">Credit accounts closed during plan</td>
-                </tr>
-                <tr>
-                  <td className="p-3 font-semibold text-blue-600">Debt Settlement</td>
-                  <td className="p-3">Negotiates paying 45%–50% of balance to settle</td>
-                  <td className="p-3 text-red-600 font-bold">Severe Drop (-100 to -150 pts)</td>
-                  <td className="p-3 text-slate-900">Forgiven debt is taxable income to IRS</td>
-                </tr>
-                <tr>
-                  <td className="p-3 font-semibold text-red-600">Chapter 7 Bankruptcy</td>
-                  <td className="p-3">Court-ordered liquidation of debts in 3–6 mos</td>
-                  <td className="p-3 text-red-600 font-bold">Maximum Damage (10 yrs on report)</td>
-                  <td className="p-3 text-slate-900">May lose non-exempt personal assets</td>
-                </tr>
-              </tbody>
-            </table>
+        <p>
+          The true engine of accelerated debt elimination is <strong>Rollover Reallocation</strong>. When debt <em>j</em> is eliminated ($B_j = 0$), its minimum payment $M_j$ does not disappear from your budget; it rolls directly into the available surplus cash pool targeting debt $j+1$:
+        </p>
+
+        <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 font-mono text-xs text-blue-600 dark:text-blue-400">
+          Rollover Pool R(t) = Extra Monthly Budget + &sum; [ M_j of all paid-off accounts ]
+        </div>
+      </section>
+
+      {/* 3. FORMULA SECTION */}
+      <section className="pt-8 space-y-4">
+        <div className="flex items-center gap-2.5 text-blue-600 dark:text-blue-400 font-semibold text-xs tracking-wider uppercase">
+          <Calculator className="w-4 h-4" />
+          <span>Formulas &amp; Prioritization Rules</span>
+        </div>
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
+          3. Repayment Strategy Algorithms &amp; Interest Savings
+        </h2>
+        <p>
+          Both primary acceleration methods maintain contractual minimum payments across all active accounts while directing 100% of the rollover pool $R(t)$ to the top-priority debt:
+        </p>
+
+        <div className="space-y-4">
+          <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+            <h3 className="font-bold text-slate-900 dark:text-slate-100 text-sm">
+              1. Debt Avalanche Algorithm (Greedy APR Sort)
+            </h3>
+            <div className="font-mono text-xs text-blue-600 dark:text-blue-400">
+              Priority Order = Sort Debts by APR (r_k) Descending: max(r_1, r_2, ..., r_K)
+            </div>
+            <p className="text-xs text-slate-600 dark:text-slate-300">
+              Targets the most damaging compounding interest first. Minimizes total lifetime interest paid.
+            </p>
+          </div>
+
+          <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+            <h3 className="font-bold text-slate-900 dark:text-slate-100 text-sm">
+              2. Debt Snowball Algorithm (Ascending Balance Sort)
+            </h3>
+            <div className="font-mono text-xs text-emerald-600 dark:text-emerald-400">
+              Priority Order = Sort Debts by Current Balance (B_k) Ascending: min(B_1, B_2, ..., B_K)
+            </div>
+            <p className="text-xs text-slate-600 dark:text-slate-300">
+              Eliminates the smallest balance first regardless of interest rate. Maximizes velocity of account closures.
+            </p>
+          </div>
+
+          <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+            <h3 className="font-bold text-slate-900 dark:text-slate-100 text-sm">
+              3. Lifetime Interest Savings Equation
+            </h3>
+            <div className="font-mono text-xs text-amber-600 dark:text-amber-400">
+              Net Savings (&Delta;I) = Total Interest (Minimums Only) - Total Interest (Accelerated Strategy)
+            </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* 20 SEO FAQs Section */}
-      <div className="space-y-6 pt-4">
-        <div className="flex items-center gap-3">
-          <HelpCircle className="h-6 w-6 text-blue-600" />
-          <h3 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 tracking-tight">
-            Frequently Asked Questions (FAQ)
-          </h3>
+      {/* 4. STEP BY STEP PROCEDURE */}
+      <section className="pt-8 space-y-4">
+        <div className="flex items-center gap-2.5 text-blue-600 dark:text-blue-400 font-semibold text-xs tracking-wider uppercase">
+          <BookOpen className="w-4 h-4" />
+          <span>Step-by-Step Procedure</span>
         </div>
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
+          4. How the Multi-Debt Payoff Calculation Works (Execution Loop)
+        </h2>
+        <ol className="list-decimal list-inside space-y-3 pl-2 text-xs sm:text-sm">
+          <li>
+            <strong>Inventory All Liabilities:</strong> Compile every credit card, auto loan, personal loan, and medical balance with exact current balance ($B_k$), interest rate ($r_k$), and minimum monthly payment ($M_k$).
+          </li>
+          <li>
+            <strong>Establish Total Monthly Debt Budget:</strong> Sum all minimum required payments plus any discretionary surplus cash ($Extra$), establishing your fixed monthly commitment: $TotalBudget = \sum M_k + Extra$.
+          </li>
+          <li>
+            <strong>Apply Prioritization Sorting:</strong> Rank debts based on your chosen strategy (APR descending for Avalanche, Balance ascending for Snowball).
+          </li>
+          <li>
+            <strong>Execute Monthly Payment Distribution:</strong> In month $t$, assign contractual minimums to lower-ranked accounts. Assign all remaining budget cash (minimum + extra + accumulated rollover) to the #1 priority target account.
+          </li>
+          <li>
+            <strong>Trigger Account Payoff Rollover:</strong> When the target debt reaches $0, celebrate the milestone and immediately roll its entire previous payment into the surplus cash pool targeting the next account in line.
+          </li>
+          <li>
+            <strong>Iterate Until Zero Debt:</strong> Continue the rollover loop month by month until all accounts reach zero balance, recording total interest paid and your exact debt-free date.
+          </li>
+        </ol>
+      </section>
 
-        <div className="space-y-3">
-          {faqs.map((faq, index) => {
-            const isOpen = openFaq === index;
+      {/* 5. WORKED EXAMPLES */}
+      <section className="pt-8 space-y-4">
+        <div className="flex items-center gap-2.5 text-blue-600 dark:text-blue-400 font-semibold text-xs tracking-wider uppercase">
+          <FileText className="w-4 h-4" />
+          <span>Detailed Numerical Demonstrations</span>
+        </div>
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
+          5. Worked Examples: Step-by-Step Portfolio Payoff Solutions
+        </h2>
+
+        <div className="space-y-6">
+          {/* Example 1 */}
+          <div className="p-5 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3">
+            <h3 className="font-bold text-slate-900 dark:text-slate-100 text-base flex items-center justify-between">
+              <span>Example 1: 4-Debt Household Portfolio ($284,000 Total Debt with $100 Extra/Month)</span>
+              <span className="text-blue-600 dark:text-blue-400 font-bold text-xs bg-blue-100 dark:bg-blue-950/40 px-2 py-1 rounded-md">Avalanche vs. Snowball</span>
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+              Debts: Credit Card 1 ($6,000 @ 18.99%, min $150), Credit Card 2 ($3,000 @ 16.99%, min $60), Auto Loan ($25,000 @ 4.90%, min $519), Mortgage ($250,000 @ 4.00%, min $1,800). Total Minimums = $2,529/mo + $100 extra = $2,629/mo.
+            </p>
+            <div className="p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 font-mono text-xs space-y-1.5">
+              <div>• <strong>Debt Avalanche Order:</strong> CC #1 (18.99%) &rarr; CC #2 (16.99%) &rarr; Auto Loan (4.90%) &rarr; Mortgage (4.00%).</div>
+              <div>&nbsp;&nbsp;CC #1 paid off in Month 25. Rollover pool grows from $100 to $250. CC #2 paid in Month 34. Total Interest = <strong>$146,820</strong>.</div>
+              <div>• <strong>Debt Snowball Order:</strong> CC #2 ($3k) &rarr; CC #1 ($6k) &rarr; Auto Loan ($25k) &rarr; Mortgage ($250k).</div>
+              <div>&nbsp;&nbsp;CC #2 cleared in Month 19 (quick psychological win!). CC #1 paid in Month 35. Total Interest = <strong>$147,410</strong>.</div>
+              <div className="text-blue-600 dark:text-blue-400 font-bold">
+                ★ Comparison: Avalanche saves $590 more in interest; Snowball delivers the first zero-balance victory 6 months faster!
+              </div>
+            </div>
+          </div>
+
+          {/* Example 2 */}
+          <div className="p-5 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-3">
+            <h3 className="font-bold text-slate-900 dark:text-slate-100 text-base flex items-center justify-between">
+              <span>Example 2: Impact of a $3,000 One-Time Tax Refund Windfall</span>
+              <span className="text-emerald-600 dark:text-emerald-400 font-bold text-xs bg-emerald-100 dark:bg-emerald-950/40 px-2 py-1 rounded-md">Lump-Sum Power</span>
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+              Applying a single $3,000 tax refund in Month 4 directly to Credit Card #1 (18.99% APR).
+            </p>
+            <div className="p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 font-mono text-xs space-y-1.5">
+              <div>• Immediately reduces Credit Card #1 principal by $3,000.</div>
+              <div>• Eliminates $570/year in ongoing compounding interest charges.</div>
+              <div>• Accelerates CC #1 payoff date by 14 months and triggers the $150 rollover pool more than a year early!</div>
+              <div className="text-emerald-600 dark:text-emerald-400 font-bold">
+                ★ Total Portfolio Interest Saved from one $3,000 windfall: Over $1,850 in lifetime savings!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 6. DECISION MATRIX & RELIEF COMPARISON */}
+      <section className="pt-8 space-y-4">
+        <div className="flex items-center gap-2.5 text-blue-600 dark:text-blue-400 font-semibold text-xs tracking-wider uppercase">
+          <TrendingUp className="w-4 h-4" />
+          <span>Strategy Decision Matrix</span>
+        </div>
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
+          6. Visual Strategy Matrix: Comparing Debt Relief Pathways
+        </h2>
+
+        <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 text-xs">
+          <table className="w-full text-left border-collapse">
+            <thead className="bg-slate-100 dark:bg-slate-800 font-semibold text-slate-900 dark:text-slate-100 border-b border-slate-200 dark:border-slate-700">
+              <tr>
+                <th className="p-3">Debt Strategy</th>
+                <th className="p-3">Primary Mechanism</th>
+                <th className="p-3">Credit Score Impact</th>
+                <th className="p-3">Best Suited For</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
+              <tr>
+                <td className="p-2.5 font-bold text-blue-600 dark:text-blue-400">Debt Avalanche</td>
+                <td className="p-2.5">Sort by highest APR first; roll over freed minimums.</td>
+                <td className="p-2.5 font-semibold text-emerald-600">Highly Positive (+40 to +100 pts)</td>
+                <td className="p-2.5">Analytical borrowers seeking maximum mathematical savings.</td>
+              </tr>
+              <tr>
+                <td className="p-2.5 font-bold text-emerald-600 dark:text-emerald-400">Debt Snowball</td>
+                <td className="p-2.5">Sort by lowest balance first; roll over freed minimums.</td>
+                <td className="p-2.5 font-semibold text-emerald-600">Highly Positive (+40 to +100 pts)</td>
+                <td className="p-2.5">Borrowers needing quick emotional wins to stay disciplined.</td>
+              </tr>
+              <tr>
+                <td className="p-2.5 font-bold text-indigo-600 dark:text-indigo-400">Consolidation Loan</td>
+                <td className="p-2.5">Refinances multiple cards into 1 fixed-rate loan (7%–12%).</td>
+                <td className="p-2.5 font-semibold text-blue-600">Positive (clears revolving debt)</td>
+                <td className="p-2.5">Borrowers with good credit (660+) wanting a single payment.</td>
+              </tr>
+              <tr>
+                <td className="p-2.5 font-bold text-amber-600 dark:text-amber-400">Non-Profit DMP</td>
+                <td className="p-2.5">Credit counselor negotiates 0%–8% APR with card issuers.</td>
+                <td className="p-2.5 font-semibold text-amber-600">Mild Temporary Drop</td>
+                <td className="p-2.5">Overwhelmed borrowers with high card debt and poor credit.</td>
+              </tr>
+              <tr>
+                <td className="p-2.5 font-bold text-rose-600 dark:text-rose-400">Debt Settlement</td>
+                <td className="p-2.5">Negotiates paying 45%–55% lump-sum settlement.</td>
+                <td className="p-2.5 font-semibold text-rose-600">Severe Drop (-100 to -150 pts)</td>
+                <td className="p-2.5">Severe insolvency; forgiven debt is taxable to the IRS.</td>
+              </tr>
+              <tr>
+                <td className="p-2.5 font-bold text-rose-700 dark:text-rose-500">Chapter 7 Bankruptcy</td>
+                <td className="p-2.5">Court-ordered liquidation of eligible unsecured debts in 3–6 mos.</td>
+                <td className="p-2.5 font-semibold text-rose-700">Maximum Damage (10 yrs on report)</td>
+                <td className="p-2.5">Extreme financial hardship with no viable repayment path.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* 7. COMMON PITFALLS */}
+      <section className="pt-8 space-y-4">
+        <div className="flex items-center gap-2.5 text-amber-600 dark:text-amber-400 font-semibold text-xs tracking-wider uppercase">
+          <AlertTriangle className="w-4 h-4" />
+          <span>Strategic Pitfalls &amp; Rules</span>
+        </div>
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
+          7. Critical Pitfalls to Avoid on Your Debt-Free Journey
+        </h2>
+
+        <div className="space-y-3 text-xs sm:text-sm">
+          <div className="p-4 bg-amber-50/60 dark:bg-amber-950/20 rounded-xl border border-amber-200 dark:border-amber-800 space-y-1">
+            <h3 className="font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+              <span className="text-amber-600 font-extrabold">✕</span>
+              The &ldquo;Minimum-Only&rdquo; Repayment Trap
+            </h3>
+            <p className="text-slate-600 dark:text-slate-300">
+              Credit card minimums are structured as 1% to 2% of the principal plus monthly interest. Paying only minimums extends repayment over 20 to 30 years and results in paying 200% to 300% of the original purchase in pure finance charges.
+            </p>
+          </div>
+
+          <div className="p-4 bg-amber-50/60 dark:bg-amber-950/20 rounded-xl border border-amber-200 dark:border-amber-800 space-y-1">
+            <h3 className="font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+              <span className="text-amber-600 font-extrabold">✕</span>
+              Closing Credit Cards Immediately After Payoff
+            </h3>
+            <p className="text-slate-600 dark:text-slate-300">
+              Closing a cleared credit card account destroys that credit line from your total available limit and shortens your average account age, causing your credit utilization ratio to spike and your credit score to drop. Keep zero-balance cards open with occasional small auto-paid charges.
+            </p>
+          </div>
+
+          <div className="p-4 bg-emerald-50/60 dark:bg-emerald-950/20 rounded-xl border border-emerald-200 dark:border-emerald-800 space-y-1">
+            <h3 className="font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+              <span className="text-emerald-600 font-extrabold">✓</span>
+              Maintain a Starter Emergency Fund ($1,000–$2,500)
+            </h3>
+            <p className="text-slate-600 dark:text-slate-300">
+              Never deplete your checking account to $0 while paying debt. A small cash buffer prevents minor emergencies (car repairs, medical copays) from forcing you back into high-APR credit card borrowing.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* 8. INTERACTIVE FAQ SECTION */}
+      <section className="pt-8 space-y-4">
+        <div className="flex items-center gap-2.5 text-blue-600 dark:text-blue-400 font-semibold text-xs tracking-wider uppercase">
+          <HelpCircle className="w-4 h-4 text-blue-500" />
+          <span>Frequently Asked Questions</span>
+        </div>
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
+          8. Frequently Asked Questions (FAQ)
+        </h2>
+        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+          Click any question below to expand or collapse detailed guidance on debt payoff strategies, interest optimization, and relief methods.
+        </p>
+
+        <div className="space-y-3 pt-2">
+          {debtPayoffFaqs.map((faq, index) => {
+            const isOpen = openFaqIndices.has(index);
             return (
               <div
                 key={index}
-                className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden transition-all shadow-sm"
+                className="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60 overflow-hidden transition-colors"
               >
                 <button
                   type="button"
                   onClick={() => toggleFaq(index)}
-                  className="w-full text-left p-4 flex items-center justify-between font-semibold text-sm text-zinc-900 dark:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors focus:outline-none"
+                  className="w-full flex items-center justify-between p-4 text-left font-bold text-slate-900 dark:text-slate-100 hover:text-blue-600 dark:hover:text-blue-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 text-xs sm:text-sm gap-3 cursor-pointer"
+                  aria-expanded={isOpen}
                 >
-                  <span className="flex items-center gap-2">
-                    <span className="text-xs text-blue-600 dark:text-blue-400 font-bold min-w-[20px]">
-                      Q{index + 1}.
-                    </span>
-                    {faq.question}
-                  </span>
+                  <span>{faq.question}</span>
                   {isOpen ? (
-                    <ChevronUp className="h-4 w-4 text-zinc-400 flex-shrink-0" />
+                    <ChevronUp className="w-4 h-4 text-slate-500 shrink-0" />
                   ) : (
-                    <ChevronDown className="h-4 w-4 text-zinc-400 flex-shrink-0" />
+                    <ChevronDown className="w-4 h-4 text-slate-500 shrink-0" />
                   )}
                 </button>
                 {isOpen && (
-                  <div className="p-4 pt-0 text-xs text-slate-900 dark:text-slate-100  dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 leading-relaxed">
+                  <div className="px-4 pb-4 pt-1 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-200/60 dark:border-slate-700/60 bg-white dark:bg-slate-900">
                     {faq.answer}
                   </div>
                 )}
@@ -249,7 +462,65 @@ export function DebtPayoffContent() {
             );
           })}
         </div>
-      </div>
-    </div>
+      </section>
+
+      {/* 9. RELATED FINANCIAL CALCULATORS */}
+      <section className="pt-8 space-y-4">
+        <div className="flex items-center gap-2.5 text-blue-600 dark:text-blue-400 font-semibold text-xs tracking-wider uppercase">
+          <BookOpen className="w-4 h-4" />
+          <span>Related Debt &amp; Credit Tools</span>
+        </div>
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
+          9. Related Debt &amp; Financial Calculators
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+          <Link
+            href="/calculators/credit-card-payoff-calculator"
+            className="p-3 bg-slate-50 dark:bg-slate-800/60 hover:bg-blue-50 dark:hover:bg-blue-950/30 rounded-xl border border-slate-200 dark:border-slate-700 transition-colors block space-y-1"
+          >
+            <div className="font-bold text-blue-600 dark:text-blue-400">Credit Card Payoff Calculator</div>
+            <p className="text-slate-600 dark:text-slate-300">Model individual credit card interest, payoff timelines, and balance transfers.</p>
+          </Link>
+
+          <Link
+            href="/calculators/personal-loan-calculator"
+            className="p-3 bg-slate-50 dark:bg-slate-800/60 hover:bg-blue-50 dark:hover:bg-blue-950/30 rounded-xl border border-slate-200 dark:border-slate-700 transition-colors block space-y-1"
+          >
+            <div className="font-bold text-blue-600 dark:text-blue-400">Personal Loan Calculator</div>
+            <p className="text-slate-600 dark:text-slate-300">Evaluate fixed-rate consolidation loans to refinance high-APR credit card balances.</p>
+          </Link>
+
+          <Link
+            href="/calculators/dti-calculator"
+            className="p-3 bg-slate-50 dark:bg-slate-800/60 hover:bg-blue-50 dark:hover:bg-blue-950/30 rounded-xl border border-slate-200 dark:border-slate-700 transition-colors block space-y-1"
+          >
+            <div className="font-bold text-blue-600 dark:text-blue-400">Debt-to-Income (DTI) Calculator</div>
+            <p className="text-slate-600 dark:text-slate-300">Measure front-end and back-end DTI ratios for mortgage and loan eligibility.</p>
+          </Link>
+        </div>
+      </section>
+
+      {/* 10. EDUCATIONAL SUMMARY */}
+      <section className="pt-8 space-y-4">
+        <div className="flex items-center gap-2.5 text-emerald-600 dark:text-emerald-400 font-semibold text-xs tracking-wider uppercase">
+          <CheckCircle2 className="w-4 h-4" />
+          <span>Educational Key Takeaways</span>
+        </div>
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100">
+          10. Educational Key Takeaways
+        </h2>
+        <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2 text-xs sm:text-sm">
+          <ul className="list-disc list-inside space-y-1.5 text-slate-700 dark:text-slate-300">
+            <li><strong>Rollover Reallocation is Key:</strong> Never reduce your monthly debt budget when an account reaches zero; roll 100% of freed payments into the next target.</li>
+            <li><strong>Avalanche Minimizes Interest:</strong> Prioritizing highest APR balances first mathematically produces the lowest total interest cost.</li>
+            <li><strong>Snowball Maximizes Motivation:</strong> Clearing small balances first generates psychological wins that prevent plan abandonment.</li>
+            <li><strong>Protect Your Credit Score:</strong> Keep zero-balance credit cards open to maintain low credit utilization and long credit history.</li>
+          </ul>
+        </div>
+      </section>
+
+    </article>
   );
 }
+
+export default DebtPayoffContent;

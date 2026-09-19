@@ -70,6 +70,7 @@ import { VatCalculator } from "./vat/VatCalculator";
 import { VatContent } from "./vat/VatContent";
 import { SalesTaxCalculator } from "./sales-tax/SalesTaxCalculator";
 import { DebtPayoffCalculator } from "./debt-payoff/DebtPayoffCalculator";
+import { DebtPayoffContent } from "./debt-payoff/DebtPayoffContent";
 import { DebtConsolidationCalculator } from "./debt-consolidation/DebtConsolidationCalculator";
 import { DebtConsolidationContent } from "./debt-consolidation/DebtConsolidationContent";
 import { RetirementCalculator } from "./retirement/RetirementCalculator";
@@ -108,6 +109,7 @@ import { BusinessLoanContent } from "./business-loan/BusinessLoanContent";
 import { StudentLoanCalculator } from "./student-loan/StudentLoanCalculator";
 import { BudgetCalculator } from "./budget/BudgetCalculator";
 import { BudgetContent } from "./budget/BudgetContent";
+import { CurrencyContent } from "./currency/CurrencyContent";
 import { BmiCalculator } from "./bmi/BmiCalculator";
 import { BmiContent } from "./bmi/BmiContent";
 import { CalorieCalculator } from "./calorie/CalorieCalculator";
@@ -609,6 +611,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
                     isTimeDuration ? TimeDurationContent :
                     isInvestment ? InvestmentContent :
                       isRetirement ? RetirementContent :
+                        isDebtPayoff ? DebtPayoffContent :
+                        isCurrency ? CurrencyContent :
                         isGdp ? GDPContent :
                           isCreditCardPayoff ? CreditCardPayoffContent :
                             isBoatLoan ? BoatLoanContent :
@@ -722,6 +726,16 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
             <MarriageTaxCalculator />
           ) : isCashBack ? (
             <CashBackCalculator />
+          ) : isBoatLoan ? (
+            <BoatLoanCalculator />
+          ) : isDebtPayoff ? (
+            <DebtPayoffCalculator />
+          ) : isMargin ? (
+            <MarginCalculator />
+          ) : isCollegeCost ? (
+            <CollegeCostCalculator />
+          ) : isCurrency ? (
+            <CurrencyCalculator />
           ) : (definition as any).CustomComponent ? (
             React.createElement((definition as any).CustomComponent)
           ) : isMolecularWeight ? (

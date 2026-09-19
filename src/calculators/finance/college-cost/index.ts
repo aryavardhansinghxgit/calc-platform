@@ -1,5 +1,7 @@
 import { CalculatorModuleDefinition } from "../../types";
 import { calculateCollegeCost } from "@/lib/calculator-engine/formulas/college-cost";
+import { CollegeCostCalculator } from "@/components/calculator/college-cost/CollegeCostCalculator";
+import { CollegeCostContent, collegeCostFaqs } from "@/components/calculator/college-cost/CollegeCostContent";
 
 export const COLLEGE_COST_CALCULATOR: CalculatorModuleDefinition = {
   id: "college-cost",
@@ -11,6 +13,8 @@ export const COLLEGE_COST_CALCULATOR: CalculatorModuleDefinition = {
     "Calculate future college costs with tuition inflation, estimate 529 savings plans, required monthly savings, student loan repayment burdens, and major ROI.",
   iconName: "GraduationCap",
   featured: true,
+  CustomComponent: CollegeCostCalculator,
+  ContentComponent: CollegeCostContent,
   tags: [
     "college cost calculator",
     "college savings calculator",
@@ -22,23 +26,7 @@ export const COLLEGE_COST_CALCULATOR: CalculatorModuleDefinition = {
   ],
   formulaDescription:
     "Future College Cost = Current Cost × (1 + Inflation Rate)^Years. Required Monthly Savings = Shortfall / [((1 + i)^n - 1) / i]",
-  faqs: [
-    {
-      question: "How is future college cost calculated with inflation?",
-      answer:
-        "Future college costs are compounded using the formula FV = PV × (1 + r)^n, where PV is today's annual cost, r is the annual college inflation rate (typically 4% to 6%), and n is the number of years until college attendance.",
-    },
-    {
-      question: "What is a 529 College Savings Plan?",
-      answer:
-        "A 529 plan is a tax-advantaged investment account where earnings grow 100% free of federal taxes and can be withdrawn tax-free for qualified educational expenses.",
-    },
-    {
-      question: "How much should parents save each month for college?",
-      answer:
-        "Monthly savings depend on the child's age, target college type, and expected investment returns. Starting at birth, saving $250 to $500 per month in a 529 plan covers a substantial portion of in-state public university costs.",
-    },
-  ],
+  faqs: collegeCostFaqs,
   inputs: [
     {
       name: "currentAnnualCost",

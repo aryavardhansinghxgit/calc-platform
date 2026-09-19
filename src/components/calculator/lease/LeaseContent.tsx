@@ -43,59 +43,10 @@ export function LeaseContent() {
     });
   };
 
-  const relatedCalculators = [
-    {
-      name: "Auto Loan Calculator",
-      slug: "/calculators/auto-loan-calculator",
-    },
-    {
-      name: "Loan Calculator",
-      slug: "/calculators/loan-calculator",
-    },
-    {
-      name: "APR Calculator",
-      slug: "/calculators/apr-calculator",
-    },
-    {
-      name: "Rent vs Buy Calculator",
-      slug: "/calculators/rent-vs-buy-calculator",
-    },
-    {
-      name: "Amortization Calculator",
-      slug: "/calculators/amortization-calculator",
-    },
-    {
-      name: "Interest Calculator",
-      slug: "/calculators/interest-calculator",
-    },
-    {
-      name: "Mortgage Calculator",
-      slug: "/calculators/mortgage-calculator",
-    },
-  ];
-
   return (
     <article className="mt-8 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 sm:p-8 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-10 divide-y divide-slate-100 dark:divide-slate-800 shadow-xs">
-      {/* 1. SINGLE CANONICAL RELATED CALCULATORS BLOCK (AT TOP - Exactly 7 Verified Live Routes) */}
-      <div>
-        <h2 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-3">
-          Related Valuation &amp; Financing Tools
-        </h2>
-        <div className="flex flex-wrap gap-2 text-xs">
-          {relatedCalculators.map((calc, idx) => (
-            <Link
-              key={idx}
-              href={calc.slug}
-              className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-            >
-              {calc.name}
-            </Link>
-          ))}
-        </div>
-      </div>
-
-      {/* 2. WHAT IS A LEASE CALCULATOR */}
-      <section className="pt-8 space-y-4">
+      {/* 1. WHAT IS A LEASE CALCULATOR */}
+      <section className="space-y-4">
         <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-xs uppercase tracking-wider">
           <BookOpen className="h-4 w-4" /> Comprehensive Lease Financing Chapter
         </div>

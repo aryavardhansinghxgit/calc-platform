@@ -563,41 +563,6 @@ export function AutoLeaseContent() {
           This Auto Lease Calculator models standard consumer leasing equations using mathematical formulations compliant with federal consumer-leasing disclosure standards. All calculations are performed deterministically in real time. Actual lease contracts can vary based on dealer documentation fees, regional sales-tax rules (e.g., upfront taxation vs monthly payment taxation), captive lender money factors, credit tier requirements, and manufacturer acquisition fee guidelines. Always inspect your written lease agreement before signing.
         </p>
       </section>
-
-      {/* =========================================================================
-          CONTEXTUAL RELATED CALCULATORS NAVIGATION
-         ========================================================================= */}
-      <section className="space-y-3 pt-6 border-t border-slate-200 dark:border-slate-800">
-        <h2 className="text-base sm:text-lg font-bold tracking-tight text-slate-900 dark:text-white">
-          Explore Related Financial Calculators
-        </h2>
-        <p className="text-xs text-slate-600 dark:text-slate-400">
-          Compare auto financing strategies with our suite of precision calculators:
-        </p>
-        <div className="flex flex-wrap gap-2 pt-1 text-xs">
-          <Link href="/calculators/auto-loan-calculator" className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-semibold hover:bg-blue-50 dark:hover:bg-blue-950/40 border border-slate-200 dark:border-slate-700 transition-colors">
-            Auto Loan Calculator →
-          </Link>
-          <Link href="/calculators/loan-calculator" className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-semibold hover:bg-blue-50 dark:hover:bg-blue-950/40 border border-slate-200 dark:border-slate-700 transition-colors">
-            Loan Calculator →
-          </Link>
-          <Link href="/calculators/payment-calculator" className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-semibold hover:bg-blue-50 dark:hover:bg-blue-950/40 border border-slate-200 dark:border-slate-700 transition-colors">
-            Payment Calculator →
-          </Link>
-          <Link href="/calculators/interest-rate-calculator" className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-semibold hover:bg-blue-50 dark:hover:bg-blue-950/40 border border-slate-200 dark:border-slate-700 transition-colors">
-            Interest Rate Calculator →
-          </Link>
-          <Link href="/calculators/depreciation-calculator" className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-semibold hover:bg-blue-50 dark:hover:bg-blue-950/40 border border-slate-200 dark:border-slate-700 transition-colors">
-            Depreciation Calculator →
-          </Link>
-          <Link href="/calculators/roi-calculator" className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-semibold hover:bg-blue-50 dark:hover:bg-blue-950/40 border border-slate-200 dark:border-slate-700 transition-colors">
-            ROI Calculator →
-          </Link>
-          <Link href="/calculators/inflation-calculator" className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-semibold hover:bg-blue-50 dark:hover:bg-blue-950/40 border border-slate-200 dark:border-slate-700 transition-colors">
-            Inflation Calculator →
-          </Link>
-        </div>
-      </section>
     </article>
   );
 }

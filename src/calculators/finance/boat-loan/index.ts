@@ -1,5 +1,7 @@
 import { CalculatorModuleDefinition } from "../../types";
 import { calculateBoatLoan } from "@/lib/calculator-engine/formulas/boat-loan";
+import { BoatLoanCalculator } from "@/components/calculator/boat-loan/BoatLoanCalculator";
+import { BoatLoanContent, boatLoanFaqs } from "@/components/calculator/boat-loan/BoatLoanContent";
 
 export const BOAT_LOAN_CALCULATOR: CalculatorModuleDefinition = {
   id: "boat-loan",
@@ -21,23 +23,7 @@ export const BOAT_LOAN_CALCULATOR: CalculatorModuleDefinition = {
   ],
   formulaDescription:
     "Monthly Boat Payment = L × [ r(1+r)^n / ((1+r)^n - 1) ]. Total Cost = Boat Price + Total Interest + Sales Tax + Dealer Rigging Fees.",
-  faqs: [
-    {
-      question: "How are boat loan interest rates and terms calculated?",
-      answer:
-        "Boat loan interest rates are fixed based on credit history and loan size, with repayment terms ranging from 2 to 20 years depending on vessel price and age.",
-    },
-    {
-      question: "What is the typical down payment on a boat loan?",
-      answer:
-        "Most marine lenders require 10% to 20% down payment in cash or trade-in equity.",
-    },
-    {
-      question: "What recurring expenses should I budget for boat ownership?",
-      answer:
-        "Beyond monthly loan payments, budget 10% to 15% of the boat value annually for marina slip/storage fees, marine insurance, engine servicing, winterization, and fuel.",
-    },
-  ],
+  faqs: boatLoanFaqs,
   inputs: [
     {
       name: "boatPrice",
@@ -115,4 +101,6 @@ export const BOAT_LOAN_CALCULATOR: CalculatorModuleDefinition = {
       totalCostOfBoat: res.totalCostOfBoat,
     };
   },
+  CustomComponent: BoatLoanCalculator,
+  ContentComponent: BoatLoanContent,
 };

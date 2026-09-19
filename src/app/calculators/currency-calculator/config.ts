@@ -1,7 +1,7 @@
 import { CalculatorModuleDefinition } from "@/calculators/types";
 import { convertCurrency } from "./calculator";
 import { CurrencyCalculator } from "@/components/calculator/currency/CurrencyCalculator";
-import { CurrencyContent } from "@/components/calculator/currency/CurrencyContent";
+import { CurrencyContent, currencyFaqs } from "@/components/calculator/currency/CurrencyContent";
 
 export const currency_calculatorConfig: CalculatorModuleDefinition = {
   id: "currency-calculator",
@@ -37,6 +37,7 @@ export const currency_calculatorConfig: CalculatorModuleDefinition = {
   ],
   formulaDescription:
     "Converted Amount = Base Amount × Exchange Rate, where Exchange Rate is the relative mid-market quote between Currency A and Currency B.",
+  faqs: currencyFaqs,
   inputs: [
     {
       name: "amount",
