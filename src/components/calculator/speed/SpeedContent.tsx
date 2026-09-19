@@ -5,28 +5,6 @@ import { speed_calculatorFaqs } from "@/app/calculators/speed-calculator/faq";
 export function SpeedContent() {
   return (
     <div className="space-y-10 text-slate-800 dark:text-slate-200">
-      {/* ─── RELATED CALCULATORS (ABOVE CONTENT) ─── */}
-      <div className="no-print -mt-2 pb-4 border-b border-slate-200 dark:border-slate-800">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1.5">
-          RELATED CALCULATORS:
-        </span>
-        <div className="flex flex-wrap items-center gap-2 text-xs font-medium">
-          <Link
-            href="/calculators/conversion-calculator"
-            className="text-blue-600 dark:text-blue-400 hover:underline"
-          >
-            Conversion Calculator
-          </Link>
-          <span className="text-zinc-300 dark:text-zinc-700">|</span>
-          <Link
-            href="/calculators/scientific-notation-calculator"
-            className="text-blue-600 dark:text-blue-400 hover:underline"
-          >
-            Scientific Notation Calculator &amp; Converter
-          </Link>
-        </div>
-      </div>
-
       {/* ─── 1. Introduction ─── */}
       <section className="space-y-3">
         <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 border-b border-slate-200 dark:border-slate-800 pb-2">
@@ -702,28 +680,6 @@ export function SpeedContent() {
           For everyday travel, athletics, unit conversion, and basic kinematics, these relationships cover a large range of practical calculations. For advanced motion problems involving acceleration, direction, changing conditions, or vector quantities, use a model appropriate to those additional variables.
         </p>
       </section>
-
-      {/* ─── RELATED CALCULATORS (AFTER CONTENT) ─── */}
-      <div className="no-print pt-4 border-t border-slate-200 dark:border-slate-800">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1.5">
-          RELATED CALCULATORS:
-        </span>
-        <div className="flex flex-wrap items-center gap-2 text-xs font-medium">
-          <Link
-            href="/calculators/conversion-calculator"
-            className="text-blue-600 dark:text-blue-400 hover:underline"
-          >
-            Conversion Calculator
-          </Link>
-          <span className="text-zinc-300 dark:text-zinc-700">|</span>
-          <Link
-            href="/calculators/scientific-notation-calculator"
-            className="text-blue-600 dark:text-blue-400 hover:underline"
-          >
-            Scientific Notation Calculator &amp; Converter
-          </Link>
-        </div>
-      </div>
     </div>
   );
 }
