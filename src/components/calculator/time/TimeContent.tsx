@@ -25,59 +25,8 @@ export function TimeContent() {
 
   return (
     <article className="mt-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-7 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-6 divide-y divide-slate-100 dark:divide-slate-800">
-      {/* 1. SINGLE CANONICAL RELATED CALCULATORS BLOCK (Exactly 7 Verified Live Routes) */}
-      <div>
-        <h2 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-3">
-          Related Date &amp; Time Calculators
-        </h2>
-        <div className="flex flex-wrap gap-2 text-xs">
-          <Link
-            href="/calculators/date-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Date Calculator
-          </Link>
-          <Link
-            href="/calculators/age-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Age Calculator
-          </Link>
-          <Link
-            href="/calculators/time-duration-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Time Duration Calculator
-          </Link>
-          <Link
-            href="/calculators/hours-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Hours Calculator
-          </Link>
-          <Link
-            href="/calculators/day-counter-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Day Counter Calculator
-          </Link>
-          <Link
-            href="/calculators/time-zone-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Time Zone Calculator
-          </Link>
-          <Link
-            href="/calculators/time-card-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Time Card Calculator
-          </Link>
-        </div>
-      </div>
-
-      {/* 2. 15 LONG-FORM EDUCATIONAL SECTIONS */}
-      <div className="space-y-6 pt-6 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200">
+      {/* 15 LONG-FORM EDUCATIONAL SECTIONS */}
+      <div className="space-y-6 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200">
         {/* Section 1 */}
         <section className="space-y-2">
           <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400">
