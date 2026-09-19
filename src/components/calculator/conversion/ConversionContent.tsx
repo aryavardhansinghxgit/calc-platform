@@ -25,30 +25,8 @@ export function ConversionContent() {
 
   return (
     <article className="mt-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-7 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-8 divide-y divide-slate-100 dark:divide-slate-800">
-      {/* ═══════════════════ RELATED CALCULATORS — ABOVE CONTENT ═══════════════════ */}
-      <div className="p-4 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-200/80 dark:border-slate-700/60 not-prose">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-2">
-          RELATED CALCULATORS:
-        </span>
-        <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm font-medium">
-          <Link
-            href="/calculators/scientific-notation-calculator"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-blue-600 dark:text-blue-400 hover:border-blue-300 dark:hover:border-blue-600 transition-colors shadow-2xs"
-          >
-            Scientific Notation Calculator &amp; Converter
-          </Link>
-          <span className="text-slate-300 dark:text-slate-600">|</span>
-          <Link
-            href="/calculators/big-number-calculator"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-blue-600 dark:text-blue-400 hover:border-blue-300 dark:hover:border-blue-600 transition-colors shadow-2xs"
-          >
-            Big Number Calculator
-          </Link>
-        </div>
-      </div>
-
       {/* ═══════════════════ MAIN EDUCATIONAL CONTENT (36 SECTIONS) ═══════════════════ */}
-      <div className="space-y-8 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200 pt-6">
+      <div className="space-y-8 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200">
         {/* Section 1 */}
         <section className="space-y-3">
           <h2 className="text-lg sm:text-xl font-bold text-blue-600 dark:text-blue-400">
@@ -772,28 +750,6 @@ export function ConversionContent() {
             .
           </p>
         </section>
-      </div>
-
-      {/* ═══════════════════ RELATED CALCULATORS — AFTER CONTENT ═══════════════════ */}
-      <div className="p-4 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-200/80 dark:border-slate-700/60 not-prose mt-8">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-2">
-          RELATED CALCULATORS:
-        </span>
-        <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm font-medium">
-          <Link
-            href="/calculators/scientific-notation-calculator"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-blue-600 dark:text-blue-400 hover:border-blue-300 dark:hover:border-blue-600 transition-colors shadow-2xs"
-          >
-            Scientific Notation Calculator &amp; Converter
-          </Link>
-          <span className="text-slate-300 dark:text-slate-600">|</span>
-          <Link
-            href="/calculators/big-number-calculator"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-blue-600 dark:text-blue-400 hover:border-blue-300 dark:hover:border-blue-600 transition-colors shadow-2xs"
-          >
-            Big Number Calculator
-          </Link>
-        </div>
       </div>
     </article>
   );
