@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { HelpCircle, ChevronDown, Binary, Cpu, Network, Calculator, ArrowRight, ShieldCheck, BookOpen } from "lucide-react";
+import { HelpCircle, ChevronDown, Binary, ShieldCheck, BookOpen } from "lucide-react";
 import { binary_calculatorFaqs } from "@/app/calculators/binary-calculator/faq";
 
 export function BinaryContent() {
@@ -26,67 +26,9 @@ export function BinaryContent() {
   return (
     <article className="mt-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-7 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-8 divide-y divide-slate-100 dark:divide-slate-800">
       {/* ======================================================== */}
-      {/* RELATED TOOLS SECTION 1 (Before Educational Content)     */}
+      {/* MAIN EDUCATIONAL CONTENT SECTIONS                        */}
       {/* ======================================================== */}
-      <div className="space-y-3 pb-2">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
-            <Cpu className="w-3.5 h-3.5" /> Related Computer Architecture &amp; Math Calculators
-          </span>
-          <span className="text-[11px] text-slate-400 font-medium">Explore Specialized Tools</span>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <Link
-            href="/calculators/hex-calculator"
-            className="p-3.5 rounded-xl bg-slate-50 hover:bg-blue-50/60 dark:bg-slate-800/60 dark:hover:bg-blue-950/40 border border-slate-200 dark:border-slate-700/80 transition-all flex flex-col justify-between group"
-          >
-            <div className="space-y-1">
-              <div className="font-bold text-xs sm:text-sm text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 flex items-center justify-between">
-                <span>Hex Calculator</span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-blue-600 dark:text-blue-400" />
-              </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">
-                Advanced Hexadecimal Math, Bitwise &amp; Converter for 8-bit to 64-bit memory addressing.
-              </p>
-            </div>
-          </Link>
-
-          <Link
-            href="/calculators/ip-subnet-calculator"
-            className="p-3.5 rounded-xl bg-slate-50 hover:bg-blue-50/60 dark:bg-slate-800/60 dark:hover:bg-blue-950/40 border border-slate-200 dark:border-slate-700/80 transition-all flex flex-col justify-between group"
-          >
-            <div className="space-y-1">
-              <div className="font-bold text-xs sm:text-sm text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 flex items-center justify-between">
-                <span>IP Subnet Calculator</span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-blue-600 dark:text-blue-400" />
-              </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">
-                Calculate CIDR notation, subnet masks, wildcard bits, and host address ranges.
-              </p>
-            </div>
-          </Link>
-
-          <Link
-            href="/calculators/scientific-calculator"
-            className="p-3.5 rounded-xl bg-slate-50 hover:bg-blue-50/60 dark:bg-slate-800/60 dark:hover:bg-blue-950/40 border border-slate-200 dark:border-slate-700/80 transition-all flex flex-col justify-between group"
-          >
-            <div className="space-y-1">
-              <div className="font-bold text-xs sm:text-sm text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 flex items-center justify-between">
-                <span>Scientific Calculator</span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-blue-600 dark:text-blue-400" />
-              </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">
-                High-precision engineering functions, logarithmic scales, and exponential arithmetic.
-              </p>
-            </div>
-          </Link>
-        </div>
-      </div>
-
-      {/* ======================================================== */}
-      {/* 2. MAIN EDUCATIONAL CONTENT SECTIONS                     */}
-      {/* ======================================================== */}
-      <div className="space-y-8 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200 pt-6">
+      <div className="space-y-8 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200">
         {/* ABOVE-THE-FOLD INTRODUCTION */}
         <section className="space-y-3">
           <h2 className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400">
@@ -693,64 +635,6 @@ export function BinaryContent() {
               </div>
             );
           })}
-        </div>
-      </div>
-
-      {/* ======================================================== */}
-      {/* 4. RELATED TOOLS SECTION 2 (After Educational Content)   */}
-      {/* ======================================================== */}
-      <div className="pt-6 space-y-3">
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 flex items-center gap-1.5">
-            <Calculator className="w-3.5 h-3.5" /> Continue Your Calculations
-          </span>
-          <span className="text-[11px] text-slate-400 font-medium">Recommended Tools</span>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <Link
-            href="/calculators/hex-calculator"
-            className="p-3.5 rounded-xl bg-slate-50 hover:bg-blue-50/60 dark:bg-slate-800/60 dark:hover:bg-blue-950/40 border border-slate-200 dark:border-slate-700/80 transition-all flex flex-col justify-between group"
-          >
-            <div className="space-y-1">
-              <div className="font-bold text-xs sm:text-sm text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 flex items-center justify-between">
-                <span>Hex Calculator</span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-blue-600 dark:text-blue-400" />
-              </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">
-                Perform hexadecimal arithmetic, bitwise shifts, masks, and conversions.
-              </p>
-            </div>
-          </Link>
-
-          <Link
-            href="/calculators/ip-subnet-calculator"
-            className="p-3.5 rounded-xl bg-slate-50 hover:bg-blue-50/60 dark:bg-slate-800/60 dark:hover:bg-blue-950/40 border border-slate-200 dark:border-slate-700/80 transition-all flex flex-col justify-between group"
-          >
-            <div className="space-y-1">
-              <div className="font-bold text-xs sm:text-sm text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 flex items-center justify-between">
-                <span>IP Subnet Calculator</span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-blue-600 dark:text-blue-400" />
-              </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">
-                Analyze IPv4 network address prefixes, subnets, and broadcast boundaries.
-              </p>
-            </div>
-          </Link>
-
-          <Link
-            href="/calculators/scientific-calculator"
-            className="p-3.5 rounded-xl bg-slate-50 hover:bg-blue-50/60 dark:bg-slate-800/60 dark:hover:bg-blue-950/40 border border-slate-200 dark:border-slate-700/80 transition-all flex flex-col justify-between group"
-          >
-            <div className="space-y-1">
-              <div className="font-bold text-xs sm:text-sm text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 flex items-center justify-between">
-                <span>Scientific Calculator</span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-blue-600 dark:text-blue-400" />
-              </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">
-                Solve complex mathematical expressions, logarithms, powers, and trigonometry.
-              </p>
-            </div>
-          </Link>
         </div>
       </div>
     </article>
