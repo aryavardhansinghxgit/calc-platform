@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { HelpCircle, ChevronDown, BookOpen, ShieldCheck, ArrowRight } from "lucide-react";
+import { HelpCircle, ChevronDown, BookOpen, ShieldCheck } from "lucide-react";
 import { random_number_generatorFaqs } from "@/app/calculators/random-number-generator/faq";
 
 export function RandomContent() {
@@ -25,40 +25,8 @@ export function RandomContent() {
 
   return (
     <article className="mt-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-7 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-8 divide-y divide-slate-100 dark:divide-slate-800">
-      {/* 1. RELATED CALCULATORS BLOCK — ABOVE THE MAIN CONTENT ONLY */}
-      <div className="pb-4">
-        <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700/80">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-2.5">
-            Related Calculators
-          </span>
-          <div className="flex flex-wrap gap-2 text-xs">
-            <Link
-              href="/calculators/exponent-calculator"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-blue-600 dark:text-blue-400 font-semibold hover:border-blue-500 transition-colors"
-            >
-              <span>Exponent Calculator</span>
-              <ArrowRight className="w-3 h-3" />
-            </Link>
-            <Link
-              href="/calculators/scientific-calculator"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-blue-600 dark:text-blue-400 font-semibold hover:border-blue-500 transition-colors"
-            >
-              <span>Scientific Calculator</span>
-              <ArrowRight className="w-3 h-3" />
-            </Link>
-            <Link
-              href="/calculators/rounding-calculator"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-blue-600 dark:text-blue-400 font-semibold hover:border-blue-500 transition-colors"
-            >
-              <span>Rounding Calculator</span>
-              <ArrowRight className="w-3 h-3" />
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* 2. EXPANDED MAIN EDUCATIONAL CONTENT */}
-      <div className="pt-6 space-y-8 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200">
+      {/* 1. EXPANDED MAIN EDUCATIONAL CONTENT */}
+      <div className="space-y-8 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200">
         
         {/* Section 1 */}
         <section className="space-y-3">
@@ -558,39 +526,6 @@ export function RandomContent() {
           })}
         </div>
       </div>
-
-      {/* 4. RELATED CALCULATORS BLOCK — BOTTOM OF CONTENT ONLY */}
-      <div className="pt-6">
-        <div className="p-4 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700/80">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-2.5">
-            Related Calculators
-          </span>
-          <div className="flex flex-wrap gap-2 text-xs">
-            <Link
-              href="/calculators/exponent-calculator"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-blue-600 dark:text-blue-400 font-semibold hover:border-blue-500 transition-colors"
-            >
-              <span>Exponent Calculator</span>
-              <ArrowRight className="w-3 h-3" />
-            </Link>
-            <Link
-              href="/calculators/scientific-calculator"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-blue-600 dark:text-blue-400 font-semibold hover:border-blue-500 transition-colors"
-            >
-              <span>Scientific Calculator</span>
-              <ArrowRight className="w-3 h-3" />
-            </Link>
-            <Link
-              href="/calculators/rounding-calculator"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-blue-600 dark:text-blue-400 font-semibold hover:border-blue-500 transition-colors"
-            >
-              <span>Rounding Calculator</span>
-              <ArrowRight className="w-3 h-3" />
-            </Link>
-          </div>
-        </div>
-      </div>
-
     </article>
   );
 }
