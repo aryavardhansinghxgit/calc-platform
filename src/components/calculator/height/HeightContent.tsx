@@ -25,32 +25,8 @@ export function HeightContent() {
 
   return (
     <article className="mt-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-7 text-slate-800 dark:text-slate-200 leading-relaxed text-xs sm:text-sm space-y-8 divide-y divide-slate-100 dark:divide-slate-800">
-      {/* ─── 1. ABOVE-CONTENT RELATED CALCULATORS ─── */}
-      <nav aria-label="Related Calculators" className="pb-2">
-        <div className="p-3.5 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-800">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1.5">
-            RELATED CALCULATORS:
-          </span>
-          <div className="flex flex-wrap items-center gap-2 text-xs font-semibold">
-            <Link
-              href="/calculators/conversion-calculator"
-              className="text-blue-600 dark:text-blue-400 hover:underline"
-            >
-              Conversion Calculator
-            </Link>
-            <span className="text-slate-300 dark:text-slate-700">|</span>
-            <Link
-              href="/calculators/weight-calculator"
-              className="text-blue-600 dark:text-blue-400 hover:underline"
-            >
-              Weight Calculator
-            </Link>
-          </div>
-        </div>
-      </nav>
-
-      {/* ─── 2. MEDICAL & EDUCATIONAL DISCLAIMER ─── */}
-      <div className="pt-4">
+      {/* ─── 1. MEDICAL & EDUCATIONAL DISCLAIMER ─── */}
+      <div>
         <div className="p-3.5 bg-slate-50 dark:bg-zinc-800/50 rounded-xl border border-slate-200 dark:border-zinc-700/60 space-y-1.5">
           <div className="font-bold text-slate-900 dark:text-zinc-100 flex items-center gap-1.5 uppercase tracking-wider text-[11px]">
             <ShieldCheck className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
@@ -723,29 +699,6 @@ export function HeightContent() {
         </p>
       </div>
 
-      {/* ─── 7. AFTER-CONTENT RELATED CALCULATORS ─── */}
-      <nav aria-label="Additional Related Calculators" className="pt-6">
-        <div className="p-3.5 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-800">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-1.5">
-            RELATED CALCULATORS:
-          </span>
-          <div className="flex flex-wrap items-center gap-2 text-xs font-semibold">
-            <Link
-              href="/calculators/conversion-calculator"
-              className="text-blue-600 dark:text-blue-400 hover:underline"
-            >
-              Conversion Calculator
-            </Link>
-            <span className="text-slate-300 dark:text-slate-700">|</span>
-            <Link
-              href="/calculators/weight-calculator"
-              className="text-blue-600 dark:text-blue-400 hover:underline"
-            >
-              Weight Calculator
-            </Link>
-          </div>
-        </div>
-      </nav>
     </article>
   );
 }
