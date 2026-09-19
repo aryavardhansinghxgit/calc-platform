@@ -1,5 +1,7 @@
 import { CalculatorModuleDefinition } from "../../types";
 import { calculateDepreciation } from "@/lib/calculator-engine/formulas/depreciation";
+import { DepreciationCalculator } from "@/components/calculator/depreciation/DepreciationCalculator";
+import { DepreciationContent, depreciationFaqs } from "@/components/calculator/depreciation/DepreciationContent";
 
 export const DEPRECIATION_CALCULATOR: CalculatorModuleDefinition = {
   id: "depreciation",
@@ -7,6 +9,9 @@ export const DEPRECIATION_CALCULATOR: CalculatorModuleDefinition = {
   slug: "depreciation-calculator",
   category: "Finance",
   subcategory: "Others",
+  CustomComponent: DepreciationCalculator,
+  ContentComponent: DepreciationContent,
+  faqs: depreciationFaqs,
   description:
     "Calculate asset depreciation schedules across Straight-Line, Double Declining Balance (DDB), 150% Declining Balance, Sum-of-Years' Digits (SYD), Units of Production, and MACRS IRS tax depreciation.",
   iconName: "TrendingDown",
@@ -22,23 +27,6 @@ export const DEPRECIATION_CALCULATOR: CalculatorModuleDefinition = {
   ],
   formulaDescription:
     "Straight-Line: (Cost - Salvage) / Life. Double Declining: Beginning Book Value × (2 / Life). Sum-of-Years' Digits: (Cost - Salvage) × (Remaining Life / SYD).",
-  faqs: [
-    {
-      question: "What is Straight-Line depreciation and how is it calculated?",
-      answer:
-        "Straight-line depreciation spreads the depreciable cost of an asset evenly across its useful life: Annual Depreciation = (Asset Purchase Price - Salvage Value) ÷ Useful Life in Years.",
-    },
-    {
-      question: "How does Double Declining Balance (DDB) work?",
-      answer:
-        "Double Declining Balance is an accelerated depreciation method where the annual rate is double the straight-line rate (200% ÷ Useful Life) applied to the beginning book value each year until reaching salvage value.",
-    },
-    {
-      question: "What is MACRS depreciation?",
-      answer:
-        "MACRS (Modified Accelerated Cost Recovery System) is the statutory tax depreciation system used in the United States under IRS tax rules. It specifies depreciation percentages across standardized property classes (3, 5, 7, 10, 15, 20 years).",
-    },
-  ],
   inputs: [
     {
       name: "assetCost",

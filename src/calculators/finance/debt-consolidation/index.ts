@@ -1,5 +1,7 @@
 import { CalculatorModuleDefinition } from "../../types";
 import { calculateDebtConsolidation } from "@/lib/calculator-engine/formulas/debt-consolidation";
+import { DebtConsolidationCalculator } from "@/components/calculator/debt-consolidation/DebtConsolidationCalculator";
+import { DebtConsolidationContent, debtConsolidationFaqs } from "@/components/calculator/debt-consolidation/DebtConsolidationContent";
 
 export const DEBT_CONSOLIDATION_CALCULATOR: CalculatorModuleDefinition = {
   id: "debt-consolidation",
@@ -7,6 +9,9 @@ export const DEBT_CONSOLIDATION_CALCULATOR: CalculatorModuleDefinition = {
   slug: "debt-consolidation-calculator",
   category: "Finance",
   subcategory: "Others",
+  CustomComponent: DebtConsolidationCalculator,
+  ContentComponent: DebtConsolidationContent,
+  faqs: debtConsolidationFaqs,
   description:
     "Compare your current debts with a consolidation loan, calculate weighted APR, real effective APR, monthly savings, total interest, fees, balance-transfer costs, and payoff schedules.",
   iconName: "Landmark",
