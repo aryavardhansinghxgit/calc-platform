@@ -1,6 +1,8 @@
 import { CalculatorModuleDefinition } from "../../types";
 import { calculateSimpleStudentLoan } from "@/lib/calculator-engine/formulas/student-loan";
 import { studentLoanFaqs } from "./faq";
+import { StudentLoanCalculator } from "@/components/calculator/student-loan/StudentLoanCalculator";
+import { StudentLoanContent } from "@/components/calculator/student-loan/StudentLoanContent";
 
 export const STUDENT_LOAN_CALCULATOR: CalculatorModuleDefinition = {
   id: "student-loan",
@@ -8,6 +10,8 @@ export const STUDENT_LOAN_CALCULATOR: CalculatorModuleDefinition = {
   slug: "student-loan-calculator",
   category: "Finance",
   subcategory: "Loans",
+  CustomComponent: StudentLoanCalculator,
+  ContentComponent: StudentLoanContent,
   description:
     "Calculate student loan payments, total interest, payoff time, extra-payment savings, in-school balance projections, refinancing scenarios, and federal repayment-plan options.",
   iconName: "GraduationCap",

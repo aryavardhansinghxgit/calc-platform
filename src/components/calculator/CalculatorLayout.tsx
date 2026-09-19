@@ -107,6 +107,7 @@ import { PersonalLoanCalculator } from "./personal-loan/PersonalLoanCalculator";
 import { BusinessLoanCalculator } from "./business-loan/BusinessLoanCalculator";
 import { BusinessLoanContent } from "./business-loan/BusinessLoanContent";
 import { StudentLoanCalculator } from "./student-loan/StudentLoanCalculator";
+import { StudentLoanContent } from "./student-loan/StudentLoanContent";
 import { BudgetCalculator } from "./budget/BudgetCalculator";
 import { BudgetContent } from "./budget/BudgetContent";
 import { CurrencyContent } from "./currency/CurrencyContent";
@@ -596,6 +597,7 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
                   : (
                     isVat ? VatContent :
                     isGst ? GstContent :
+                    isStudentLoan ? StudentLoanContent :
                     isBudget ? BudgetContent :
                     isBusinessLoan ? BusinessLoanContent :
                     isCommission ? CommissionContent :
@@ -742,6 +744,8 @@ export function CalculatorLayout({ definition }: CalculatorLayoutProps) {
             <DebtConsolidationCalculator />
           ) : isDepreciation ? (
             <DepreciationCalculator />
+          ) : isStudentLoan ? (
+            <StudentLoanCalculator />
           ) : (definition as any).CustomComponent ? (
             React.createElement((definition as any).CustomComponent)
           ) : isMolecularWeight ? (

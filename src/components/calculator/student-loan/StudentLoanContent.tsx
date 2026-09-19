@@ -32,57 +32,7 @@ export function StudentLoanContent() {
   const faqs = studentLoanFaqs || [];
 
   return (
-    <div className="mt-8 space-y-10 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200">
-      {/* 1. RELATED CALCULATORS BLOCK (Exactly 7 Verified Live Routes) */}
-      <section className="space-y-3 pt-2">
-        <h2 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-          Related Educational &amp; Financial Calculators
-        </h2>
-        <div className="flex flex-wrap gap-2 text-xs">
-          <Link
-            href="/calculators/loan-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Loan Calculator
-          </Link>
-          <Link
-            href="/calculators/personal-loan-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Personal Loan Calculator
-          </Link>
-          <Link
-            href="/calculators/debt-payoff-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Debt Payoff Calculator
-          </Link>
-          <Link
-            href="/calculators/credit-card-payoff-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Credit Card Payoff Calculator
-          </Link>
-          <Link
-            href="/calculators/refinance-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Refinance Calculator
-          </Link>
-          <Link
-            href="/calculators/budget-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Budget Calculator
-          </Link>
-          <Link
-            href="/calculators/credit-card-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Credit Card Calculator
-          </Link>
-        </div>
-      </section>
+    <div className="space-y-10 text-zinc-800 dark:text-zinc-200">
 
       {/* 2. MAIN EDUCATIONAL CONTENT (15 Sections) */}
       <div className="space-y-8 text-xs sm:text-sm text-slate-900 dark:text-slate-100 leading-relaxed pt-2">
@@ -475,3 +425,7 @@ export function StudentLoanContent() {
     </div>
   );
 }
+
+export { studentLoanFaqs };
+export default StudentLoanContent;
+
