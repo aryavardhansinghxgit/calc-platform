@@ -32,58 +32,7 @@ export function HouseAffordabilityContentSection() {
 
   return (
     <div className="space-y-8 py-2 text-zinc-700 dark:text-zinc-300">
-      {/* 1. SINGLE CANONICAL RELATED CALCULATORS BLOCK (Exactly 7 Verified Live Routes) */}
-      <section className="space-y-3 pt-2">
-        <h2 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-          Related Home Buying &amp; Mortgage Calculators
-        </h2>
-        <div className="flex flex-wrap gap-2 text-xs">
-          <Link
-            href="/calculators/mortgage-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Mortgage Calculator
-          </Link>
-          <Link
-            href="/calculators/refinance-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Refinance Calculator
-          </Link>
-          <Link
-            href="/calculators/down-payment-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Down Payment Calculator
-          </Link>
-          <Link
-            href="/calculators/rent-vs-buy-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Rent vs Buy Calculator
-          </Link>
-          <Link
-            href="/calculators/dti-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            DTI Calculator
-          </Link>
-          <Link
-            href="/calculators/amortization-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Amortization Calculator
-          </Link>
-          <Link
-            href="/calculators/fha-loan-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            FHA Loan Calculator
-          </Link>
-        </div>
-      </section>
-
-      {/* 2. 12 MAIN EDUCATIONAL SECTIONS */}
+      {/* 1. 12 MAIN EDUCATIONAL SECTIONS */}
       <div className="space-y-6 text-xs sm:text-sm leading-relaxed text-slate-900 dark:text-slate-100">
         {/* Section 1 */}
         <section className="space-y-2">

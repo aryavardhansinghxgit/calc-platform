@@ -59,20 +59,13 @@ export default function RootLayout({
             __html: `
               (function() {
                 try {
-                  var ethVal = window.ethereum;
-                  Object.defineProperty(window, 'ethereum', {
-                    configurable: true,
-                    enumerable: true,
-                    get: function() { return ethVal; },
-                    set: function(v) { ethVal = v; }
-                  });
+                  window.addEventListener('error', function(event) {
+                    if (event && event.message && (event.message.indexOf('ethereum') !== -1 || event.message.indexOf('evmAsk') !== -1)) {
+                      event.preventDefault();
+                      if (event.stopImmediatePropagation) event.stopImmediatePropagation();
+                    }
+                  }, true);
                 } catch(e) {}
-                window.addEventListener('error', function(event) {
-                  if (event && event.message && (event.message.indexOf('ethereum') !== -1 || event.message.indexOf('evmAsk') !== -1)) {
-                    event.preventDefault();
-                    if (event.stopImmediatePropagation) event.stopImmediatePropagation();
-                  }
-                }, true);
               })();
             `,
           }}

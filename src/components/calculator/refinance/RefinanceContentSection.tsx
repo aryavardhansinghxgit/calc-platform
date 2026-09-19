@@ -153,50 +153,6 @@ export function RefinanceContentSection() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(financialServiceSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppSchema) }} />
 
-      {/* Internal Links Header Banner */}
-      <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 space-y-2">
-        <h4 className="text-xs font-bold uppercase tracking-wider text-blue-900 dark:text-blue-200 flex items-center gap-1.5">Related Refinancing & Loan Calculators
-        </h4>
-        <div className="flex flex-wrap gap-2 text-xs">
-          <Link
-            href="/calculators/mortgage-calculator"
-            className="px-2.5 py-1 rounded-md bg-white dark:bg-zinc-800 border border-blue-200 dark:border-zinc-700 text-blue-700 dark:text-blue-300 hover:bg-blue-100 font-medium transition-colors"
-          >
-            Mortgage Calculator
-          </Link>
-          <Link
-            href="/calculators/mortgage-payoff-calculator"
-            className="px-2.5 py-1 rounded-md bg-white dark:bg-zinc-800 border border-blue-200 dark:border-zinc-700 text-blue-700 dark:text-blue-300 hover:bg-blue-100 font-medium transition-colors"
-          >
-            Mortgage Payoff Calculator
-          </Link>
-          <Link
-            href="/calculators/amortization-calculator"
-            className="px-2.5 py-1 rounded-md bg-white dark:bg-zinc-800 border border-blue-200 dark:border-zinc-700 text-blue-700 dark:text-blue-300 hover:bg-blue-100 font-medium transition-colors"
-          >
-            Amortization Calculator
-          </Link>
-          <Link
-            href="/calculators/loan-calculator"
-            className="px-2.5 py-1 rounded-md bg-white dark:bg-zinc-800 border border-blue-200 dark:border-zinc-700 text-blue-700 dark:text-blue-300 hover:bg-blue-100 font-medium transition-colors"
-          >
-            Loan Calculator
-          </Link>
-          <Link
-            href="/calculators/personal-loan-calculator"
-            className="px-2.5 py-1 rounded-md bg-white dark:bg-zinc-800 border border-blue-200 dark:border-zinc-700 text-blue-700 dark:text-blue-300 hover:bg-blue-100 font-medium transition-colors"
-          >
-            Personal Loan Calculator
-          </Link>
-          <Link
-            href="/calculators/student-loan-calculator"
-            className="px-2.5 py-1 rounded-md bg-white dark:bg-zinc-800 border border-blue-200 dark:border-zinc-700 text-blue-700 dark:text-blue-300 hover:bg-blue-100 font-medium transition-colors"
-          >
-            Student Loan Calculator
-          </Link>
-        </div>
-      </div>
-
       {/* 1. What Is Loan Refinancing */}
       <section className="space-y-3">
         <h2 className="text-xl font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-2">1. What Is Loan Refinancing?

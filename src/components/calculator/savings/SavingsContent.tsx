@@ -27,58 +27,7 @@ export function SavingsContent() {
 
   return (
     <article className="prose dark:prose-invert max-w-none space-y-8 text-zinc-700 dark:text-zinc-300 text-sm leading-relaxed mt-6">
-      {/* 1. RELATED CALCULATORS BLOCK (Exactly 7 Verified Active Routes) */}
-      <section className="space-y-3 pt-2">
-        <h2 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-          Related Savings &amp; Investment Calculators
-        </h2>
-        <div className="flex flex-wrap gap-2 text-xs">
-          <Link
-            href="/calculators/investment-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Investment Calculator
-          </Link>
-          <Link
-            href="/calculators/retirement-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Retirement Calculator
-          </Link>
-          <Link
-            href="/calculators/cd-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            CD Calculator
-          </Link>
-          <Link
-            href="/calculators/inflation-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Inflation Calculator
-          </Link>
-          <Link
-            href="/calculators/budget-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Budget Calculator
-          </Link>
-          <Link
-            href="/calculators/401k-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            401(k) Calculator
-          </Link>
-          <Link
-            href="/calculators/interest-rate-calculator"
-            className="bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-          >
-            Interest Rate Calculator
-          </Link>
-        </div>
-      </section>
-
-      {/* 2. 15 EDUCATIONAL SECTIONS */}
+      {/* 1. 15 EDUCATIONAL SECTIONS */}
       <div className="space-y-8 text-xs sm:text-sm text-slate-900 dark:text-slate-100 leading-relaxed pt-2">
         {/* Section 1 */}
         <section className="space-y-2">
