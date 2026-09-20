@@ -25,45 +25,6 @@ export function OhmsLawContent() {
 
   return (
     <div className="space-y-6 mt-6">
-      {/* ========================================================================= */}
-      {/* 1. RELATED CALCULATORS — ABOVE ARTICLE (RESTRAINED & HORIZONTAL) */}
-      {/* ========================================================================= */}
-      <section className="bg-slate-50 dark:bg-slate-900/60 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2.5 no-print">
-        <h2 className="text-xs font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-          Related Calculators
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <Link
-            href="/calculators/voltage-drop-calculator"
-            className="group p-3.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 hover:shadow-xs transition-all flex flex-col justify-between"
-          >
-            <div className="space-y-1">
-              <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 group-hover:underline flex items-center justify-between">
-                <span>Voltage Drop Calculator</span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </h3>
-              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                Determine wire gauge loss, conductor resistance, and voltage drop across AC and DC transmission runs.
-              </p>
-            </div>
-          </Link>
-
-          <Link
-            href="/calculators/resistor-calculator"
-            className="group p-3.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 hover:shadow-xs transition-all flex flex-col justify-between"
-          >
-            <div className="space-y-1">
-              <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 group-hover:underline flex items-center justify-between">
-                <span>Resistor Calculator</span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </h3>
-              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                Decode 4-band, 5-band, and 6-band resistors to determine baseline resistance, tolerance, and TCR.
-              </p>
-            </div>
-          </Link>
-        </div>
-      </section>
 
       {/* ========================================================================= */}
       {/* 2. EDITORIAL ARTICLE — CLEAN 401(K) STYLE (NO DARK CARDS) */}

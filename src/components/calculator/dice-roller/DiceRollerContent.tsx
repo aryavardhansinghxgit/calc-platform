@@ -25,60 +25,6 @@ export function DiceRollerContent() {
 
   return (
     <article className="mt-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 sm:p-8 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-10">
-      {/* ========================================================================= */}
-      {/* 1. TOP RELATED CALCULATORS — DIRECTLY ABOVE THE ARTICLE                   */}
-      {/* ========================================================================= */}
-      <section className="bg-slate-50 dark:bg-slate-800/60 p-4 sm:p-6 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-3">
-        <h2 className="text-xs font-extrabold uppercase tracking-wider text-slate-600 dark:text-slate-400">
-          Related Calculators
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-          <Link
-            href="/calculators/random-number-generator"
-            className="group p-3.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-xs transition-all flex flex-col justify-between"
-          >
-            <div className="space-y-1">
-              <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 group-hover:underline flex items-center justify-between">
-                <span>Random Number Generator</span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </h3>
-              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                Generate random values for games, testing and general-purpose use.
-              </p>
-            </div>
-          </Link>
-
-          <Link
-            href="/calculators/probability-calculator"
-            className="group p-3.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-xs transition-all flex flex-col justify-between"
-          >
-            <div className="space-y-1">
-              <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 group-hover:underline flex items-center justify-between">
-                <span>Probability Calculator</span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </h3>
-              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                Work with probability calculations beyond individual dice distributions.
-              </p>
-            </div>
-          </Link>
-
-          <Link
-            href="/calculators/permutation-combination-calculator"
-            className="group p-3.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-xs transition-all flex flex-col justify-between"
-          >
-            <div className="space-y-1">
-              <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 group-hover:underline flex items-center justify-between">
-                <span>Permutation &amp; Combination Calculator</span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </h3>
-              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                Calculate permutations and combinations for combinatorics and probability problems.
-              </p>
-            </div>
-          </Link>
-        </div>
-      </section>
 
       {/* ========================================================================= */}
       {/* 2. MAIN EDUCATIONAL ARTICLE                                               */}

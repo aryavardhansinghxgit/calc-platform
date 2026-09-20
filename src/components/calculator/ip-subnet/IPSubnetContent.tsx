@@ -91,45 +91,6 @@ export function IPSubnetContent() {
 
   return (
     <div className="space-y-8 mt-6">
-      {/* ========================================================================= */}
-      {/* 1. RELATED CALCULATORS — ABOVE ARTICLE (RESTRAINED & HORIZONTAL) */}
-      {/* ========================================================================= */}
-      <section className="bg-slate-50 dark:bg-slate-900/60 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-2.5 no-print">
-        <h2 className="text-xs font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-          RELATED CALCULATORS
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <Link
-            href="/calculators/bandwidth-calculator"
-            className="group p-3.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 hover:shadow-xs transition-all flex flex-col justify-between"
-          >
-            <div className="space-y-1">
-              <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 group-hover:underline flex items-center justify-between">
-                <span>Bandwidth Calculator</span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </h3>
-              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                Estimate network data throughput, download transfer times, and bandwidth capacity requirements for local and WAN infrastructure.
-              </p>
-            </div>
-          </Link>
-
-          <Link
-            href="/calculators/binary-calculator"
-            className="group p-3.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 hover:shadow-xs transition-all flex flex-col justify-between"
-          >
-            <div className="space-y-1">
-              <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 group-hover:underline flex items-center justify-between">
-                <span>Advanced Binary Calculator &amp; Multi-Base Converter</span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </h3>
-              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                Perform bitwise AND, OR, XOR, NOT, bit shifts, and conversions between binary, octal, decimal, and hexadecimal notations.
-              </p>
-            </div>
-          </Link>
-        </div>
-      </section>
 
       {/* ========================================================================= */}
       {/* 2. EDITORIAL ARTICLE — CLEAN 401(K) STYLE (NO DARK CARDS) */}

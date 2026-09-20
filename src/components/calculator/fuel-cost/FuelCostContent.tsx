@@ -7,27 +7,6 @@ import { fuel_cost_calculatorFaqs } from "@/app/calculators/fuel-cost-calculator
 export function FuelCostContent() {
   return (
     <div className="space-y-6 max-w-5xl mx-auto font-sans leading-relaxed text-slate-800 dark:text-slate-200">
-      {/* ═══════════════════ RELATED CALCULATORS — ABOVE ARTICLE ═══════════════════ */}
-      <section className="bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 rounded-xl p-3.5 sm:p-4 text-xs">
-        <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
-          Related Calculators
-        </h2>
-        <div className="flex flex-wrap items-center gap-3">
-          <Link
-            href="/calculators/gas-mileage-calculator"
-            className="inline-flex items-center gap-1.5 font-semibold text-blue-600 dark:text-blue-400 hover:underline"
-          >
-            <span>Gas Mileage Calculator</span>
-            <span className="text-slate-300 dark:text-slate-600">|</span>
-          </Link>
-          <Link
-            href="/calculators/mileage-calculator"
-            className="inline-flex items-center gap-1.5 font-semibold text-blue-600 dark:text-blue-400 hover:underline"
-          >
-            <span>Mileage Calculator</span>
-          </Link>
-        </div>
-      </section>
 
       {/* ═══════════════════ LONG-FORM EDUCATIONAL ARTICLE ═══════════════════ */}
       <article className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 space-y-8 text-sm sm:text-base leading-relaxed">

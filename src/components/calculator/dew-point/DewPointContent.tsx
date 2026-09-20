@@ -25,40 +25,6 @@ export function DewPointContent() {
 
   return (
     <article className="mt-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 sm:p-8 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-8 divide-y divide-slate-100 dark:divide-slate-800">
-      {/* 3. ABOVE-ARTICLE RELATED CALCULATORS (Compact & Horizontal) */}
-      <div className="no-print pb-2">
-        <div className="flex items-center gap-2 mb-3">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">
-            Related Calculators
-          </span>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-          <Link
-            href="/calculators/heat-index-calculator"
-            className="group p-4 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-blue-500/60 dark:hover:border-blue-400/60 bg-slate-50/70 dark:bg-slate-800/40 hover:bg-blue-50/30 dark:hover:bg-blue-950/20 transition-all block"
-          >
-            <div className="font-bold text-sm text-blue-600 dark:text-blue-400 group-hover:underline flex items-center justify-between">
-              <span>Heat Index Calculator</span>
-              <ArrowRight className="h-3.5 w-3.5 opacity-60 group-hover:translate-x-0.5 transition-transform" />
-            </div>
-            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-normal font-normal">
-              Calculate apparent temperature from air temperature and relative humidity.
-            </p>
-          </Link>
-          <Link
-            href="/calculators/wind-chill-calculator"
-            className="group p-4 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-blue-500/60 dark:hover:border-blue-400/60 bg-slate-50/70 dark:bg-slate-800/40 hover:bg-blue-50/30 dark:hover:bg-blue-950/20 transition-all block"
-          >
-            <div className="font-bold text-sm text-blue-600 dark:text-blue-400 group-hover:underline flex items-center justify-between">
-              <span>Wind Chill Calculator</span>
-              <ArrowRight className="h-3.5 w-3.5 opacity-60 group-hover:translate-x-0.5 transition-transform" />
-            </div>
-            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-normal font-normal">
-              Calculate how cold the air feels when wind speed increases heat loss.
-            </p>
-          </Link>
-        </div>
-      </div>
 
       {/* 4. INTRODUCTION / ARTICLE OPENING */}
       <div className="pt-6 space-y-8 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200 font-normal">
