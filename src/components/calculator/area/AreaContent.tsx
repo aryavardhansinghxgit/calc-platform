@@ -38,62 +38,6 @@ export function AreaContent() {
   return (
     <article className="mt-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 sm:p-8 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-10">
       {/* ========================================================================= */}
-      {/* 1. RELATED CALCULATORS — DIRECTLY ABOVE EDUCATIONAL CONTENT */}
-      {/* ========================================================================= */}
-      <section className="bg-slate-50 dark:bg-slate-900/60 p-4 sm:p-6 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-3">
-        <h2 className="text-xs font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-          <Layers className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-          Related Calculators
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-          <Link
-            href="/calculators/triangle-calculator"
-            className="group p-3.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 hover:shadow-xs transition-all flex flex-col justify-between"
-          >
-            <div className="space-y-1">
-              <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 group-hover:underline flex items-center justify-between">
-                <span>Triangle Area Calculator</span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </h3>
-              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                Solve triangle area using base and height, Heron&apos;s formula, SAS trigonometry, or coordinate geometry.
-              </p>
-            </div>
-          </Link>
-
-          <Link
-            href="/calculators/volume-calculator"
-            className="group p-3.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 hover:shadow-xs transition-all flex flex-col justify-between"
-          >
-            <div className="space-y-1">
-              <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 group-hover:underline flex items-center justify-between">
-                <span>Volume Calculator</span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </h3>
-              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                Extend 2D floor and base areas into 3D volume, liquid capacity, and container storage calculations.
-              </p>
-            </div>
-          </Link>
-
-          <Link
-            href="/calculators/surface-area-calculator"
-            className="group p-3.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 hover:shadow-xs transition-all flex flex-col justify-between"
-          >
-            <div className="space-y-1">
-              <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 group-hover:underline flex items-center justify-between">
-                <span>Surface Area Calculator</span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </h3>
-              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                Calculate total boundary and exterior surface area for prisms, cylinders, pyramids, cones, and spheres.
-              </p>
-            </div>
-          </Link>
-        </div>
-      </section>
-
-      {/* ========================================================================= */}
       {/* 2. INTRODUCTION & OVERVIEW */}
       {/* ========================================================================= */}
       <section className="space-y-4">
@@ -805,60 +749,6 @@ export function AreaContent() {
         </div>
       </section>
 
-      {/* ========================================================================= */}
-      {/* 20. BOTTOM RELATED CALCULATORS — PLACED ONCE AFTER ARTICLE */}
-      {/* ========================================================================= */}
-      <section className="pt-4 border-t border-slate-200 dark:border-slate-800 space-y-3">
-        <h2 className="text-xs font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-          Related Calculators
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-          <Link
-            href="/calculators/triangle-calculator"
-            className="group p-3.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 hover:shadow-xs transition-all flex flex-col justify-between"
-          >
-            <div className="space-y-1">
-              <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 group-hover:underline flex items-center justify-between">
-                <span>Triangle Calculator</span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </h3>
-              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                Solve sides, angles, area, perimeter, inradius, and circumradius step by step.
-              </p>
-            </div>
-          </Link>
-
-          <Link
-            href="/calculators/volume-calculator"
-            className="group p-3.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 hover:shadow-xs transition-all flex flex-col justify-between"
-          >
-            <div className="space-y-1">
-              <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 group-hover:underline flex items-center justify-between">
-                <span>Volume Calculator</span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </h3>
-              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                Calculate 3D volumes and tank capacities with exact unit conversions.
-              </p>
-            </div>
-          </Link>
-
-          <Link
-            href="/calculators/surface-area-calculator"
-            className="group p-3.5 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-blue-500 hover:shadow-xs transition-all flex flex-col justify-between"
-          >
-            <div className="space-y-1">
-              <h3 className="text-xs font-bold text-blue-600 dark:text-blue-400 group-hover:underline flex items-center justify-between">
-                <span>Surface Area Calculator</span>
-                <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </h3>
-              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
-                Calculate surface area and nets for polyhedra and curved 3D solids.
-              </p>
-            </div>
-          </Link>
-        </div>
-      </section>
     </article>
   );
 }

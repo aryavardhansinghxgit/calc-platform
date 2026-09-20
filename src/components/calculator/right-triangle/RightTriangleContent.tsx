@@ -25,34 +25,6 @@ export function RightTriangleContent() {
 
   return (
     <article className="mt-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-7 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-8 divide-y divide-slate-100 dark:divide-slate-800">
-      {/* 1. RELATED CALCULATORS — ABOVE CONTENT */}
-      <div className="p-4 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-200/80 dark:border-slate-800/80">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-2">
-          RELATED CALCULATORS:
-        </span>
-        <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300">
-          <Link
-            href="/calculators/pythagorean-theorem-calculator"
-            className="text-blue-600 dark:text-blue-400 hover:underline font-bold"
-          >
-            Pythagorean Theorem Calculator
-          </Link>
-          <span className="text-slate-300 dark:text-slate-600">|</span>
-          <Link
-            href="/calculators/triangle-calculator"
-            className="text-blue-600 dark:text-blue-400 hover:underline font-bold"
-          >
-            Triangle Calculator
-          </Link>
-          <span className="text-slate-300 dark:text-slate-600">|</span>
-          <Link
-            href="/calculators/distance-calculator"
-            className="text-blue-600 dark:text-blue-400 hover:underline font-bold"
-          >
-            Distance Calculator
-          </Link>
-        </div>
-      </div>
 
       {/* 2. MAIN EDUCATIONAL BODY */}
       <div className="pt-6 space-y-8 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200">
@@ -574,36 +546,6 @@ export function RightTriangleContent() {
         </div>
       </div>
 
-      {/* 4. RELATED CALCULATORS — AFTER CONTENT */}
-      <div className="pt-6">
-        <div className="p-4 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-200/80 dark:border-slate-800/80">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-2">
-            RELATED CALCULATORS:
-          </span>
-          <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300">
-            <Link
-              href="/calculators/pythagorean-theorem-calculator"
-              className="text-blue-600 dark:text-blue-400 hover:underline font-bold"
-            >
-              Pythagorean Theorem Calculator
-            </Link>
-            <span className="text-slate-300 dark:text-slate-600">|</span>
-            <Link
-              href="/calculators/triangle-calculator"
-              className="text-blue-600 dark:text-blue-400 hover:underline font-bold"
-            >
-              Triangle Calculator
-            </Link>
-            <span className="text-slate-300 dark:text-slate-600">|</span>
-            <Link
-              href="/calculators/distance-calculator"
-              className="text-blue-600 dark:text-blue-400 hover:underline font-bold"
-            >
-              Distance Calculator
-            </Link>
-          </div>
-        </div>
-      </div>
     </article>
   );
 }

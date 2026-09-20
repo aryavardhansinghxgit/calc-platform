@@ -21,29 +21,6 @@ export function RootContent() {
   return (
     <article className="space-y-10 text-slate-800 dark:text-slate-200 leading-relaxed font-sans">
       
-      {/* RELATED CALCULATORS BLOCK (ABOVE CONTENT) */}
-      <div className="no-print bg-slate-50 dark:bg-slate-800/60 p-4 rounded-xl border border-slate-200 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-400 font-semibold space-y-1.5">
-        <span className="font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider block text-[11px]">
-          RELATED CALCULATORS:
-        </span>
-        <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-blue-600 dark:text-blue-400">
-          <Link href="/calculators/exponent-calculator" className="hover:underline font-semibold">
-            Exponent Calculator
-          </Link>
-          <span className="text-slate-300 dark:text-slate-600">|</span>
-          <Link href="/calculators/scientific-calculator" className="hover:underline font-semibold">
-            Scientific Calculator
-          </Link>
-          <span className="text-slate-300 dark:text-slate-600">|</span>
-          <Link href="/calculators/pythagorean-theorem-calculator" className="hover:underline font-semibold">
-            Pythagorean Theorem Calculator &amp; Right Triangle Solver
-          </Link>
-          <span className="text-slate-300 dark:text-slate-600">|</span>
-          <Link href="/calculators/factor-calculator" className="hover:underline font-semibold">
-            Factor Calculator &amp; Prime Factorization
-          </Link>
-        </div>
-      </div>
 
       {/* 1. INTRODUCTION */}
       <section className="space-y-4">
@@ -725,29 +702,6 @@ export function RootContent() {
         </p>
       </section>
 
-      {/* RELATED CALCULATORS BLOCK (BELOW CONTENT) */}
-      <div className="no-print bg-slate-50 dark:bg-slate-800/60 p-4 rounded-xl border border-slate-200 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-400 font-semibold space-y-1.5 mt-8">
-        <span className="font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider block text-[11px]">
-          RELATED CALCULATORS:
-        </span>
-        <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-blue-600 dark:text-blue-400">
-          <Link href="/calculators/exponent-calculator" className="hover:underline font-semibold">
-            Exponent Calculator
-          </Link>
-          <span className="text-slate-300 dark:text-slate-600">|</span>
-          <Link href="/calculators/scientific-calculator" className="hover:underline font-semibold">
-            Scientific Calculator
-          </Link>
-          <span className="text-slate-300 dark:text-slate-600">|</span>
-          <Link href="/calculators/pythagorean-theorem-calculator" className="hover:underline font-semibold">
-            Pythagorean Theorem Calculator &amp; Right Triangle Solver
-          </Link>
-          <span className="text-slate-300 dark:text-slate-600">|</span>
-          <Link href="/calculators/factor-calculator" className="hover:underline font-semibold">
-            Factor Calculator &amp; Prime Factorization
-          </Link>
-        </div>
-      </div>
 
     </article>
   );

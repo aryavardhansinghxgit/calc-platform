@@ -24,37 +24,6 @@ import { sample_size_calculatorFaqs } from "@/app/calculators/sample-size-calcul
 export function SampleSizeContent() {
   return (
     <article className="space-y-10 text-slate-800 dark:text-slate-200 leading-relaxed font-sans max-w-5xl mx-auto">
-      {/* ========================================================================= */}
-      {/* RELATED CALCULATORS — TOP OF ARTICLE */}
-      {/* ========================================================================= */}
-      <section className="no-print p-4 rounded-2xl bg-blue-50/60 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/50 space-y-2">
-        <span className="text-[11px] font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block">
-          Related Statistical Calculators:
-        </span>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
-          <Link
-            href="/calculators/standard-deviation-calculator"
-            className="flex items-center justify-between p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 hover:border-blue-500 font-bold text-slate-800 dark:text-slate-200 transition-all shadow-2xs group"
-          >
-            <span>Standard Deviation Calculator</span>
-            <ArrowRight className="w-3.5 h-3.5 text-blue-600 group-hover:translate-x-0.5 transition-transform" />
-          </Link>
-          <Link
-            href="/calculators/confidence-interval-calculator"
-            className="flex items-center justify-between p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 hover:border-blue-500 font-bold text-slate-800 dark:text-slate-200 transition-all shadow-2xs group"
-          >
-            <span>Confidence Interval Calculator</span>
-            <ArrowRight className="w-3.5 h-3.5 text-blue-600 group-hover:translate-x-0.5 transition-transform" />
-          </Link>
-          <Link
-            href="/calculators/z-score-calculator"
-            className="flex items-center justify-between p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 hover:border-blue-500 font-bold text-slate-800 dark:text-slate-200 transition-all shadow-2xs group"
-          >
-            <span>Z-Score Calculator</span>
-            <ArrowRight className="w-3.5 h-3.5 text-blue-600 group-hover:translate-x-0.5 transition-transform" />
-          </Link>
-        </div>
-      </section>
 
       {/* ========================================================================= */}
       {/* OPENING CONTENT */}
@@ -1159,37 +1128,6 @@ export function SampleSizeContent() {
         </p>
       </section>
 
-      {/* ========================================================================= */}
-      {/* RELATED CALCULATORS — BOTTOM OF ARTICLE */}
-      {/* ========================================================================= */}
-      <section className="no-print p-4 rounded-2xl bg-blue-50/60 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/50 space-y-2">
-        <span className="text-[11px] font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 block">
-          Related Statistical Calculators:
-        </span>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
-          <Link
-            href="/calculators/standard-deviation-calculator"
-            className="flex items-center justify-between p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 hover:border-blue-500 font-bold text-slate-800 dark:text-slate-200 transition-all shadow-2xs group"
-          >
-            <span>Standard Deviation Calculator</span>
-            <ArrowRight className="w-3.5 h-3.5 text-blue-600 group-hover:translate-x-0.5 transition-transform" />
-          </Link>
-          <Link
-            href="/calculators/confidence-interval-calculator"
-            className="flex items-center justify-between p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 hover:border-blue-500 font-bold text-slate-800 dark:text-slate-200 transition-all shadow-2xs group"
-          >
-            <span>Confidence Interval Calculator</span>
-            <ArrowRight className="w-3.5 h-3.5 text-blue-600 group-hover:translate-x-0.5 transition-transform" />
-          </Link>
-          <Link
-            href="/calculators/z-score-calculator"
-            className="flex items-center justify-between p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 hover:border-blue-500 font-bold text-slate-800 dark:text-slate-200 transition-all shadow-2xs group"
-          >
-            <span>Z-Score Calculator</span>
-            <ArrowRight className="w-3.5 h-3.5 text-blue-600 group-hover:translate-x-0.5 transition-transform" />
-          </Link>
-        </div>
-      </section>
     </article>
   );
 }

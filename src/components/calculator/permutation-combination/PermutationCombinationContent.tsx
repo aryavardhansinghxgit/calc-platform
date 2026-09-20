@@ -36,48 +36,6 @@ export function PermutationCombinationContent() {
 
   return (
     <article className="mt-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-7 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-8 divide-y divide-slate-100 dark:divide-slate-800 print:divide-y-0 print:border-none print:p-0">
-      {/* RELATED CALCULATORS SECTION (BEFORE CONTENT) */}
-      <div className="no-print pb-2">
-        <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 border border-slate-200 dark:border-slate-700/60">
-          <div className="flex items-center justify-between pb-2 mb-3 border-b border-slate-200 dark:border-slate-700/60">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-              <Compass className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-              Related Mathematical &amp; Probability Tools
-            </span>
-            <span className="text-[11px] text-slate-500 dark:text-slate-400">Quick Navigation</span>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-            <Link
-              href="/calculators/probability-calculator"
-              className="flex items-center justify-between p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-800 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-300 dark:hover:border-blue-700 transition-colors group"
-            >
-              <span>Probability Calculator</span>
-              <ArrowRight className="h-3.5 w-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
-            </Link>
-            <Link
-              href="/calculators/statistics-calculator"
-              className="flex items-center justify-between p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-800 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-300 dark:hover:border-blue-700 transition-colors group"
-            >
-              <span>Statistics Calculator</span>
-              <ArrowRight className="h-3.5 w-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
-            </Link>
-            <Link
-              href="/calculators/dice-roller"
-              className="flex items-center justify-between p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-800 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-300 dark:hover:border-blue-700 transition-colors group"
-            >
-              <span>Dice Roller Simulator</span>
-              <ArrowRight className="h-3.5 w-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
-            </Link>
-            <Link
-              href="/calculators/sample-size-calculator"
-              className="flex items-center justify-between p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-800 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-300 dark:hover:border-blue-700 transition-colors group"
-            >
-              <span>Sample Size Calculator</span>
-              <ArrowRight className="h-3.5 w-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
-            </Link>
-          </div>
-        </div>
-      </div>
 
       {/* MAIN LONG-FORM EDUCATIONAL CONTENT */}
       <div className="space-y-8 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200 pt-6">
@@ -563,48 +521,6 @@ export function PermutationCombinationContent() {
         </div>
       </div>
 
-      {/* RELATED CALCULATORS SECTION (AFTER CONTENT) */}
-      <div className="no-print pt-6">
-        <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 border border-slate-200 dark:border-slate-700/60">
-          <div className="flex items-center justify-between pb-2 mb-3 border-b border-slate-200 dark:border-slate-700/60">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-              <Sparkles className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-              Explore Advanced Mathematical &amp; Statistical Calculators
-            </span>
-            <span className="text-[11px] text-slate-500 dark:text-slate-400">Platform Directory</span>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-            <Link
-              href="/calculators/random-number-generator"
-              className="flex items-center justify-between p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-800 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-300 dark:hover:border-blue-700 transition-colors group"
-            >
-              <span>Random Number Generator</span>
-              <ArrowRight className="h-3.5 w-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
-            </Link>
-            <Link
-              href="/calculators/scientific-calculator"
-              className="flex items-center justify-between p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-800 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-300 dark:hover:border-blue-700 transition-colors group"
-            >
-              <span>Scientific Calculator</span>
-              <ArrowRight className="h-3.5 w-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
-            </Link>
-            <Link
-              href="/calculators/matrix-calculator"
-              className="flex items-center justify-between p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-800 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-300 dark:hover:border-blue-700 transition-colors group"
-            >
-              <span>Matrix Calculator</span>
-              <ArrowRight className="h-3.5 w-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
-            </Link>
-            <Link
-              href="/calculators/standard-deviation-calculator"
-              className="flex items-center justify-between p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-800 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-300 dark:hover:border-blue-700 transition-colors group"
-            >
-              <span>Standard Deviation</span>
-              <ArrowRight className="h-3.5 w-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
-            </Link>
-          </div>
-        </div>
-      </div>
     </article>
   );
 }

@@ -112,35 +112,6 @@ export function CircleContent() {
   return (
     <article className="mt-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-7 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-8 divide-y divide-slate-100 dark:divide-slate-800">
       
-      {/* RELATED CALCULATORS — ABOVE THE MAIN CONTENT */}
-      <div>
-        <div className="p-4 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
-          <div className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">
-            Related Calculators
-          </div>
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs sm:text-sm">
-            <Link href="/calculators/area-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
-              Area Calculator
-            </Link>
-            <span className="text-slate-300 dark:text-slate-600">·</span>
-            <Link href="/calculators/volume-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
-              Volume Calculator
-            </Link>
-            <span className="text-slate-300 dark:text-slate-600">·</span>
-            <Link href="/calculators/triangle-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
-              Triangle Calculator
-            </Link>
-            <span className="text-slate-300 dark:text-slate-600">·</span>
-            <Link href="/calculators/distance-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
-              Distance Calculator
-            </Link>
-            <span className="text-slate-300 dark:text-slate-600">·</span>
-            <Link href="/calculators/pythagorean-theorem-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
-              Pythagorean Theorem Calculator
-            </Link>
-          </div>
-        </div>
-      </div>
 
       {/* MAIN LONG-FORM EDUCATIONAL CONTENT */}
       <div className="pt-8 space-y-8 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200">
@@ -735,35 +706,6 @@ export function CircleContent() {
         </section>
       </div>
 
-      {/* RELATED CALCULATORS — AFTER THE CONTENT */}
-      <div className="pt-6">
-        <div className="p-4 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
-          <div className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">
-            Related Calculators
-          </div>
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs sm:text-sm">
-            <Link href="/calculators/area-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
-              Area Calculator
-            </Link>
-            <span className="text-slate-300 dark:text-slate-600">·</span>
-            <Link href="/calculators/volume-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
-              Volume Calculator
-            </Link>
-            <span className="text-slate-300 dark:text-slate-600">·</span>
-            <Link href="/calculators/triangle-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
-              Triangle Calculator
-            </Link>
-            <span className="text-slate-300 dark:text-slate-600">·</span>
-            <Link href="/calculators/distance-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
-              Distance Calculator
-            </Link>
-            <span className="text-slate-300 dark:text-slate-600">·</span>
-            <Link href="/calculators/pythagorean-theorem-calculator" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
-              Pythagorean Theorem Calculator
-            </Link>
-          </div>
-        </div>
-      </div>
 
     </article>
   );

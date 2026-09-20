@@ -26,36 +26,6 @@ export function ScientificNotationContent() {
   return (
     <article className="mt-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-7 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-8 divide-y divide-slate-100 dark:divide-slate-800">
       
-      {/* ========================================================================= */}
-      {/* RELATED CALCULATORS — ABOVE CONTENT ONLY */}
-      {/* ========================================================================= */}
-      <div className="no-print pb-2 space-y-1.5">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 block">
-          RELATED CALCULATORS:
-        </span>
-        <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-slate-600 dark:text-slate-400">
-          <Link
-            href="/calculators/exponent-calculator"
-            className="text-blue-600 dark:text-blue-400 hover:underline font-semibold"
-          >
-            Exponent Calculator
-          </Link>
-          <span>|</span>
-          <Link
-            href="/calculators/big-number-calculator"
-            className="text-blue-600 dark:text-blue-400 hover:underline font-semibold"
-          >
-            Big Number Calculator
-          </Link>
-          <span>|</span>
-          <Link
-            href="/calculators/rounding-calculator"
-            className="text-blue-600 dark:text-blue-400 hover:underline font-semibold"
-          >
-            Rounding Calculator
-          </Link>
-        </div>
-      </div>
 
       {/* ========================================================================= */}
       {/* EXPANDED MAIN EDUCATIONAL CONTENT (SECTIONS 1 TO 20) */}
@@ -836,36 +806,6 @@ export function ScientificNotationContent() {
 
       </div>
 
-      {/* ========================================================================= */}
-      {/* RELATED CALCULATORS — AFTER CONTENT ONLY */}
-      {/* ========================================================================= */}
-      <div className="no-print pt-6 border-t border-slate-200/60 dark:border-slate-800">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 block mb-2">
-          RELATED CALCULATORS:
-        </span>
-        <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-slate-600 dark:text-slate-400">
-          <Link
-            href="/calculators/exponent-calculator"
-            className="text-blue-600 dark:text-blue-400 hover:underline font-semibold"
-          >
-            Exponent Calculator
-          </Link>
-          <span>|</span>
-          <Link
-            href="/calculators/big-number-calculator"
-            className="text-blue-600 dark:text-blue-400 hover:underline font-semibold"
-          >
-            Big Number Calculator
-          </Link>
-          <span>|</span>
-          <Link
-            href="/calculators/rounding-calculator"
-            className="text-blue-600 dark:text-blue-400 hover:underline font-semibold"
-          >
-            Rounding Calculator
-          </Link>
-        </div>
-      </div>
 
     </article>
   );

@@ -47,40 +47,6 @@ export function DistanceContent() {
 
   return (
     <article className="mt-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-7 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-8 divide-y divide-slate-100 dark:divide-slate-800">
-      {/* PRE-CONTENT RELATED CALCULATORS (Immediately before main educational content) */}
-      <div className="pb-2">
-        <div className="flex items-center gap-2 mb-2.5">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-            Related Calculators:
-          </span>
-        </div>
-        <div className="flex flex-wrap items-center gap-2 text-xs font-semibold">
-          <Link
-            href="/calculators/pythagorean-theorem-calculator"
-            className="px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/40 text-blue-600 dark:text-blue-400 border border-slate-200 dark:border-slate-700 hover:border-blue-500 transition-colors"
-          >
-            Pythagorean Theorem Calculator
-          </Link>
-          <Link
-            href="/calculators/slope-calculator"
-            className="px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/40 text-blue-600 dark:text-blue-400 border border-slate-200 dark:border-slate-700 hover:border-blue-500 transition-colors"
-          >
-            Slope Calculator
-          </Link>
-          <Link
-            href="/calculators/triangle-calculator"
-            className="px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/40 text-blue-600 dark:text-blue-400 border border-slate-200 dark:border-slate-700 hover:border-blue-500 transition-colors"
-          >
-            Triangle Calculator
-          </Link>
-          <Link
-            href="/calculators/standard-deviation-calculator"
-            className="px-3 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800/40 text-blue-600 dark:text-blue-400 border border-slate-200 dark:border-slate-700 hover:border-blue-500 transition-colors"
-          >
-            Standard Deviation Calculator
-          </Link>
-        </div>
-      </div>
 
       {/* MAIN EDUCATIONAL BODY (13 Core Sections + Practical Trust Block) */}
       <div className="pt-6 space-y-8 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200">
@@ -545,40 +511,6 @@ export function DistanceContent() {
         </div>
       </div>
 
-      {/* POST-CONTENT RELATED CALCULATORS (Immediately after content) */}
-      <div className="pt-6">
-        <div className="flex items-center gap-2 mb-3">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-            Related Calculators:
-          </span>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs font-semibold">
-          <Link
-            href="/calculators/pythagorean-theorem-calculator"
-            className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 hover:border-blue-500 text-blue-600 dark:text-blue-400 block transition-colors"
-          >
-            Pythagorean Theorem Calculator &rarr;
-          </Link>
-          <Link
-            href="/calculators/slope-calculator"
-            className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 hover:border-blue-500 text-blue-600 dark:text-blue-400 block transition-colors"
-          >
-            Slope Calculator &rarr;
-          </Link>
-          <Link
-            href="/calculators/triangle-calculator"
-            className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 hover:border-blue-500 text-blue-600 dark:text-blue-400 block transition-colors"
-          >
-            Triangle Calculator &rarr;
-          </Link>
-          <Link
-            href="/calculators/standard-deviation-calculator"
-            className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 hover:border-blue-500 text-blue-600 dark:text-blue-400 block transition-colors"
-          >
-            Standard Deviation Calculator &rarr;
-          </Link>
-        </div>
-      </div>
     </article>
   );
 }

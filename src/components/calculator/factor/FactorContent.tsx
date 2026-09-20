@@ -8,23 +8,6 @@ export function FactorContent() {
   return (
     <article className="mt-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-7 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-8">
       
-      {/* INTERNAL LINK BLOCK — ABOVE CONTENT */}
-      <nav aria-label="Related Calculators" className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/60 not-prose">
-        <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm">
-          <span className="font-bold text-slate-700 dark:text-slate-300">Related calculators:</span>
-          <Link href="/calculators/gcf-calculator" className="font-semibold text-blue-600 dark:text-blue-400 hover:underline">
-            Greatest Common Factor (GCF) Calculator
-          </Link>
-          <span className="text-slate-400">|</span>
-          <Link href="/calculators/lcm-calculator" className="font-semibold text-blue-600 dark:text-blue-400 hover:underline">
-            Least Common Multiple (LCM) Calculator
-          </Link>
-          <span className="text-slate-400">|</span>
-          <Link href="/calculators/fraction-calculator" className="font-semibold text-blue-600 dark:text-blue-400 hover:underline">
-            Fraction Calculator
-          </Link>
-        </div>
-      </nav>
 
       <div className="space-y-8 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200 divide-y divide-slate-100 dark:divide-slate-800">
         
@@ -701,23 +684,6 @@ export function FactorContent() {
 
       </div>
 
-      {/* INTERNAL LINK BLOCK — AFTER CONTENT */}
-      <nav aria-label="Related Calculators" className="pt-6 border-t border-slate-200 dark:border-slate-700 not-prose">
-        <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm">
-          <span className="font-bold text-slate-700 dark:text-slate-300">Related calculators:</span>
-          <Link href="/calculators/gcf-calculator" className="font-semibold text-blue-600 dark:text-blue-400 hover:underline">
-            Greatest Common Factor (GCF) Calculator
-          </Link>
-          <span className="text-slate-400">|</span>
-          <Link href="/calculators/lcm-calculator" className="font-semibold text-blue-600 dark:text-blue-400 hover:underline">
-            Least Common Multiple (LCM) Calculator
-          </Link>
-          <span className="text-slate-400">|</span>
-          <Link href="/calculators/fraction-calculator" className="font-semibold text-blue-600 dark:text-blue-400 hover:underline">
-            Fraction Calculator
-          </Link>
-        </div>
-      </nav>
 
     </article>
   );

@@ -8,32 +8,6 @@ import { confidence_interval_calculatorFaqs } from "@/app/calculators/confidence
 export function ConfidenceIntervalContent() {
   return (
     <article className="space-y-10 text-slate-700 dark:text-slate-300 leading-relaxed font-sans max-w-5xl mx-auto">
-      {/* ========================================================================= */}
-      {/* RELATED CALCULATORS STRIP — ABOVE ARTICLE */}
-      {/* ========================================================================= */}
-      <div className="p-3 bg-blue-50/80 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/60 rounded-xl flex flex-wrap items-center gap-2 text-xs">
-        <span className="font-bold text-blue-900 dark:text-blue-300">Related Calculators:</span>
-        <Link
-          href="/calculators/sample-size-calculator"
-          className="font-semibold text-blue-700 dark:text-blue-400 hover:underline"
-        >
-          Sample Size Calculator
-        </Link>
-        <span className="text-slate-300 dark:text-slate-700">&bull;</span>
-        <Link
-          href="/calculators/z-score-calculator"
-          className="font-semibold text-blue-700 dark:text-blue-400 hover:underline"
-        >
-          Z-Score Calculator
-        </Link>
-        <span className="text-slate-300 dark:text-slate-700">&bull;</span>
-        <Link
-          href="/calculators/statistics-calculator"
-          className="font-semibold text-blue-700 dark:text-blue-400 hover:underline"
-        >
-          Statistics Calculator
-        </Link>
-      </div>
 
       {/* ========================================================================= */}
       {/* 1. WHAT IS A CONFIDENCE INTERVAL */}
@@ -598,32 +572,6 @@ export function ConfidenceIntervalContent() {
         </ul>
       </section>
 
-      {/* ========================================================================= */}
-      {/* RELATED CALCULATORS STRIP — AFTER ARTICLE */}
-      {/* ========================================================================= */}
-      <div className="p-3 bg-blue-50/80 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/60 rounded-xl flex flex-wrap items-center gap-2 text-xs">
-        <span className="font-bold text-blue-900 dark:text-blue-300">Related Calculators:</span>
-        <Link
-          href="/calculators/sample-size-calculator"
-          className="font-semibold text-blue-700 dark:text-blue-400 hover:underline"
-        >
-          Sample Size Calculator
-        </Link>
-        <span className="text-slate-300 dark:text-slate-700">&bull;</span>
-        <Link
-          href="/calculators/z-score-calculator"
-          className="font-semibold text-blue-700 dark:text-blue-400 hover:underline"
-        >
-          Z-Score Calculator
-        </Link>
-        <span className="text-slate-300 dark:text-slate-700">&bull;</span>
-        <Link
-          href="/calculators/statistics-calculator"
-          className="font-semibold text-blue-700 dark:text-blue-400 hover:underline"
-        >
-          Statistics Calculator
-        </Link>
-      </div>
     </article>
   );
 }

@@ -36,36 +36,6 @@ export function SequenceContent() {
 
   return (
     <article className="mt-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-7 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-8 divide-y divide-slate-100 dark:divide-slate-800">
-      {/* 1. ABOVE-CONTENT RELATED CALCULATORS STRIP */}
-      <div className="space-y-3">
-        <div className="p-3.5 bg-slate-50 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 flex flex-wrap items-center justify-between gap-2.5 text-xs">
-          <span className="font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-            <Calculator className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-            RELATED CALCULATORS:
-          </span>
-          <div className="flex flex-wrap items-center gap-2 font-medium">
-            <Link
-              href="/calculators/standard-deviation-calculator"
-              className="text-blue-600 dark:text-blue-400 hover:underline px-2.5 py-1 rounded-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 transition-colors"
-            >
-              Standard Deviation Calculator
-            </Link>
-            <span className="text-slate-300 dark:text-slate-600">|</span>
-            <Link
-              href="/calculators/exponent-calculator"
-              className="text-blue-600 dark:text-blue-400 hover:underline px-2.5 py-1 rounded-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 transition-colors"
-            >
-              Exponent Calculator
-            </Link>
-            <span className="text-slate-300 dark:text-slate-600">|</span>
-            <Link
-              href="/calculators/big-number-calculator"
-              className="text-blue-600 dark:text-blue-400 hover:underline px-2.5 py-1 rounded-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700/80 transition-colors"
-            >
-              Big Number Calculator
-            </Link>
-          </div>
-        </div>
 
         {/* INTRODUCTION ABOVE THE DEEPER GUIDE */}
         <section className="space-y-3 pt-2">
@@ -95,7 +65,6 @@ export function SequenceContent() {
             The important distinction is that a finite list does not always determine one unique rule. A good sequence solver should therefore distinguish a strong detected pattern from a merely possible pattern. This calculator uses that distinction for short or ambiguous inputs rather than presenting every guess as mathematically certain.
           </p>
         </section>
-      </div>
 
       {/* 2. MAIN EDUCATIONAL SECTIONS */}
       <div className="space-y-8 pt-6 text-slate-800 dark:text-slate-200">
@@ -710,56 +679,6 @@ export function SequenceContent() {
         </div>
       </div>
 
-      {/* 4. POST-CONTENT INTERNAL LINKS SECTION */}
-      <div className="pt-8 space-y-3">
-        <h2 className="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
-          <Compass className="h-5 w-5 text-blue-600 dark:text-blue-400 shrink-0" />
-          16. Continue Exploring Related Calculations
-        </h2>
-        <p className="text-sm text-slate-700 dark:text-slate-300">
-          When a sequence problem leads into another type of calculation, these specialized tools provide exact mathematical solutions:
-        </p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 pt-1">
-          <Link
-            href="/calculators/standard-deviation-calculator"
-            className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 hover:border-blue-500 transition-all group block"
-          >
-            <h3 className="font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 text-sm flex items-center justify-between">
-              Standard Deviation Calculator
-              <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
-            </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-              Analyze dispersion, variance, and spread when sequence terms represent an empirical dataset.
-            </p>
-          </Link>
-
-          <Link
-            href="/calculators/exponent-calculator"
-            className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 hover:border-blue-500 transition-all group block"
-          >
-            <h3 className="font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 text-sm flex items-center justify-between">
-              Exponent Calculator
-              <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
-            </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-              Evaluate rapid exponential powers such as <em>rⁿ</em> or <em>2ⁿ</em> with complete step-by-step laws of exponents.
-            </p>
-          </Link>
-
-          <Link
-            href="/calculators/big-number-calculator"
-            className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 hover:border-blue-500 transition-all group block"
-          >
-            <h3 className="font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 text-sm flex items-center justify-between">
-              Big Number Calculator
-              <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
-            </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-              Compute huge recurrence terms and factorials with exact arbitrary-precision integers.
-            </p>
-          </Link>
-        </div>
-      </div>
     </article>
   );
 }

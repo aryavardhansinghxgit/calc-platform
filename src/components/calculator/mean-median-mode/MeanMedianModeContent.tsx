@@ -21,46 +21,6 @@ export function MeanMedianModeContent() {
 
   return (
     <article className="space-y-12 text-slate-800 dark:text-slate-200 leading-relaxed font-sans max-w-4xl mx-auto pt-4">
-      {/* 401(k)-STYLE RELATED CALCULATORS MID-BAR */}
-      <section className="bg-slate-50 dark:bg-slate-900/60 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
-        <div className="flex items-center gap-2 mb-3">
-          <Sliders className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-          <span className="text-xs font-extrabold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-            Related Statistical Solvers
-          </span>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <Link
-            href="/calculators/statistics-calculator"
-            className="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-400 transition-colors shadow-xs group"
-          >
-            <div>
-              <span className="font-bold text-sm text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400">
-                Statistics Calculator
-              </span>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Broader descriptive statistics, quartiles &amp; distributions
-              </p>
-            </div>
-            <span className="text-blue-600 dark:text-blue-400 font-bold text-xs">Explore &rarr;</span>
-          </Link>
-
-          <Link
-            href="/calculators/standard-deviation-calculator"
-            className="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-400 transition-colors shadow-xs group"
-          >
-            <div>
-              <span className="font-bold text-sm text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400">
-                Standard Deviation Calculator
-              </span>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Dedicated variance, Bessel&apos;s correction &amp; dispersion
-              </p>
-            </div>
-            <span className="text-blue-600 dark:text-blue-400 font-bold text-xs">Explore &rarr;</span>
-          </Link>
-        </div>
-      </section>
 
       {/* SHORT INTRO */}
       <section className="space-y-4">
