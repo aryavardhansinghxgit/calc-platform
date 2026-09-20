@@ -17,9 +17,31 @@ export async function POST(req: Request) {
       );
     }
 
+    // Input length boundaries for denial of service / payload abuse protection
+    if (typeof message !== "string" || message.length > 10000) {
+      return NextResponse.json(
+        { error: "Message content exceeds maximum allowed length (10,000 characters)." },
+        { status: 400 }
+      );
+    }
+
+    if (name && (typeof name !== "string" || name.length > 150)) {
+      return NextResponse.json(
+        { error: "Name field exceeds maximum allowed length." },
+        { status: 400 }
+      );
+    }
+
+    if (subject && (typeof subject !== "string" || subject.length > 250)) {
+      return NextResponse.json(
+        { error: "Subject line exceeds maximum allowed length." },
+        { status: 400 }
+      );
+    }
+
     // Basic email format check
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (typeof email !== "string" || email.length > 200 || !emailRegex.test(email.trim())) {
       return NextResponse.json(
         { error: "Please provide a valid email address." },
         { status: 400 }

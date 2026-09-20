@@ -34,15 +34,15 @@ export default function ErrorPage({
         </p>
       </div>
 
-      {/* Error Details (if available in dev) */}
-      {error?.message && (
+      {/* Error Details (only displayed in development or safe reference in prod) */}
+      {process.env.NODE_ENV === "development" && error?.message && (
         <div className="w-full bg-zinc-50 dark:bg-zinc-900/80 border border-zinc-200 dark:border-zinc-800 rounded-lg p-3 text-left">
           <p className="text-[11px] font-mono text-zinc-600 dark:text-zinc-400 break-all">
             {error.message}
           </p>
           {error.digest && (
             <p className="text-[10px] text-zinc-400 dark:text-zinc-500 mt-1">
-              Digest: {error.digest}
+              Reference ID: {error.digest}
             </p>
           )}
         </div>
