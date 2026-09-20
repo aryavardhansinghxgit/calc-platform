@@ -104,7 +104,7 @@ export function Footer() {
             </li>
             <li>
               <Link href="/contact" className="text-blue-50 dark:text-zinc-400 hover:text-white dark:hover:text-zinc-100 transition-colors">
-                Contact Us
+                Feedback & Contact
               </Link>
             </li>
           </ul>

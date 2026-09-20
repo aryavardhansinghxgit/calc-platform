@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { name, email, topic, subject, message, honeypot } = body;
+    const { name, email, topic, topicLabel, calculatorName, rating, subject, message, honeypot } = body;
 
     // Spam honeypot check
     if (honeypot) {
@@ -32,6 +32,13 @@ export async function POST(req: Request) {
       );
     }
 
+    if (calculatorName && (typeof calculatorName !== "string" || calculatorName.length > 150)) {
+      return NextResponse.json(
+        { error: "Calculator name field exceeds maximum allowed length." },
+        { status: 400 }
+      );
+    }
+
     if (subject && (typeof subject !== "string" || subject.length > 250)) {
       return NextResponse.json(
         { error: "Subject line exceeds maximum allowed length." },
@@ -49,7 +56,7 @@ export async function POST(req: Request) {
     }
 
     const destinationEmail = process.env.CONTACT_DESTINATION_EMAIL || "xasvmax@gmail.com";
-    const emailSubject = `[CalcPlatform] ${subject || topic || "New Contact Message"}`;
+    const emailSubject = `[CalcPlatform Feedback] ${topicLabel || topic || "General Feedback"}${calculatorName ? ` [${calculatorName}]` : ""}`;
 
     const origin = req.headers.get("origin") || "https://calcplatform.com";
     const referer = req.headers.get("referer") || "https://calcplatform.com/contact";
@@ -73,8 +80,10 @@ export async function POST(req: Request) {
         _captcha: "false",
         name: name ? String(name).trim() : "Anonymous User",
         email: String(email).trim(),
-        topic: topic ? String(topic).trim() : "General Inquiry",
-        subject: subject ? String(subject).trim() : "No Subject",
+        category: topicLabel ? String(topicLabel).trim() : (topic ? String(topic).trim() : "General Feedback"),
+        calculator: calculatorName ? String(calculatorName).trim() : "N/A",
+        userRating: rating ? `${rating} / 5 Stars` : "Not Provided",
+        subject: subject ? String(subject).trim() : "N/A",
         message: String(message).trim(),
         submittedAt: new Date().toISOString(),
       }),

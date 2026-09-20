@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Calculator, Search, Menu, X, ArrowRight } from "lucide-react";
+import { Calculator, Search, Menu, X, ArrowRight, MessageSquare } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { NAVIGATION_CATEGORIES } from "@/constants/navigation";
@@ -118,11 +118,31 @@ export function Navbar({ onSearchChange, activeCategory = "Home" }: NavbarProps)
                 </Link>
               );
             })}
+
+            {/* Feedback Button (Yellow) right after Other category and before Search Bar */}
+            <Link
+              href="/contact"
+              className="ml-1 flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-md bg-yellow-400 hover:bg-yellow-300 text-yellow-950 dark:bg-yellow-400 dark:hover:bg-yellow-300 dark:text-zinc-950 transition-all shadow-xs border border-yellow-300 dark:border-yellow-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300 shrink-0 cursor-pointer"
+              title="Give feedback or request a calculator"
+            >
+              <MessageSquare className="h-3.5 w-3.5 fill-yellow-950/20 dark:fill-zinc-950/20" />
+              <span>Feedback</span>
+            </Link>
           </nav>
         </div>
 
         {/* Global Compact Search Bar & Controls */}
         <div className="flex min-w-0 flex-1 items-center justify-end gap-1.5 sm:gap-2 sm:flex-none">
+          {/* Feedback Button for intermediate screens where category bar is collapsed */}
+          <Link
+            href="/contact"
+            className="hidden sm:flex xl:hidden items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-md bg-yellow-400 hover:bg-yellow-300 text-yellow-950 dark:bg-yellow-400 dark:hover:bg-yellow-300 dark:text-zinc-950 transition-all shadow-xs border border-yellow-300 dark:border-yellow-400 shrink-0 cursor-pointer"
+            title="Give feedback or request a calculator"
+          >
+            <MessageSquare className="h-3.5 w-3.5 fill-yellow-950/20 dark:fill-zinc-950/20" />
+            <span>Feedback</span>
+          </Link>
+
           <div className="relative w-0 min-w-0 flex-1 sm:w-64 lg:w-72 sm:flex-none">
             <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-blue-100 dark:text-zinc-400 z-10 pointer-events-none" />
             <Input
@@ -203,7 +223,17 @@ export function Navbar({ onSearchChange, activeCategory = "Home" }: NavbarProps)
       {/* Mobile Dropdown Menu */}
       {mobileMenuOpen && (
         <div className="xl:hidden border-t border-blue-500 dark:border-zinc-800 bg-blue-600 dark:bg-zinc-900 px-4 py-3 space-y-2">
-          <div className="space-y-1">
+          {/* Mobile Feedback Button Highlight (Yellow) */}
+          <Link
+            href="/contact"
+            onClick={() => setMobileMenuOpen(false)}
+            className="flex items-center gap-2.5 w-full px-3 py-2 rounded-lg text-xs font-bold bg-yellow-400 hover:bg-yellow-300 text-yellow-950 dark:bg-yellow-400 dark:hover:bg-yellow-300 dark:text-zinc-950 transition-colors shadow-xs"
+          >
+            <MessageSquare className="h-4 w-4 fill-yellow-950/20 dark:fill-zinc-950/20" />
+            <span>Give Feedback & Contact</span>
+          </Link>
+
+          <div className="space-y-1 pt-1 border-t border-blue-500/60 dark:border-zinc-800">
             {categories.map((cat) => {
               const isActive = selectedCategory === cat.name;
               const href = cat.slug === "home" || cat.id === "home" ? "/" : `/category/${cat.slug}`;
