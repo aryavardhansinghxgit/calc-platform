@@ -1,23 +1,34 @@
 import { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://calcplatform.com";
+  const rawBaseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://calcplatform.com";
+  const baseUrl = rawBaseUrl.replace(/\/+$/, "");
 
   return {
     rules: [
       {
         userAgent: "*",
-        allow: "/",
+        allow: ["/", "/calculators/", "/category/", "/contact", "/about", "/privacy", "/terms"],
         disallow: ["/404", "/500", "/api/"],
       },
       {
         userAgent: "Googlebot",
-        allow: "/",
+        allow: ["/", "/calculators/", "/category/", "/contact", "/about", "/privacy", "/terms"],
         disallow: ["/404", "/500", "/api/"],
       },
       {
         userAgent: "Bingbot",
-        allow: "/",
+        allow: ["/", "/calculators/", "/category/", "/contact", "/about", "/privacy", "/terms"],
+        disallow: ["/404", "/500", "/api/"],
+      },
+      {
+        userAgent: "Applebot",
+        allow: ["/", "/calculators/", "/category/", "/contact", "/about", "/privacy", "/terms"],
+        disallow: ["/404", "/500", "/api/"],
+      },
+      {
+        userAgent: "DuckDuckBot",
+        allow: ["/", "/calculators/", "/category/", "/contact", "/about", "/privacy", "/terms"],
         disallow: ["/404", "/500", "/api/"],
       },
     ],
