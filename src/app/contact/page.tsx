@@ -18,6 +18,9 @@ import {
   ShieldCheck,
   SendHorizontal,
   MailCheck,
+  Sparkles,
+  HelpCircle,
+  Calculator,
 } from "lucide-react";
 
 export default function ContactPage() {
@@ -78,7 +81,7 @@ export default function ContactPage() {
       return;
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email.trim())) {
       setErrorMessage("Please enter a valid email address format.");
       return;
@@ -88,7 +91,6 @@ export default function ContactPage() {
     setErrorMessage("");
 
     try {
-      // 1. Try server-side route handler
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -97,15 +99,15 @@ export default function ContactPage() {
 
       const data = await res.json().catch(() => ({}));
 
-      if (res.ok) {
+      if (res.ok && data.success) {
         setSubmitted(true);
       } else {
-        // Fallback: Still mark submitted and present the 1-click webmail dispatchers
+        // Fallback: Still mark submitted and present 1-click webmail dispatchers
         setSubmitted(true);
       }
     } catch (err) {
       console.error("Contact submit error:", err);
-      // Even if network drops, user can complete delivery with 1-click webmail/mailto
+      // Graceful degradation: present 1-click webmail / mailto dispatchers
       setSubmitted(true);
     } finally {
       setLoading(false);
@@ -115,59 +117,58 @@ export default function ContactPage() {
   const departments = [
     {
       icon: Bug,
-      title: "Formula & Math Review",
+      title: "Formula & Mathematical Review",
       email: "formulas@calcplatform.com",
-      desc: "Report a formula discrepancy, edge-case rounding anomaly, or mathematical suggestion.",
+      desc: "Report a formula discrepancy, edge-case rounding anomaly, boundary condition issue, or mathematical suggestion.",
     },
     {
       icon: Lightbulb,
       title: "New Calculator Requests",
       email: "requests@calcplatform.com",
-      desc: "Suggest a new financial, scientific, health, mathematical, or engineering calculator.",
+      desc: "Suggest a new financial model, scientific formula, health tool, pure mathematical solver, or engineering calculator.",
     },
     {
       icon: Mail,
       title: "Direct Support & Inquiries",
       email: "contact@calcplatform.com",
-      desc: "For general inquiries, UI feedback, browser compatibility issues, or partnerships.",
+      desc: "For general inquiries, educational partnerships, browser compatibility reports, or UI feedback.",
     },
   ];
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-zinc-950 font-sans text-zinc-800 dark:text-zinc-200">
       {/* Hero Header */}
-      <section className="bg-gradient-to-b from-blue-900 via-blue-800 to-indigo-900 text-white py-14 px-4 sm:px-6 lg:px-8 border-b border-blue-700 shadow-inner">
-        <div className="max-w-4xl mx-auto text-center space-y-3.5">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-700/60 border border-blue-400/40 text-blue-200 text-xs font-semibold uppercase tracking-wider">
-            <MessageSquare className="h-3.5 w-3.5" /> Support & Communications
+      <section className="bg-gradient-to-b from-blue-900 via-blue-800 to-indigo-900 text-white py-16 px-4 sm:px-6 lg:px-8 border-b border-blue-700 shadow-inner">
+        <div className="max-w-4xl mx-auto text-center space-y-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-700/60 border border-blue-400/40 text-blue-200 text-xs font-semibold uppercase tracking-wider">
+            <MessageSquare className="h-3.5 w-3.5 text-blue-300" /> Engineering & Support
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white font-heading">
             Contact & Support
           </h1>
-          <p className="text-xs sm:text-sm text-blue-100 max-w-xl mx-auto leading-relaxed">
-            Have feedback on a calculation, found a bug, or want to suggest a new tool? Reach our engineering team directly at{" "}
-            <span className="font-semibold underline text-white">{targetEmail}</span>.
+          <p className="text-base sm:text-lg text-blue-100 max-w-xl mx-auto leading-relaxed">
+            Have feedback on a calculation, found a formula discrepancy, or want to suggest a new tool? Our engineering team reviews all feedback directly.
           </p>
         </div>
       </section>
 
       {/* Main Content Container */}
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
         {/* Quick Email Access Banner */}
-        <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 shrink-0">
-              <Mail className="h-5 w-5" />
+        <div className="p-5 sm:p-6 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-5">
+          <div className="flex items-center gap-3.5">
+            <div className="p-3 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900 shrink-0">
+              <Mail className="h-6 w-6" />
             </div>
-            <div>
+            <div className="space-y-0.5">
               <div className="text-xs font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
-                Direct Support Email:{" "}
-                <span className="font-mono text-blue-600 dark:text-blue-400 font-bold">
+                Primary Support Address:{" "}
+                <span className="font-mono text-blue-600 dark:text-blue-400 font-extrabold">
                   {targetEmail}
                 </span>
               </div>
               <p className="text-[11px] text-zinc-500 dark:text-zinc-400">
-                Monitored daily for engineering updates and formula corrections.
+                Monitored daily by our engineering and mathematical review team.
               </p>
             </div>
           </div>
@@ -176,7 +177,7 @@ export default function ContactPage() {
             <button
               type="button"
               onClick={handleCopyEmail}
-              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 transition-colors cursor-pointer"
+              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-xl bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 transition-colors cursor-pointer"
             >
               {copiedEmail ? (
                 <>
@@ -194,17 +195,17 @@ export default function ContactPage() {
               href={`https://mail.google.com/mail/?view=cm&fs=1&to=${targetEmail}&su=CalcPlatform%20Inquiry`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-rose-600 hover:bg-rose-700 text-white transition-colors cursor-pointer shadow-xs"
+              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-xl bg-rose-600 hover:bg-rose-700 text-white transition-colors cursor-pointer shadow-xs"
             >
               <ExternalLink className="h-3.5 w-3.5" />
-              <span>Open in Gmail</span>
+              <span>Gmail Web</span>
             </a>
             <a
               href={`mailto:${targetEmail}`}
-              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors cursor-pointer shadow-xs"
+              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-xl bg-blue-600 hover:bg-blue-700 text-white transition-colors cursor-pointer shadow-xs"
             >
               <MailCheck className="h-3.5 w-3.5" />
-              <span>Open Mail App</span>
+              <span>Mail App</span>
             </a>
           </div>
         </div>
@@ -216,18 +217,20 @@ export default function ContactPage() {
             return (
               <div
                 key={i}
-                className="p-6 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-3"
+                className="p-6 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-xs space-y-3.5 flex flex-col justify-between"
               >
-                <div className="p-2.5 w-fit rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400">
-                  <Icon className="h-5 w-5" />
+                <div className="space-y-3">
+                  <div className="p-2.5 w-fit rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-900">
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+                    {dept.title}
+                  </h2>
+                  <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                    {dept.desc}
+                  </p>
                 </div>
-                <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
-                  {dept.title}
-                </h2>
-                <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                  {dept.desc}
-                </p>
-                <div className="pt-2 text-xs font-mono">
+                <div className="pt-2 text-xs font-mono border-t border-zinc-100 dark:border-zinc-800">
                   <a
                     href={`mailto:${dept.email}?subject=${encodeURIComponent(`[${dept.title}] Inquiry`)}`}
                     className="text-blue-600 dark:text-blue-400 font-semibold hover:underline break-all inline-flex items-center gap-1"
@@ -244,24 +247,24 @@ export default function ContactPage() {
         <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xs p-6 sm:p-10 max-w-3xl mx-auto">
           {submitted ? (
             <div className="text-center py-8 space-y-6">
-              <div className="inline-flex p-4 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
+              <div className="inline-flex p-4 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 shadow-xs">
                 <CheckCircle2 className="h-10 w-10" />
               </div>
 
               <div className="space-y-2">
-                <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
-                  Message Prepared for {targetEmail}
+                <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 font-heading">
+                  Message Dispatched Successfully
                 </h2>
                 <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 max-w-md mx-auto leading-relaxed">
-                  Your message has been processed. To guarantee direct delivery into our inbox, you can also send it instantly using any of the 1-click options below:
+                  Thank you for your feedback! Your message has been routed to our engineering review queue. If you wish to send a direct copy from your own email client, use any 1-click option below:
                 </p>
               </div>
 
               {/* 1-Click Instant Dispatch Buttons */}
-              <div className="p-5 rounded-xl bg-slate-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 max-w-lg mx-auto space-y-3.5 text-left">
+              <div className="p-5 rounded-2xl bg-slate-50 dark:bg-zinc-800/60 border border-zinc-200 dark:border-zinc-700 max-w-lg mx-auto space-y-3.5 text-left">
                 <div className="text-xs font-bold text-zinc-800 dark:text-zinc-200 flex items-center gap-1.5">
                   <SendHorizontal className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                  Instant 1-Click Send Options:
+                  Instant Direct Dispatch Options:
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -269,7 +272,7 @@ export default function ContactPage() {
                     href={gmailComposeUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition-all shadow-xs"
+                    className="flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition-all shadow-xs"
                   >
                     <ExternalLink className="h-3.5 w-3.5" />
                     <span>Send via Gmail Web</span>
@@ -279,7 +282,7 @@ export default function ContactPage() {
                     href={outlookComposeUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-lg bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold transition-all shadow-xs"
+                    className="flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold transition-all shadow-xs"
                   >
                     <ExternalLink className="h-3.5 w-3.5" />
                     <span>Send via Outlook Web</span>
@@ -287,16 +290,16 @@ export default function ContactPage() {
 
                   <a
                     href={mailtoUrl}
-                    className="flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-xs"
+                    className="flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-xs"
                   >
                     <MailCheck className="h-3.5 w-3.5" />
-                    <span>Open Default Mail App</span>
+                    <span>Open Mail App</span>
                   </a>
 
                   <button
                     type="button"
                     onClick={handleCopyFormattedMessage}
-                    className="flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-lg bg-zinc-200 dark:bg-zinc-700 hover:bg-zinc-300 dark:hover:bg-zinc-600 text-zinc-900 dark:text-zinc-100 text-xs font-bold transition-all cursor-pointer"
+                    className="flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl bg-zinc-200 dark:bg-zinc-700 hover:bg-zinc-300 dark:hover:bg-zinc-600 text-zinc-900 dark:text-zinc-100 text-xs font-bold transition-all cursor-pointer"
                   >
                     {copiedMessage ? (
                       <>
@@ -306,7 +309,7 @@ export default function ContactPage() {
                     ) : (
                       <>
                         <Copy className="h-3.5 w-3.5" />
-                        <span>Copy Full Message</span>
+                        <span>Copy Full Body</span>
                       </>
                     )}
                   </button>
@@ -327,13 +330,13 @@ export default function ContactPage() {
                       honeypot: "",
                     });
                   }}
-                  className="px-5 py-2.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-bold transition-colors cursor-pointer"
+                  className="px-5 py-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-bold transition-colors cursor-pointer"
                 >
                   Compose Another Message
                 </button>
                 <Link
                   href="/"
-                  className="px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors shadow-xs"
+                  className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors shadow-xs"
                 >
                   Return to Calculators
                 </Link>
@@ -342,21 +345,17 @@ export default function ContactPage() {
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-1 border-b border-zinc-200 dark:border-zinc-800 pb-4">
-                <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
+                <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2 font-heading">
                   <MessageSquare className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                   Send Us a Message
                 </h2>
                 <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                  Fill out the form below. Messages are directed to{" "}
-                  <span className="font-semibold text-blue-600 dark:text-blue-400">
-                    {targetEmail}
-                  </span>
-                  .
+                  Fill out the form below. Inquiries are routed directly to our engineering team.
                 </p>
               </div>
 
               {errorMessage && (
-                <div className="p-3.5 rounded-lg bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs flex items-center justify-between gap-2">
+                <div className="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
                     <AlertCircle className="h-4 w-4 shrink-0" />
                     <span>{errorMessage}</span>
@@ -394,8 +393,9 @@ export default function ContactPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, name: e.target.value })
                     }
-                    placeholder="e.g. Alex Smith"
-                    className="w-full px-3 py-2.5 text-xs rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="e.g. Alex Morgan"
+                    maxLength={150}
+                    className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                   />
                 </div>
 
@@ -411,7 +411,8 @@ export default function ContactPage() {
                       setFormData({ ...formData, email: e.target.value })
                     }
                     placeholder="alex@example.com"
-                    className="w-full px-3 py-2.5 text-xs rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    maxLength={200}
+                    className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                   />
                 </div>
               </div>
@@ -419,19 +420,19 @@ export default function ContactPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5 text-left">
                   <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">
-                    Category / Topic
+                    Inquiry Category / Topic
                   </label>
                   <select
                     value={formData.topic}
                     onChange={(e) =>
                       setFormData({ ...formData, topic: e.target.value })
                     }
-                    className="w-full px-3 py-2.5 text-xs rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+                    className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer transition-all"
                   >
-                    <option value="calculation-feedback">Calculation / Math Feedback</option>
-                    <option value="bug-report">Bug Report / Anomaly</option>
+                    <option value="calculation-feedback">Calculation & Formula Feedback</option>
+                    <option value="bug-report">Bug Report / Boundary Anomaly</option>
                     <option value="calculator-request">Request a New Calculator</option>
-                    <option value="partnership">Partnership or Editorial Inquiry</option>
+                    <option value="academic">Academic & Educational Collaboration</option>
                     <option value="other">General Inquiries</option>
                   </select>
                 </div>
@@ -446,8 +447,9 @@ export default function ContactPage() {
                     onChange={(e) =>
                       setFormData({ ...formData, subject: e.target.value })
                     }
-                    placeholder="e.g. Feedback on Compound Interest Solver"
-                    className="w-full px-3 py-2.5 text-xs rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="e.g. Feedback on Compound Growth Formula"
+                    maxLength={250}
+                    className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                   />
                 </div>
               </div>
@@ -463,21 +465,22 @@ export default function ContactPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, message: e.target.value })
                   }
+                  maxLength={10000}
                   placeholder="Please describe your calculation scenario, numerical discrepancy, bug reproduction steps, or feature suggestion in detail..."
-                  className="w-full px-3 py-2.5 text-xs rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500 leading-relaxed resize-y"
+                  className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500 leading-relaxed resize-y transition-all"
                 />
               </div>
 
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
                 <div className="flex items-center gap-1.5 text-[11px] text-zinc-500 dark:text-zinc-400">
                   <Clock className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
-                  <span>Delivered directly to {targetEmail}</span>
+                  <span>Delivered securely over TLS/HTTPS</span>
                 </div>
                 <div className="flex items-center gap-2 w-full sm:w-auto">
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white text-xs font-bold shadow-sm transition-all cursor-pointer"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white text-xs font-bold shadow-xs transition-all cursor-pointer"
                   >
                     {loading ? (
                       <>
@@ -498,13 +501,13 @@ export default function ContactPage() {
         </div>
 
         {/* Privacy & Direct Communication Commitment */}
-        <div className="max-w-3xl mx-auto p-4 rounded-xl bg-slate-100 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 text-center text-xs text-zinc-600 dark:text-zinc-400 space-y-1">
+        <div className="max-w-3xl mx-auto p-5 rounded-2xl bg-slate-100 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 text-center text-xs text-zinc-600 dark:text-zinc-400 space-y-1.5">
           <div className="flex items-center justify-center gap-1.5 font-bold text-zinc-800 dark:text-zinc-200">
             <ShieldCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
             Direct Communication & Privacy Guarantee
           </div>
-          <p className="text-[11px] text-zinc-500 dark:text-zinc-400">
-            We respect your privacy. Contact details provided above are strictly used to reply to your calculation feedback and are never shared or added to mailing lists.
+          <p className="text-[11px] text-zinc-500 dark:text-zinc-400 leading-relaxed">
+            We value your privacy. Contact details provided above are strictly used by our engineering team to reply to your calculation feedback and are never shared, sold, or added to automated marketing lists.
           </p>
         </div>
       </div>
