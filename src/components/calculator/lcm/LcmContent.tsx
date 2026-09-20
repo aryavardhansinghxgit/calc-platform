@@ -99,34 +99,6 @@ export function LcmContent() {
   return (
     <article className="mt-6 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-7 text-slate-800 dark:text-slate-200 leading-relaxed text-sm sm:text-base space-y-8 divide-y divide-slate-100 dark:divide-slate-800">
       
-      {/* ========================================================================= */}
-      {/* 1. QUICK-ACCESS RELATED CALCULATORS BAR (PLACED ONCE BEFORE CONTENT) */}
-      {/* ========================================================================= */}
-      <div className="bg-slate-50 dark:bg-slate-800/60 p-4 rounded-xl border border-slate-200 dark:border-slate-700/80 mb-6">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 block mb-2">
-          Related Calculators:
-        </span>
-        <div className="flex flex-wrap gap-2 text-xs font-medium">
-          <Link
-            href="/calculators/gcf-calculator"
-            className="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-blue-600 dark:text-blue-400 font-bold hover:border-blue-500 transition-colors shadow-2xs"
-          >
-            Greatest Common Factor (GCF) Calculator
-          </Link>
-          <Link
-            href="/calculators/factor-calculator"
-            className="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-blue-600 dark:text-blue-400 font-bold hover:border-blue-500 transition-colors shadow-2xs"
-          >
-            Factor Calculator &amp; Prime Factorization
-          </Link>
-          <Link
-            href="/calculators/fraction-calculator"
-            className="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-blue-600 dark:text-blue-400 font-bold hover:border-blue-500 transition-colors shadow-2xs"
-          >
-            Fraction Calculator
-          </Link>
-        </div>
-      </div>
 
       {/* ========================================================================= */}
       {/* 2. IN-CONTENT TABLE OF CONTENTS (ANCHOR LINKS) */}
@@ -790,52 +762,6 @@ export function LcmContent() {
 
       </div>
 
-      {/* ========================================================================= */}
-      {/* 4. EXPLORE RELATED CALCULATORS (PLACED ONCE AFTER THE CONTENT) */}
-      {/* ========================================================================= */}
-      <section className="pt-8 space-y-4">
-        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">
-          20. Explore Related Math Calculators
-        </h2>
-        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-          Complement your integer factorization and arithmetic problem solving with these dedicated solvers:
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-          <Link
-            href="/calculators/gcf-calculator"
-            className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 hover:border-blue-500 hover:shadow-sm transition-all group"
-          >
-            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm group-hover:underline mb-1">
-              Greatest Common Factor (GCF) Calculator
-            </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400">
-              Calculate the largest shared divisor across multiple numbers with Euclidean steps and Bézout identities.
-            </p>
-          </Link>
-          <Link
-            href="/calculators/factor-calculator"
-            className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 hover:border-blue-500 hover:shadow-sm transition-all group"
-          >
-            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm group-hover:underline mb-1">
-              Factor Calculator &amp; Prime Factorization
-            </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400">
-              Decompose any integer into prime factor trees, find all factor pairs, and test for primality.
-            </p>
-          </Link>
-          <Link
-            href="/calculators/fraction-calculator"
-            className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50 hover:border-blue-500 hover:shadow-sm transition-all group"
-          >
-            <h3 className="font-bold text-blue-600 dark:text-blue-400 text-sm group-hover:underline mb-1">
-              Fraction Calculator
-            </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400">
-              Add, subtract, multiply, and divide fractions with automated common denominator conversion.
-            </p>
-          </Link>
-        </div>
-      </section>
 
     </article>
   );
