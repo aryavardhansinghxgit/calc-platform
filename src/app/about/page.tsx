@@ -46,7 +46,7 @@ export default function AboutPage() {
   ];
 
   const stats = [
-    { label: "Precision Calculators", value: "200+" },
+    { label: "Precision Calculators", value: "190+" },
     { label: "Specialized Categories", value: "7" },
     { label: "Client-Side Processing", value: "100%" },
     { label: "Access Cost", value: "Free Forever" },
@@ -173,7 +173,7 @@ export default function AboutPage() {
             Ready to explore?
           </h2>
           <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 max-w-md mx-auto">
-            Choose from over 200+ specialized calculators across finance, health, math, construction, and science.
+            Choose from over 190+ specialized calculators across finance, health, math, construction, and science.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
             <Link

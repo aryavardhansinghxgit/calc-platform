@@ -6,7 +6,7 @@ import { SearchBar } from "@/components/home/SearchBar";
 
 export const metadata: Metadata = {
   title: "404 - Page Not Found | CalcPlatform",
-  description: "The calculator or page you are looking for could not be found. Search our comprehensive directory of 200+ financial, health, math, and engineering calculators.",
+  description: "The calculator or page you are looking for could not be found. Search our comprehensive directory of 190+ financial, health, math, and engineering calculators.",
 };
 
 export default function NotFound() {

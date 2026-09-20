@@ -30,7 +30,7 @@ export function Hero() {
             {/* 3D Elevated Pill Badge */}
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/80 dark:to-indigo-950/80 text-blue-600 dark:text-blue-400 border border-blue-200/80 dark:border-blue-800/80 text-[11px] font-bold uppercase tracking-wider shadow-[0_2px_8px_rgba(37,99,235,0.15)]">
               <Sparkles className="h-3.5 w-3.5 text-blue-500 animate-pulse" />
-              <span>Free 200+ Precision Calculators</span>
+              <span>Free 190+ Precision Calculators</span>
             </div>
 
             {/* Hero Heading */}
