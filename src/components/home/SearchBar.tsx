@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { searchCalculators } from "@/calculators";
 import { getCalculatorDisplayTitle } from "@/lib/calculator-title";
 
+import { useRouter } from "next/navigation";
+
 export interface QuickTag {
   id: string;
   label: string;
@@ -43,6 +45,7 @@ export function SearchBar({
   selectedCalc,
   onSelectCalc,
 }: SearchBarProps = {}) {
+  const router = useRouter();
   const [internalQuery, setInternalQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
 
@@ -58,6 +61,16 @@ export function SearchBar({
     return searchCalculators(query);
   }, [query]);
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && searchResults.length > 0) {
+      e.preventDefault();
+      setIsFocused(false);
+      router.push(`/calculators/${searchResults[0].slug}`);
+    } else if (e.key === "Escape") {
+      setIsFocused(false);
+    }
+  };
+
   return (
     <div className="space-y-3 max-w-2xl w-full relative">
       {/* Search Input Container */}
@@ -70,6 +83,7 @@ export function SearchBar({
           onFocus={() => setIsFocused(true)}
           onBlur={() => setTimeout(() => setIsFocused(false), 200)}
           onChange={(e) => handleQueryChange(e.target.value)}
+          onKeyDown={handleKeyDown}
           aria-label="Search all calculators"
           className="pl-10 pr-9 h-11 text-sm bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 rounded-xl shadow-[0_3px_10px_rgba(0,0,0,0.04),0_1px_2px_rgba(0,0,0,0.06)] focus:border-blue-500 focus:ring-4 focus:ring-blue-500/15 focus:shadow-[0_8px_25px_rgba(37,99,235,0.18)] transition-all"
         />
@@ -77,7 +91,7 @@ export function SearchBar({
           <button
             onClick={() => handleQueryChange("")}
             aria-label="Clear search"
-            className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground rounded-full transition-colors"
+            className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground rounded-full transition-colors cursor-pointer"
           >
             <X className="h-3.5 w-3.5" />
           </button>
@@ -86,14 +100,17 @@ export function SearchBar({
 
       {/* Live Search Dropdown */}
       {isFocused && query.trim() !== "" && (
-        <div className="absolute top-13 left-0 right-0 z-50 bg-card border border-blue-200 dark:border-blue-900/70 rounded-2xl shadow-2xl overflow-hidden max-h-80 overflow-y-auto">
-          <div className="flex items-center justify-between px-3.5 py-2.5 border-b border-blue-100 dark:border-blue-900/60 bg-blue-50/70 dark:bg-blue-950/30">
+        <div
+          onMouseDown={(e) => e.preventDefault()}
+          className="absolute top-13 left-0 right-0 z-50 bg-card border border-blue-200 dark:border-blue-900/70 rounded-2xl shadow-2xl overflow-hidden max-h-96 overflow-y-auto"
+        >
+          <div className="flex items-center justify-between px-3.5 py-2.5 border-b border-blue-100 dark:border-blue-900/60 bg-blue-50/70 dark:bg-blue-950/30 sticky top-0 backdrop-blur-sm z-10">
             <span className="text-[10px] font-bold uppercase tracking-wider text-blue-700 dark:text-blue-300">
-              Calculator suggestions
+              Calculators (A–Z)
             </span>
             {searchResults.length > 0 && (
               <span className="text-[10px] font-sans tabular-nums font-semibold text-blue-600 dark:text-blue-400">
-                {searchResults.length} matches
+                {searchResults.length} {searchResults.length === 1 ? "match" : "matches"}
               </span>
             )}
           </div>
@@ -106,6 +123,9 @@ export function SearchBar({
               <Link
                 key={calc.id}
                 href={`/calculators/${calc.slug}`}
+                onClick={() => {
+                  setIsFocused(false);
+                }}
                 className="p-3 flex min-w-0 items-center gap-3 border-b border-blue-50 last:border-b-0 dark:border-blue-950/40 hover:bg-blue-50/70 dark:hover:bg-blue-950/30 transition-colors group cursor-pointer"
               >
                 <div className="min-w-0 flex-1 space-y-0.5">

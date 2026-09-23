@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Calculator, Search, Menu, X, ArrowRight, MessageSquare } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,7 @@ export interface NavbarProps {
 }
 
 export function Navbar({ onSearchChange, activeCategory = "Home" }: NavbarProps) {
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -153,19 +154,44 @@ export function Navbar({ onSearchChange, activeCategory = "Home" }: NavbarProps)
               onFocus={() => setIsFocused(true)}
               onBlur={() => setTimeout(() => setIsFocused(false), 200)}
               onChange={handleSearch}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && searchResults.length > 0) {
+                  e.preventDefault();
+                  setIsFocused(false);
+                  router.push(`/calculators/${searchResults[0].slug}`);
+                } else if (e.key === "Escape") {
+                  setIsFocused(false);
+                }
+              }}
               aria-label="Search calculators"
-              className="pl-8 pr-8 sm:pr-12 bg-blue-700/80 dark:bg-zinc-800 border border-blue-400/60 dark:border-zinc-700 hover:border-blue-300 dark:hover:border-zinc-600 text-white dark:text-zinc-100 placeholder:text-blue-200 dark:placeholder:text-zinc-400 focus:border-white dark:focus:border-blue-500 focus:ring-1 focus:ring-white/30 dark:focus:ring-blue-500/30 rounded-lg h-8 text-xs transition-all shadow-none"
+              className="pl-8 pr-7 bg-blue-700/80 dark:bg-zinc-800 border border-blue-400/60 dark:border-zinc-700 hover:border-blue-300 dark:hover:border-zinc-600 text-white dark:text-zinc-100 placeholder:text-blue-200 dark:placeholder:text-zinc-400 focus:border-white dark:focus:border-blue-500 focus:ring-1 focus:ring-white/30 dark:focus:ring-blue-500/30 rounded-lg h-8 text-xs transition-all shadow-none"
             />
+            {searchTerm && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchTerm("");
+                  if (onSearchChange) onSearchChange("");
+                }}
+                aria-label="Clear search"
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-0.5 text-blue-200 hover:text-white dark:text-zinc-400 dark:hover:text-zinc-100 rounded-full transition-colors cursor-pointer"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            )}
             {/* Autocomplete Popup */}
             {isFocused && searchTerm.trim() !== "" && (
-              <div className="absolute top-10 right-0 left-0 sm:left-auto sm:w-80 z-50 bg-white dark:bg-zinc-900 border border-blue-200 dark:border-zinc-700 rounded-2xl shadow-2xl overflow-hidden max-h-80 overflow-y-auto">
-                <div className="flex items-center justify-between px-3 py-2 border-b border-blue-100 dark:border-zinc-800 bg-blue-50/70 dark:bg-zinc-800/50">
+              <div
+                onMouseDown={(e) => e.preventDefault()}
+                className="absolute top-10 right-0 left-0 sm:left-auto sm:w-80 z-50 bg-white dark:bg-zinc-900 border border-blue-200 dark:border-zinc-700 rounded-2xl shadow-2xl overflow-hidden max-h-96 overflow-y-auto"
+              >
+                <div className="flex items-center justify-between px-3 py-2 border-b border-blue-100 dark:border-zinc-800 bg-blue-50/70 dark:bg-zinc-800/50 sticky top-0 backdrop-blur-sm z-10">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-blue-700 dark:text-blue-400">
-                    Calculator suggestions
+                    Calculators (A–Z)
                   </span>
                   {searchResults.length > 0 && (
                     <span className="text-[10px] font-sans tabular-nums font-semibold text-blue-600 dark:text-blue-400">
-                      {searchResults.length} matches
+                      {searchResults.length} {searchResults.length === 1 ? "match" : "matches"}
                     </span>
                   )}
                 </div>
@@ -178,6 +204,9 @@ export function Navbar({ onSearchChange, activeCategory = "Home" }: NavbarProps)
                     <Link
                       key={calc.id}
                       href={`/calculators/${calc.slug}`}
+                      onClick={() => {
+                        setIsFocused(false);
+                      }}
                       className="p-2.5 flex min-w-0 items-center gap-2 border-b border-blue-50 last:border-b-0 dark:border-zinc-800/60 hover:bg-blue-50/70 dark:hover:bg-zinc-800/60 transition-colors group cursor-pointer"
                     >
                       <div className="min-w-0 flex-1 space-y-0.5">

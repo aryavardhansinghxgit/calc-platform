@@ -29,22 +29,20 @@ export function CategoryGrid() {
           Browse All Calculators
         </h2>
         <span className="text-xs text-muted-foreground font-sans tabular-nums">
-          Direct Directory
+          Alphabetical Directory (A–Z)
         </span>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {mainCategories.map((cat) => {
-          const tools = getCalculatorsByCategory(cat.slug);
-          const cutoffSlug = CATEGORY_CUTOFFS[cat.slug];
-          let displayedTools = tools;
-
-          if (cutoffSlug) {
-            const cutoffIndex = tools.findIndex((t) => t.slug === cutoffSlug);
-            if (cutoffIndex !== -1) {
-              displayedTools = tools.slice(0, cutoffIndex + 1);
-            }
-          }
+          const rawTools = getCalculatorsByCategory(cat.slug);
+          // Sort tools strictly alphabetically A to Z
+          const tools = [...rawTools].sort((a, b) => {
+            const titleA = getCalculatorDisplayTitle(a.title);
+            const titleB = getCalculatorDisplayTitle(b.title);
+            return titleA.localeCompare(titleB, undefined, { sensitivity: "base" });
+          });
+          const displayedTools = tools.slice(0, 18);
 
           return (
             <div key={cat.id} className="min-w-0 space-y-2.5">
@@ -69,6 +67,18 @@ export function CategoryGrid() {
                   </li>
                 ))}
               </ul>
+
+              {tools.length > 18 && (
+                <div className="pt-1">
+                  <Link
+                    href={`/category/${cat.slug}`}
+                    className="text-[11px] font-semibold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 group"
+                  >
+                    <span>View all {tools.length} {cat.name} calculators</span>
+                    <ArrowRight className="h-3 w-3 group-hover:translate-x-0.5 transition-transform" />
+                  </Link>
+                </div>
+              )}
             </div>
           );
         })}

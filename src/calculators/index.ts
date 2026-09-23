@@ -242,7 +242,12 @@ export function searchCalculators(query: string): CalculatorModuleDefinition[] {
 
   const expandedTargetIds = new Set<string>();
   Object.entries(aliases).forEach(([alias, targetIds]) => {
-    if (alias.includes(q) || q.includes(alias)) {
+    if (
+      alias === q ||
+      alias.startsWith(q) ||
+      (q.length >= 3 && alias.includes(q)) ||
+      (alias.length >= 3 && q.includes(alias))
+    ) {
       targetIds.forEach((id) => expandedTargetIds.add(id));
     }
   });
@@ -287,28 +292,17 @@ export function searchCalculators(query: string): CalculatorModuleDefinition[] {
     );
   });
 
+  // Sort matching calculators strictly alphabetically (A to Z)
   return matches.sort((a, b) => {
-    const getScore = (calc: CalculatorModuleDefinition) => {
-      const title = calc.title.toLowerCase();
-      const slug = calc.slug.toLowerCase();
-      const id = calc.id.toLowerCase();
-      const category = calc.category.toLowerCase();
-      const titleWords = title.split(/\s+/);
-
-      if (title === q || slug === q || id === q) return 0;
-      if (title.startsWith(q)) return 1;
-      if (titleWords.some((word) => word.startsWith(q))) return 2;
-      if (slug.startsWith(q) || id.startsWith(q)) return 3;
-      if (category.startsWith(q)) return 4;
-      if (title.includes(q)) return 5;
-      if (slug.includes(q) || id.includes(q) || category.includes(q)) return 6;
-      return 7;
-    };
-
-    const scoreDifference = getScore(a) - getScore(b);
-    if (scoreDifference !== 0) return scoreDifference;
-
-    return a.title.localeCompare(b.title, undefined, { sensitivity: "base" });
+    const cleanTitleA = (a.title || "")
+      .replace(/\s*\|.*$/, "")
+      .replace(/\s+[-–—]\s+.*$/, "")
+      .trim();
+    const cleanTitleB = (b.title || "")
+      .replace(/\s*\|.*$/, "")
+      .replace(/\s+[-–—]\s+.*$/, "")
+      .trim();
+    return cleanTitleA.localeCompare(cleanTitleB, undefined, { sensitivity: "base" });
   });
 }
 
