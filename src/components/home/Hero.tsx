@@ -14,16 +14,18 @@ export interface HeroProps {
 
 export function Hero({ searchQuery, onSearchChange }: HeroProps = {}) {
   return (
-    <section className="relative overflow-hidden rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 bg-gradient-to-br from-white via-slate-50/70 to-blue-50/40 dark:from-zinc-900 dark:via-zinc-900/90 dark:to-blue-950/20 p-5 sm:p-6 lg:p-8 shadow-[0_20px_50px_-15px_rgba(37,99,235,0.12),0_10px_25px_-5px_rgba(0,0,0,0.04),inset_0_1px_1px_rgba(255,255,255,0.9)] dark:shadow-[0_20px_50px_-15px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.05)] transition-all">
-      {/* 3D Ambient Glowing Light Cones in Background */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-blue-500/10 dark:bg-blue-500/15 blur-3xl"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -bottom-24 right-1/4 h-80 w-80 rounded-full bg-indigo-500/10 dark:bg-indigo-500/10 blur-3xl"
-      />
+    <section className="relative rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 bg-gradient-to-br from-white via-slate-50/70 to-blue-50/40 dark:from-zinc-900 dark:via-zinc-900/90 dark:to-blue-950/20 p-5 sm:p-6 lg:p-8 shadow-[0_20px_50px_-15px_rgba(37,99,235,0.12),0_10px_25px_-5px_rgba(0,0,0,0.04),inset_0_1px_1px_rgba(255,255,255,0.9)] dark:shadow-[0_20px_50px_-15px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.05)] transition-all">
+      {/* 3D Ambient Glowing Light Cones in Background (Clipped inside rounded frame) */}
+      <div className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-blue-500/10 dark:bg-blue-500/15 blur-3xl"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -bottom-24 right-1/4 h-80 w-80 rounded-full bg-indigo-500/10 dark:bg-indigo-500/10 blur-3xl"
+        />
+      </div>
 
       <div className="relative z-10 grid min-w-0 grid-cols-1 lg:grid-cols-12 gap-8 items-center">
         {/* Left Column (Col 7 - Primary Content Area) */}

@@ -2,13 +2,33 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { ArrowRight, Search, X } from "lucide-react";
+import {
+  ArrowRight,
+  Search,
+  X,
+  Calculator,
+  DollarSign,
+  Activity,
+  Percent,
+  Hammer,
+  Calendar,
+} from "lucide-react";
 import Hero from "@/components/home/Hero";
 import CategoryGrid from "@/components/home/CategoryGrid";
 import LatestCalculators from "@/components/home/LatestCalculators";
 import { searchCalculators } from "@/calculators";
 import { getCalculatorDisplayTitle } from "@/lib/calculator-title";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+
+function getCategoryIcon(category: string) {
+  const cat = (category || "").toLowerCase();
+  if (cat.includes("finan") || cat.includes("money") || cat.includes("tax")) return DollarSign;
+  if (cat.includes("health") || cat.includes("fit") || cat.includes("diet")) return Activity;
+  if (cat.includes("math")) return Percent;
+  if (cat.includes("construct") || cat.includes("build")) return Hammer;
+  if (cat.includes("date") || cat.includes("time") || cat.includes("age")) return Calendar;
+  return Calculator;
+}
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -72,7 +92,10 @@ export default function Home() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
               {searchResults.map((calc) => {
-                const Icon = calc.icon;
+                const Icon =
+                  (typeof calc.icon === "function" || typeof calc.icon === "object") && calc.icon
+                    ? calc.icon
+                    : getCategoryIcon(calc.category);
                 return (
                   <Link key={calc.id} href={`/calculators/${calc.slug}`} className="min-w-0 group block h-full">
                     <Card className="h-full bg-white dark:bg-zinc-900/90 border-zinc-200/80 dark:border-zinc-800 hover:border-blue-400/70 dark:hover:border-blue-500/60 hover:shadow-md dark:hover:shadow-[0_4px_20px_rgba(0,0,0,0.5)] transition-all duration-200 cursor-pointer rounded-xl overflow-hidden">

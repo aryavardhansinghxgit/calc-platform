@@ -183,9 +183,9 @@ export function Navbar({ onSearchChange, activeCategory = "Home" }: NavbarProps)
             {isFocused && searchTerm.trim() !== "" && (
               <div
                 onMouseDown={(e) => e.preventDefault()}
-                className="absolute top-10 right-0 left-0 sm:left-auto sm:w-80 z-50 bg-white dark:bg-zinc-900 border border-blue-200 dark:border-zinc-700 rounded-2xl shadow-2xl overflow-hidden max-h-96 overflow-y-auto"
+                className="fixed inset-x-3 top-13 sm:inset-x-auto sm:absolute sm:top-10 sm:right-0 sm:w-96 z-50 bg-white dark:bg-zinc-900 border border-blue-200/90 dark:border-zinc-700 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.25)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.7)] overflow-hidden max-h-[75vh] sm:max-h-96 overflow-y-auto"
               >
-                <div className="flex items-center justify-between px-3 py-2 border-b border-blue-100 dark:border-zinc-800 bg-blue-50/70 dark:bg-zinc-800/50 sticky top-0 backdrop-blur-sm z-10">
+                <div className="flex items-center justify-between px-3.5 py-2.5 border-b border-blue-100 dark:border-zinc-800 bg-blue-50/80 dark:bg-zinc-800/60 sticky top-0 backdrop-blur-sm z-10">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-blue-700 dark:text-blue-400">
                     Calculators (A–Z)
                   </span>
@@ -196,7 +196,7 @@ export function Navbar({ onSearchChange, activeCategory = "Home" }: NavbarProps)
                   )}
                 </div>
                 {searchResults.length === 0 ? (
-                  <div className="p-3.5 text-center text-xs text-zinc-500 dark:text-zinc-400">
+                  <div className="p-4 text-center text-xs text-zinc-500 dark:text-zinc-400">
                     No calculators found matching &quot;{searchTerm}&quot;
                   </div>
                 ) : (
@@ -207,14 +207,14 @@ export function Navbar({ onSearchChange, activeCategory = "Home" }: NavbarProps)
                       onClick={() => {
                         setIsFocused(false);
                       }}
-                      className="p-2.5 flex min-w-0 items-center gap-2 border-b border-blue-50 last:border-b-0 dark:border-zinc-800/60 hover:bg-blue-50/70 dark:hover:bg-zinc-800/60 transition-colors group cursor-pointer"
+                      className="p-3 flex min-w-0 items-center justify-between gap-3 border-b border-blue-50/70 last:border-b-0 dark:border-zinc-800/60 hover:bg-blue-50/70 dark:hover:bg-zinc-800/60 transition-colors group cursor-pointer"
                     >
                       <div className="min-w-0 flex-1 space-y-0.5">
-                        <div className="flex min-w-0 items-center gap-1.5">
-                          <span className="min-w-0 truncate text-xs font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                        <div className="flex min-w-0 flex-wrap items-center gap-1.5">
+                          <span className="min-w-0 text-xs sm:text-sm font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                             {getCalculatorDisplayTitle(calc.title)}
                           </span>
-                          <span className="shrink-0 text-[9px] font-semibold px-1.5 py-0.5 rounded-md bg-blue-50 dark:bg-zinc-800 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-zinc-700">
+                          <span className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-md bg-blue-50 dark:bg-zinc-800 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-zinc-700">
                             {calc.category}
                           </span>
                         </div>

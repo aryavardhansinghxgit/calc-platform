@@ -102,10 +102,10 @@ export function SearchBar({
       {isFocused && query.trim() !== "" && (
         <div
           onMouseDown={(e) => e.preventDefault()}
-          className="absolute top-13 left-0 right-0 z-50 bg-card border border-blue-200 dark:border-blue-900/70 rounded-2xl shadow-2xl overflow-hidden max-h-96 overflow-y-auto"
+          className="absolute top-13 left-0 right-0 z-50 bg-white dark:bg-zinc-900 border border-blue-200/90 dark:border-zinc-800 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.2)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.6)] overflow-hidden max-h-80 sm:max-h-96 overflow-y-auto"
         >
-          <div className="flex items-center justify-between px-3.5 py-2.5 border-b border-blue-100 dark:border-blue-900/60 bg-blue-50/70 dark:bg-blue-950/30 sticky top-0 backdrop-blur-sm z-10">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-blue-700 dark:text-blue-300">
+          <div className="flex items-center justify-between px-3.5 py-2.5 border-b border-blue-100 dark:border-zinc-800 bg-blue-50/80 dark:bg-zinc-800/60 sticky top-0 backdrop-blur-sm z-10">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-blue-700 dark:text-blue-400">
               Calculators (A–Z)
             </span>
             {searchResults.length > 0 && (
@@ -126,19 +126,19 @@ export function SearchBar({
                 onClick={() => {
                   setIsFocused(false);
                 }}
-                className="p-3 flex min-w-0 items-center gap-3 border-b border-blue-50 last:border-b-0 dark:border-blue-950/40 hover:bg-blue-50/70 dark:hover:bg-blue-950/30 transition-colors group cursor-pointer"
+                className="p-3 flex min-w-0 items-center justify-between gap-3 border-b border-blue-50/70 last:border-b-0 dark:border-zinc-800/60 hover:bg-blue-50/70 dark:hover:bg-zinc-800/60 transition-colors group cursor-pointer"
               >
                 <div className="min-w-0 flex-1 space-y-0.5">
                   <div className="flex min-w-0 flex-wrap items-center gap-1.5">
-                    <span className="min-w-0 truncate text-xs font-semibold text-foreground group-hover:text-primary transition-colors">
+                    <span className="min-w-0 text-xs sm:text-sm font-semibold text-zinc-900 dark:text-zinc-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                       {getCalculatorDisplayTitle(calc.title)}
                     </span>
-                    <span className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                    <span className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-md bg-blue-50 dark:bg-zinc-800 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-zinc-700">
                       {calc.category}
                     </span>
                   </div>
                 </div>
-                <ArrowRight className="h-7 w-7 shrink-0 rounded-full bg-blue-50 p-1.5 text-blue-600 transition-all group-hover:bg-blue-600 group-hover:text-white group-hover:translate-x-0.5" />
+                <ArrowRight className="h-6 w-6 shrink-0 rounded-full bg-blue-50 dark:bg-zinc-800 p-1.5 text-blue-600 dark:text-blue-400 transition-all group-hover:bg-blue-600 dark:group-hover:bg-blue-500 group-hover:text-white group-hover:translate-x-0.5" />
               </Link>
             ))
           )}

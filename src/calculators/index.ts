@@ -91,8 +91,6 @@ export function getFeaturedCalculators(): CalculatorModuleDefinition[] {
 
 export function searchCalculators(query: string): CalculatorModuleDefinition[] {
   if (!query || query.trim() === "") return ALL_CALCULATORS;
-  const q = query.toLowerCase().trim();
-  const tokens = q.split(/\s+/).filter(Boolean);
 
   const aliases: Record<string, string[]> = {
     cd: ["cd-calculator"],
@@ -240,70 +238,113 @@ export function searchCalculators(query: string): CalculatorModuleDefinition[] {
     birthday: ["age"],
   };
 
+  const rawQ = query.trim().toLowerCase();
+  // Strip trailing "calculator" or "calc" if query has multiple words, e.g. "mortgage calculator" -> "mortgage"
+  const q = rawQ.replace(/\s+(calculator|calc)$/i, "").trim() || rawQ;
+  const isSingleLetter = q.length === 1;
+
   const expandedTargetIds = new Set<string>();
   Object.entries(aliases).forEach(([alias, targetIds]) => {
-    if (
-      alias === q ||
-      alias.startsWith(q) ||
-      (q.length >= 3 && alias.includes(q)) ||
-      (alias.length >= 3 && q.includes(alias))
-    ) {
-      targetIds.forEach((id) => expandedTargetIds.add(id));
+    const a = alias.toLowerCase();
+    if (isSingleLetter) {
+      if (a === q) {
+        targetIds.forEach((id) => expandedTargetIds.add(id.toLowerCase()));
+      }
+    } else if (q.length === 2) {
+      if (a === q || (a.startsWith(q) && a.length <= 4)) {
+        targetIds.forEach((id) => expandedTargetIds.add(id.toLowerCase()));
+      }
+    } else {
+      if (a === q || a.startsWith(q) || (q.length >= 4 && a.includes(q)) || (a.length >= 4 && q.includes(a))) {
+        targetIds.forEach((id) => expandedTargetIds.add(id.toLowerCase()));
+      }
     }
   });
 
-  const matches = ALL_CALCULATORS.filter((calc) => {
-    const title = calc.title.toLowerCase();
-    const desc = calc.description.toLowerCase();
-    const cat = calc.category.toLowerCase();
-    const subcat = (calc.subcategory || "").toLowerCase();
+  const getClean = (calc: CalculatorModuleDefinition) => {
+    return (calc.title || "")
+      .replace(/\s*\|.*$/, "")
+      .replace(/\s+[-–—]\s+.*$/, "")
+      .trim();
+  };
+
+  const scoredMatches: { calc: CalculatorModuleDefinition; tier: number; cleanTitle: string }[] = [];
+
+  for (const calc of ALL_CALCULATORS) {
+    const cleanTitle = getClean(calc);
+    const cleanLower = cleanTitle.toLowerCase();
     const id = calc.id.toLowerCase();
     const slug = calc.slug.toLowerCase();
-    const tags = [
-      ...(calc.tags || []),
-      ...(calc.keywords || []),
-    ].map((t) => t.toLowerCase());
+    const tags = [...(calc.tags || []), ...(calc.keywords || [])].map((t) => t.toLowerCase());
+    const words = cleanLower.split(/[\s\-_/()]+/).filter(Boolean);
 
-    if (
-      title.includes(q) ||
-      desc.includes(q) ||
-      cat.includes(q) ||
-      subcat.includes(q) ||
-      id.includes(q) ||
-      slug.includes(q) ||
-      tags.some((t) => t.includes(q))
-    ) {
-      return true;
+    // TIER 1: Title starts with query, or ID/Slug starts with query
+    if (cleanLower.startsWith(q) || id.startsWith(q) || slug.startsWith(q)) {
+      scoredMatches.push({ calc, tier: 1, cleanTitle });
+      continue;
     }
 
+    // TIER 2: Any word in Title starts with query
+    if (words.some((w) => w.startsWith(q))) {
+      scoredMatches.push({ calc, tier: 2, cleanTitle });
+      continue;
+    }
+
+    // TIER 3: Explicit alias match or Tag/Keyword starts with query
     if (expandedTargetIds.has(id) || expandedTargetIds.has(slug)) {
-      return true;
+      scoredMatches.push({ calc, tier: 3, cleanTitle });
+      continue;
+    }
+    if (!isSingleLetter && tags.some((t) => t.startsWith(q))) {
+      scoredMatches.push({ calc, tier: 3, cleanTitle });
+      continue;
     }
 
-    return tokens.every(
-      (token) =>
-        title.includes(token) ||
-        desc.includes(token) ||
-        cat.includes(token) ||
-        subcat.includes(token) ||
-        id.includes(token) ||
-        slug.includes(token) ||
-        tags.some((t) => t.includes(token))
-    );
+    // Single letter queries STOP here! Never match random substrings or descriptions on 1 character.
+    if (isSingleLetter) {
+      continue;
+    }
+
+    // TIER 4: Title contains query as substring (for queries >= 3 chars)
+    if (q.length >= 3 && cleanLower.includes(q)) {
+      scoredMatches.push({ calc, tier: 4, cleanTitle });
+      continue;
+    }
+
+    // TIER 5: Tag contains query as substring (for queries >= 3 chars)
+    if (q.length >= 3 && tags.some((t) => t.includes(q))) {
+      scoredMatches.push({ calc, tier: 5, cleanTitle });
+      continue;
+    }
+
+    // TIER 6: Category or Subcategory matches query (for queries >= 4 chars, e.g. "finance", "health", "math")
+    const cat = calc.category.toLowerCase();
+    const subcat = (calc.subcategory || "").toLowerCase();
+    if (q.length >= 4 && (cat === q || subcat === q || cat.startsWith(q))) {
+      scoredMatches.push({ calc, tier: 6, cleanTitle });
+      continue;
+    }
+
+    // TIER 7: Description contains whole word (for queries >= 4 chars)
+    if (q.length >= 4) {
+      const desc = calc.description.toLowerCase();
+      const wordRegex = new RegExp(`\\b${q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`, "i");
+      if (wordRegex.test(desc)) {
+        scoredMatches.push({ calc, tier: 7, cleanTitle });
+        continue;
+      }
+    }
+  }
+
+  // Sort first by Tier (relevance), and WITHIN EACH TIER strictly ALPHABETICALLY (A to Z)
+  scoredMatches.sort((a, b) => {
+    if (a.tier !== b.tier) {
+      return a.tier - b.tier;
+    }
+    return a.cleanTitle.localeCompare(b.cleanTitle, undefined, { sensitivity: "base" });
   });
 
-  // Sort matching calculators strictly alphabetically (A to Z)
-  return matches.sort((a, b) => {
-    const cleanTitleA = (a.title || "")
-      .replace(/\s*\|.*$/, "")
-      .replace(/\s+[-–—]\s+.*$/, "")
-      .trim();
-    const cleanTitleB = (b.title || "")
-      .replace(/\s*\|.*$/, "")
-      .replace(/\s+[-–—]\s+.*$/, "")
-      .trim();
-    return cleanTitleA.localeCompare(cleanTitleB, undefined, { sensitivity: "base" });
-  });
+  return scoredMatches.map((m) => m.calc);
 }
 
 export function getRelatedCalculators(
