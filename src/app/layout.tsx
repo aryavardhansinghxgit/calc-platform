@@ -71,12 +71,71 @@ export default function RootLayout({
           }}
         />
         <Script
-          id="wallet-guard"
+          id="extension-guard"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
                 try {
+                  // Filter out false-positive hydration errors caused by browser extensions (e.g. Bitwarden, etc.)
+                  if (typeof console !== 'undefined' && console.error) {
+                    var origError = console.error;
+                    console.error = function() {
+                      var args = Array.prototype.slice.call(arguments);
+                      var msg = args.map(function(a) {
+                        return typeof a === 'string' ? a : (a && a.message ? a.message : '');
+                      }).join(' ');
+                      if (
+                        msg.indexOf('bis_skin_checked') !== -1 ||
+                        msg.indexOf('bis_register') !== -1 ||
+                        msg.indexOf('__processed_') !== -1 ||
+                        msg.indexOf('eppiocemhmnlbjplcgkofci') !== -1
+                      ) {
+                        return;
+                      }
+                      return origError.apply(console, arguments);
+                    };
+                  }
+
+                  // Strip extension-injected attributes from DOM before & during React hydration
+                  var cleanNode = function(node) {
+                    if (!node || node.nodeType !== 1) return;
+                    if (node.hasAttribute('bis_skin_checked')) node.removeAttribute('bis_skin_checked');
+                    if (node.hasAttribute('bis_register')) node.removeAttribute('bis_register');
+                  };
+
+                  if (typeof MutationObserver !== 'undefined' && document.documentElement) {
+                    var observer = new MutationObserver(function(mutations) {
+                      for (var i = 0; i < mutations.length; i++) {
+                        var m = mutations[i];
+                        if (m.type === 'attributes') {
+                          var name = m.attributeName;
+                          if (name === 'bis_skin_checked' || name === 'bis_register' || (name && name.indexOf('__processed_') === 0)) {
+                            m.target.removeAttribute(name);
+                          }
+                        } else if (m.type === 'childList') {
+                          for (var j = 0; j < m.addedNodes.length; j++) {
+                            cleanNode(m.addedNodes[j]);
+                          }
+                        }
+                      }
+                    });
+
+                    observer.observe(document.documentElement, {
+                      attributes: true,
+                      subtree: true,
+                      childList: true,
+                      attributeFilter: ['bis_skin_checked', 'bis_register']
+                    });
+
+                    window.addEventListener('load', function() {
+                      setTimeout(function() {
+                        observer.disconnect();
+                      }, 5000);
+                    });
+                  }
+
+                  // Web3 extension noise handler
                   window.addEventListener('error', function(event) {
                     if (event && event.message && (event.message.indexOf('ethereum') !== -1 || event.message.indexOf('evmAsk') !== -1)) {
                       event.preventDefault();
@@ -89,7 +148,10 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 font-sans selection:bg-blue-600 selection:text-white transition-colors duration-150">
+      <body
+        suppressHydrationWarning
+        className="min-h-full flex flex-col bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 font-sans selection:bg-blue-600 selection:text-white transition-colors duration-150"
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
