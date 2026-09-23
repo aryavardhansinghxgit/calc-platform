@@ -9,6 +9,7 @@
     "lint": "eslint",
     "generate:calculator": "node scripts/generate-calculator.js",
     "sitemap": "node scripts/generate-sitemap-xml.js",
+    "deploy": "npm run build && npm run deploy:cf",
     "deploy:cf": "wrangler pages deploy out --project-name calc-platform --commit-dirty=true"
   },
   "dependencies": {
