@@ -2,6 +2,8 @@ import { MetadataRoute } from "next";
 import { getAllCalculatorDefinitions } from "@/calculators";
 import { CATEGORIES } from "@/data/categories";
 
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const rawBaseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://calcplatform.com";
   const baseUrl = rawBaseUrl.replace(/\/+$/, "");
