@@ -42,7 +42,7 @@ async function runSeoAudit() {
   // 4. Canonical
   const canonMatch = html.match(/<link\s+rel=["']canonical["']\s+href=["'](.*?)["']/i);
   const canonical = canonMatch ? canonMatch[1] : "";
-  test("Canonical href points to molarity-calculator", canonical === "https://calcplatform.com/calculators/molarity-calculator", `Actual: "${canonical}"`);
+  test("Canonical href points to molarity-calculator", canonical === "https://calcplatform.org/calculators/molarity-calculator", `Actual: "${canonical}"`);
 
   // 5. Contextual Internal Anchors
   const hasMolWeightAnchor = html.includes('href="/calculators/molecular-weight-calculator"') &&

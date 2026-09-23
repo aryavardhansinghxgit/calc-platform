@@ -39,7 +39,7 @@ async function verifyWindChillDeployment() {
   const canonicalMatch = html.match(/<link[^>]*rel=["']canonical["'][^>]*href=["']([^"']*)["']/i);
   if (!canonicalMatch) throw new Error("Canonical link not found");
   console.log(`✓ Canonical: "${canonicalMatch[1]}"`);
-  if (canonicalMatch[1] !== "https://calcplatform.com/calculators/wind-chill-calculator") {
+  if (canonicalMatch[1] !== "https://calcplatform.org/calculators/wind-chill-calculator") {
     throw new Error(`Canonical mismatch: ${canonicalMatch[1]}`);
   }
 

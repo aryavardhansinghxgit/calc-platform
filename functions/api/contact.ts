@@ -49,8 +49,8 @@ export async function onRequestPost(context: { request: Request; env: Record<str
       calculatorName ? ` [${calculatorName}]` : ""
     }`;
 
-    const origin = context.request.headers.get("origin") || "https://calcplatform.com";
-    const referer = context.request.headers.get("referer") || "https://calcplatform.com/contact";
+    const origin = context.request.headers.get("origin") || "https://calcplatform.org";
+    const referer = context.request.headers.get("referer") || "https://calcplatform.org/contact";
     const userAgent =
       context.request.headers.get("user-agent") ||
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
@@ -99,7 +99,7 @@ export async function onRequestPost(context: { request: Request; env: Record<str
         JSON.stringify({
           success: true,
           message: "Message recorded.",
-          fallback: `mailto:contact@calcplatform.com?subject=${encodeURIComponent(
+          fallback: `mailto:contact@calcplatform.org?subject=${encodeURIComponent(
             emailSubject
           )}&body=${encodeURIComponent(message)}`,
         }),
@@ -110,7 +110,7 @@ export async function onRequestPost(context: { request: Request; env: Record<str
     return new Response(
       JSON.stringify({
         error: "Failed to send message via automated gateway.",
-        fallback: "mailto:contact@calcplatform.com",
+        fallback: "mailto:contact@calcplatform.org",
       }),
       { status: 500, headers: { "Content-Type": "application/json" } }
     );

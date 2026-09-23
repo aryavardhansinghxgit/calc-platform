@@ -37,7 +37,7 @@ async function auditBandwidthSeo() {
   // 4. Canonical
   const canonMatch = html.match(/<link[^>]*rel=["']canonical["'][^>]*href=["']([^"']*)["']/i);
   const actualCanon = canonMatch ? canonMatch[1].trim() : "";
-  const expectedCanon = "https://calcplatform.com/calculators/bandwidth-calculator";
+  const expectedCanon = "https://calcplatform.org/calculators/bandwidth-calculator";
   const canonPass = actualCanon === expectedCanon;
   console.log(`CANONICAL: ${canonPass ? "PASS" : "FAIL"} ("${actualCanon}")`);
 

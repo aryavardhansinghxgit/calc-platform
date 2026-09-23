@@ -214,7 +214,7 @@ const esSchemas = generateJsonLdSchema({
   category: SPANISH_MORTGAGE_SEO.category,
   faqs: SPANISH_MORTGAGE_FAQS,
   locale: "es",
-  baseUrl: "https://calcplatform.com",
+  baseUrl: "https://calcplatform.org",
 });
 
 assert(esSchemas.length === 3, "6.4: generateJsonLdSchema produces 3 schemas (Breadcrumb, SoftwareApplication, FAQPage)");
@@ -234,27 +234,27 @@ const esMeta = generateCalculatorMetadata({
   description: SPANISH_MORTGAGE_SEO.description,
   slug: "mortgage-calculator",
   locale: "es",
-  baseUrl: "https://calcplatform.com",
+  baseUrl: "https://calcplatform.org",
 });
 
 assert(
-  esMeta.alternates.canonical === "https://calcplatform.com/es/calculators/mortgage-calculator",
-  `7.1: Spanish canonical is 'https://calcplatform.com/es/calculators/mortgage-calculator'`
+  esMeta.alternates.canonical === "https://calcplatform.org/es/calculators/mortgage-calculator",
+  `7.1: Spanish canonical is 'https://calcplatform.org/es/calculators/mortgage-calculator'`
 );
 assert(
   esMeta.title === "Calculadora de Hipoteca - Free Online Calculator | CalcPlatform",
   `7.2: Spanish Title follows localized pattern`
 );
 assert(
-  esMeta.alternates.languages["en"] === "https://calcplatform.com/calculators/mortgage-calculator",
+  esMeta.alternates.languages["en"] === "https://calcplatform.org/calculators/mortgage-calculator",
   "7.3: Hreflang 'en' points to English canonical"
 );
 assert(
-  esMeta.alternates.languages["es"] === "https://calcplatform.com/es/calculators/mortgage-calculator",
+  esMeta.alternates.languages["es"] === "https://calcplatform.org/es/calculators/mortgage-calculator",
   "7.4: Hreflang 'es' points to Spanish canonical"
 );
 assert(
-  esMeta.alternates.languages["x-default"] === "https://calcplatform.com/calculators/mortgage-calculator",
+  esMeta.alternates.languages["x-default"] === "https://calcplatform.org/calculators/mortgage-calculator",
   "7.5: Hreflang 'x-default' points to English canonical"
 );
 
@@ -264,10 +264,10 @@ const enMeta = generateCalculatorMetadata({
   description: MORTGAGE_CALCULATOR.description,
   slug: "mortgage-calculator",
   locale: "en",
-  baseUrl: "https://calcplatform.com",
+  baseUrl: "https://calcplatform.org",
 });
 assert(
-  enMeta.alternates.languages["es"] === "https://calcplatform.com/es/calculators/mortgage-calculator",
+  enMeta.alternates.languages["es"] === "https://calcplatform.org/es/calculators/mortgage-calculator",
   "7.6: English metadata includes reciprocal hreflang 'es'"
 );
 

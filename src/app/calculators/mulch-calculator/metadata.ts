@@ -5,13 +5,13 @@ export const mulch_calculatorMetadata: Metadata = {
   description:
     "Calculate how much mulch you need in cubic yards, cubic feet, bags and weight. Estimate tree rings, multiple landscape beds, bulk vs bagged cost and pickup loads.",
   alternates: {
-    canonical: "https://calcplatform.com/calculators/mulch-calculator",
+    canonical: "https://calcplatform.org/calculators/mulch-calculator",
   },
   openGraph: {
     title: "Mulch Calculator – Cubic Yards, Bags & Cost Estimator | CalcPlatform",
     description:
       "Calculate how much mulch you need in cubic yards, cubic feet, bags and weight. Estimate tree rings, multiple landscape beds, bulk vs bagged cost and pickup loads.",
-    url: "https://calcplatform.com/calculators/mulch-calculator",
+    url: "https://calcplatform.org/calculators/mulch-calculator",
     type: "website",
   },
   twitter: {

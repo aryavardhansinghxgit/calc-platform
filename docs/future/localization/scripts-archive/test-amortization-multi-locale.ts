@@ -269,13 +269,13 @@ for (const loc of ["en", "es", "fr", "de", "hi", "pt"] as const) {
   
   const languages = (meta as any).alternates?.languages;
   assert(Boolean(languages), `'${loc}' metadata contains hreflang language alternates`);
-  assert(languages?.["x-default"] === "https://calcplatform.com/calculators/amortization-calculator", `'${loc}' x-default is English canonical`);
-  assert(languages?.["en"] === "https://calcplatform.com/calculators/amortization-calculator", `'${loc}' en hreflang has no /en/ prefix`);
-  assert(languages?.["es"] === "https://calcplatform.com/es/calculators/amortization-calculator", `'${loc}' es hreflang is correct`);
-  assert(languages?.["fr"] === "https://calcplatform.com/fr/calculators/amortization-calculator", `'${loc}' fr hreflang is correct`);
-  assert(languages?.["de"] === "https://calcplatform.com/de/calculators/amortization-calculator", `'${loc}' de hreflang is correct`);
-  assert(languages?.["hi"] === "https://calcplatform.com/hi/calculators/amortization-calculator", `'${loc}' hi hreflang is correct`);
-  assert(languages?.["pt"] === "https://calcplatform.com/pt/calculators/amortization-calculator", `'${loc}' pt hreflang is correct`);
+  assert(languages?.["x-default"] === "https://calcplatform.org/calculators/amortization-calculator", `'${loc}' x-default is English canonical`);
+  assert(languages?.["en"] === "https://calcplatform.org/calculators/amortization-calculator", `'${loc}' en hreflang has no /en/ prefix`);
+  assert(languages?.["es"] === "https://calcplatform.org/es/calculators/amortization-calculator", `'${loc}' es hreflang is correct`);
+  assert(languages?.["fr"] === "https://calcplatform.org/fr/calculators/amortization-calculator", `'${loc}' fr hreflang is correct`);
+  assert(languages?.["de"] === "https://calcplatform.org/de/calculators/amortization-calculator", `'${loc}' de hreflang is correct`);
+  assert(languages?.["hi"] === "https://calcplatform.org/hi/calculators/amortization-calculator", `'${loc}' hi hreflang is correct`);
+  assert(languages?.["pt"] === "https://calcplatform.org/pt/calculators/amortization-calculator", `'${loc}' pt hreflang is correct`);
 }
 
 // --- 9. Runtime Isolation & Immutability ---

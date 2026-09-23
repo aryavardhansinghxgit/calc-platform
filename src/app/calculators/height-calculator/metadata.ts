@@ -5,13 +5,13 @@ export const height_calculatorMetadata: Metadata = {
   description:
     "Estimate adult height with Khamis-Roche and mid-parental methods, calculate toddler-based estimates, compare stature, and convert feet, inches and cm.",
   alternates: {
-    canonical: "https://calcplatform.com/calculators/height-calculator",
+    canonical: "https://calcplatform.org/calculators/height-calculator",
   },
   openGraph: {
     title: "Height Calculator – Adult Height Prediction & Stature Converter",
     description:
       "Estimate adult height from child and parent measurements, compare prediction methods, calculate stature ranges, and convert height units.",
-    url: "https://calcplatform.com/calculators/height-calculator",
+    url: "https://calcplatform.org/calculators/height-calculator",
     type: "website",
   },
   twitter: {

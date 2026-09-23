@@ -61,8 +61,8 @@ async function verify() {
   // 4. Canonical URL
   const canonicalMatch = html.match(/<link\s+rel=["']canonical["']\s+href=["']([^"']+)["']/i);
   console.log(`Canonical URL: ${canonicalMatch ? canonicalMatch[1] : "None found"}`);
-  if (canonicalMatch && canonicalMatch[1] === "https://calcplatform.com/calculators/circle-calculator") {
-    console.log("✔ Exact Real production canonical URL (https://calcplatform.com/calculators/circle-calculator)!");
+  if (canonicalMatch && canonicalMatch[1] === "https://calcplatform.org/calculators/circle-calculator") {
+    console.log("✔ Exact Real production canonical URL (https://calcplatform.org/calculators/circle-calculator)!");
   }
 
   // 5. Check exactly 2 Related Calculator blocks (one before content, one after content)

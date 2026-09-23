@@ -64,7 +64,7 @@ async function auditRenderedPages() {
 
       // Check hreflang and canonical tags
       const hasHreflangOrCanonical = route.locale === "en"
-        ? (html.includes('href="https://calcplatform.com/calculators/') || html.includes('/calculators/') || html.includes('hreflang="en"'))
+        ? (html.includes('href="https://calcplatform.org/calculators/') || html.includes('/calculators/') || html.includes('hreflang="en"'))
         : (html.includes(`hreflang="${route.locale}"`) || html.includes(`${route.locale}/calculators`));
       assertAudit(`${route.slug} [${route.locale}]: Has locale hreflang or canonical`, hasHreflangOrCanonical);
 

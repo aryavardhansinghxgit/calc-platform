@@ -79,7 +79,7 @@ async function verifyPages() {
 
   // --- SEO & HREFLANG RELATIONSHIP ---
   console.log("\n--- 4. SEO, Canonical, Hreflang & Structured Data ---");
-  assert(enHtml.includes('href="https://calcplatform.com/calculators/fuel-cost-calculator"') || enHtml.includes('calculators/fuel-cost-calculator'), "EN canonical tag");
+  assert(enHtml.includes('href="https://calcplatform.org/calculators/fuel-cost-calculator"') || enHtml.includes('calculators/fuel-cost-calculator'), "EN canonical tag");
   assert(esHtml.includes('es/calculators/fuel-cost-calculator'), "ES canonical tag");
   assert(enHtml.includes('hreflang="es"') || enHtml.includes('es/calculators'), "EN has link/hreflang to ES");
   assert(esHtml.includes('application/ld+json'), "ES includes JSON-LD structured data");

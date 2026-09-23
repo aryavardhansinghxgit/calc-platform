@@ -240,14 +240,14 @@ for (const loc of ["en", "es", "fr", "de", "hi", "pt"]) {
     locale: loc,
   });
   const canonicalUrl = meta.alternates?.canonical;
-  const expectedCanonical = loc === "en" ? "https://calcplatform.com/calculators/mortgage-calculator" : `https://calcplatform.com/${loc}/calculators/mortgage-calculator`;
+  const expectedCanonical = loc === "en" ? "https://calcplatform.org/calculators/mortgage-calculator" : `https://calcplatform.org/${loc}/calculators/mortgage-calculator`;
   assert(canonicalUrl === expectedCanonical, `Canonical URL for ${loc} is ${canonicalUrl}`);
-  assert(meta.alternates?.languages?.["en"] === "https://calcplatform.com/calculators/mortgage-calculator", `Hreflang 'en' present for ${loc}`);
-  assert(meta.alternates?.languages?.["es"] === "https://calcplatform.com/es/calculators/mortgage-calculator", `Hreflang 'es' present for ${loc}`);
-  assert(meta.alternates?.languages?.["fr"] === "https://calcplatform.com/fr/calculators/mortgage-calculator", `Hreflang 'fr' present for ${loc}`);
-  assert(meta.alternates?.languages?.["de"] === "https://calcplatform.com/de/calculators/mortgage-calculator", `Hreflang 'de' present for ${loc}`);
-  assert(meta.alternates?.languages?.["hi"] === "https://calcplatform.com/hi/calculators/mortgage-calculator", `Hreflang 'hi' present for ${loc}`);
-  assert(meta.alternates?.languages?.["pt"] === "https://calcplatform.com/pt/calculators/mortgage-calculator", `Hreflang 'pt' present for ${loc}`);
+  assert(meta.alternates?.languages?.["en"] === "https://calcplatform.org/calculators/mortgage-calculator", `Hreflang 'en' present for ${loc}`);
+  assert(meta.alternates?.languages?.["es"] === "https://calcplatform.org/es/calculators/mortgage-calculator", `Hreflang 'es' present for ${loc}`);
+  assert(meta.alternates?.languages?.["fr"] === "https://calcplatform.org/fr/calculators/mortgage-calculator", `Hreflang 'fr' present for ${loc}`);
+  assert(meta.alternates?.languages?.["de"] === "https://calcplatform.org/de/calculators/mortgage-calculator", `Hreflang 'de' present for ${loc}`);
+  assert(meta.alternates?.languages?.["hi"] === "https://calcplatform.org/hi/calculators/mortgage-calculator", `Hreflang 'hi' present for ${loc}`);
+  assert(meta.alternates?.languages?.["pt"] === "https://calcplatform.org/pt/calculators/mortgage-calculator", `Hreflang 'pt' present for ${loc}`);
 
   const faqs = loc === "en" ? [] : getCalculatorLocalizedContent("mortgage-calculator", loc)?.faqs || [];
   const schemas = generateJsonLdSchema({
@@ -265,12 +265,12 @@ for (const loc of ["en", "es", "fr", "de", "hi", "pt"]) {
 console.log("\n--- 8. Sitemap Generation Verification ---");
 const sitemapEntries = sitemap();
 const mortgageUrls = sitemapEntries.filter((e) => e.url.includes("mortgage-calculator")).map((e) => e.url);
-assert(mortgageUrls.includes("https://calcplatform.com/calculators/mortgage-calculator"), "Sitemap includes English mortgage URL");
-assert(mortgageUrls.includes("https://calcplatform.com/es/calculators/mortgage-calculator"), "Sitemap includes Spanish mortgage URL");
-assert(mortgageUrls.includes("https://calcplatform.com/fr/calculators/mortgage-calculator"), "Sitemap includes French mortgage URL");
-assert(mortgageUrls.includes("https://calcplatform.com/de/calculators/mortgage-calculator"), "Sitemap includes German mortgage URL");
-assert(mortgageUrls.includes("https://calcplatform.com/hi/calculators/mortgage-calculator"), "Sitemap includes Hindi mortgage URL");
-assert(mortgageUrls.includes("https://calcplatform.com/pt/calculators/mortgage-calculator"), "Sitemap includes Portuguese mortgage URL");
+assert(mortgageUrls.includes("https://calcplatform.org/calculators/mortgage-calculator"), "Sitemap includes English mortgage URL");
+assert(mortgageUrls.includes("https://calcplatform.org/es/calculators/mortgage-calculator"), "Sitemap includes Spanish mortgage URL");
+assert(mortgageUrls.includes("https://calcplatform.org/fr/calculators/mortgage-calculator"), "Sitemap includes French mortgage URL");
+assert(mortgageUrls.includes("https://calcplatform.org/de/calculators/mortgage-calculator"), "Sitemap includes German mortgage URL");
+assert(mortgageUrls.includes("https://calcplatform.org/hi/calculators/mortgage-calculator"), "Sitemap includes Hindi mortgage URL");
+assert(mortgageUrls.includes("https://calcplatform.org/pt/calculators/mortgage-calculator"), "Sitemap includes Portuguese mortgage URL");
 assert(!mortgageUrls.some((u) => u.includes("/en/")), "Zero duplicate /en/ prefixed mortgage URLs in sitemap");
 
 console.log("==================================================");

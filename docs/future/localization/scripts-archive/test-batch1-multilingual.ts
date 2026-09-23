@@ -176,7 +176,7 @@ async function runBatch1TestSuite() {
 
       // Self-canonical
       assert(
-        (meta.alternates?.canonical as string) === `https://calcplatform.com/${locale}/calculators/${slug}`,
+        (meta.alternates?.canonical as string) === `https://calcplatform.org/${locale}/calculators/${slug}`,
         `F1: Self-canonical matches localized path for ${slug} (${locale})`
       );
 
@@ -184,13 +184,13 @@ async function runBatch1TestSuite() {
       const languages = meta.alternates?.languages as Record<string, string>;
       assert(languages !== undefined, `F2: Alternates languages present for ${slug} (${locale})`);
       if (languages) {
-        assert(languages["x-default"] === `https://calcplatform.com/calculators/${slug}`, `F3: x-default is English unprefixed`);
-        assert(languages["en"] === `https://calcplatform.com/calculators/${slug}`, `F4: en alternate is unprefixed`);
-        assert(languages["es"] === `https://calcplatform.com/es/calculators/${slug}`, `F5: es alternate present`);
-        assert(languages["fr"] === `https://calcplatform.com/fr/calculators/${slug}`, `F6: fr alternate present`);
-        assert(languages["de"] === `https://calcplatform.com/de/calculators/${slug}`, `F7: de alternate present`);
-        assert(languages["hi"] === `https://calcplatform.com/hi/calculators/${slug}`, `F8: hi alternate present`);
-        assert(languages["pt"] === `https://calcplatform.com/pt/calculators/${slug}`, `F9: pt alternate present`);
+        assert(languages["x-default"] === `https://calcplatform.org/calculators/${slug}`, `F3: x-default is English unprefixed`);
+        assert(languages["en"] === `https://calcplatform.org/calculators/${slug}`, `F4: en alternate is unprefixed`);
+        assert(languages["es"] === `https://calcplatform.org/es/calculators/${slug}`, `F5: es alternate present`);
+        assert(languages["fr"] === `https://calcplatform.org/fr/calculators/${slug}`, `F6: fr alternate present`);
+        assert(languages["de"] === `https://calcplatform.org/de/calculators/${slug}`, `F7: de alternate present`);
+        assert(languages["hi"] === `https://calcplatform.org/hi/calculators/${slug}`, `F8: hi alternate present`);
+        assert(languages["pt"] === `https://calcplatform.org/pt/calculators/${slug}`, `F9: pt alternate present`);
       }
     }
   }

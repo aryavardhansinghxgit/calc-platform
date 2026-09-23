@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://calcplatform.com";
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://calcplatform.org";
 const currentDate = new Date().toISOString().split("T")[0];
 
 const categories = [

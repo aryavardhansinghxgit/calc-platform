@@ -20,7 +20,7 @@ async function verifySSR() {
   console.assert(relMatches.length === 2, `Expected exactly 2 Related Calculator blocks, got ${relMatches.length}`);
 
   // 3. Self link check
-  const selfLink = html.includes('href="/calculators/golf-handicap-calculator"') || html.includes('href="https://calcplatform.com/calculators/golf-handicap-calculator"');
+  const selfLink = html.includes('href="/calculators/golf-handicap-calculator"') || html.includes('href="https://calcplatform.org/calculators/golf-handicap-calculator"');
   // Only canonical is permitted in head; check if related calculator blocks link to golf-handicap-calculator
   const bodyOnly = html.split("<body")[1] || "";
   const selfLinkInBody = bodyOnly.includes('href="/calculators/golf-handicap-calculator"');

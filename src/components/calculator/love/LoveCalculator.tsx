@@ -170,7 +170,7 @@ export function LoveCalculator() {
 
     const pageUrl = typeof window !== "undefined" && window.location?.href
       ? window.location.href
-      : "https://calcplatform.com/calculators/love-calculator";
+      : "https://calcplatform.org/calculators/love-calculator";
 
     const title = `${name1} + ${name2} Love Match: ${result.compatibilityScore}% (${result.moniker})`;
     const text = `💕 ${name1} + ${name2} = ${result.moniker} 💕\nLove Match Score: ${result.compatibilityScore}%\nTier: ${result.tierBadge}\nDiscover your relationship chemistry on CalcPlatform!`;

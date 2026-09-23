@@ -5,7 +5,7 @@ import { CATEGORIES } from "@/data/categories";
 export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const rawBaseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://calcplatform.com";
+  const rawBaseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://calcplatform.org";
   const baseUrl = rawBaseUrl.replace(/\/+$/, "");
   const currentDate = new Date();
 

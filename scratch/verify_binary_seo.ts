@@ -45,7 +45,7 @@ async function verifyBinarySeo() {
 
   // 6. Internal Link Count & Anchor Texts
   const linkMatches = [...html.matchAll(/<a\s+[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi)];
-  const internalLinks = linkMatches.filter(m => m[1].startsWith("/") || m[1].includes("calcplatform.com"));
+  const internalLinks = linkMatches.filter(m => m[1].startsWith("/") || m[1].includes("calcplatform.org"));
   console.log("\n6. Internal Links Audit:");
   console.log("  Total Internal Links:", internalLinks.length);
   const anchorTexts = internalLinks.map(m => m[2].replace(/<[^>]+>/g, "").trim()).filter(Boolean);

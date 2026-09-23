@@ -1205,14 +1205,14 @@ const calculators = [
     keywords: ["url encoder", "url decoder", "percent encoding"],
     relatedCalculators: ["base64-calculator"],
     inputs: [
-      { name: "text", label: "Input URL / Text", type: "text", defaultValue: "https://calcplatform.com/search?q=math & health" },
+      { name: "text", label: "Input URL / Text", type: "text", defaultValue: "https://calcplatform.org/search?q=math & health" },
       { name: "mode", label: "Operation", type: "select", defaultValue: "encode", options: [{ label: "URL Encode", value: "encode" }, { label: "URL Decode", value: "decode" }] }
     ],
     outputs: [
       { name: "result", label: "Processed URL Output", format: "text", highlight: true }
     ],
     calcLogic: `
-  const txt = String(inputs.text || "https://calcplatform.com/search?q=math & health");
+  const txt = String(inputs.text || "https://calcplatform.org/search?q=math & health");
   const isEnc = inputs.mode !== "decode";
   let res = "";
   try {

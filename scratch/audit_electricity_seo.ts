@@ -57,7 +57,7 @@ async function auditSEO() {
   const canonicalMatch =
     html.match(/<link\s+rel="canonical"\s+href="([^"]*)"/i) ||
     html.match(/<link\s+href="([^"]*)"\s+rel="canonical"/i);
-  const expectedCanonical = 'https://calcplatform.com/calculators/electricity-calculator';
+  const expectedCanonical = 'https://calcplatform.org/calculators/electricity-calculator';
   const actualCanonical = canonicalMatch ? canonicalMatch[1] : '';
   const canonicalPass = actualCanonical === expectedCanonical;
   console.log(`\n4. Canonical: ${canonicalPass ? 'PASS' : 'FAIL'}`);

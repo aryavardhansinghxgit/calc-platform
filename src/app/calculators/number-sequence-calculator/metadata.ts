@@ -5,13 +5,13 @@ export const number_sequence_calculatorMetadata: Metadata = {
   description:
     "Find sequence patterns, nth terms, partial sums and formulas for arithmetic, geometric, quadratic, cubic, Fibonacci and custom recurrences. Free step-by-step number sequence calculator.",
   alternates: {
-    canonical: "https://calcplatform.com/calculators/number-sequence-calculator",
+    canonical: "https://calcplatform.org/calculators/number-sequence-calculator",
   },
   openGraph: {
     title: "Number Sequence Calculator – Nth Term, Sum & Pattern Solver | CalcPlatform",
     description:
       "Find sequence patterns, nth terms, partial sums and formulas for arithmetic, geometric, quadratic, cubic, Fibonacci and custom recurrences. Free step-by-step number sequence calculator.",
-    url: "https://calcplatform.com/calculators/number-sequence-calculator",
+    url: "https://calcplatform.org/calculators/number-sequence-calculator",
     type: "website",
   },
   twitter: {

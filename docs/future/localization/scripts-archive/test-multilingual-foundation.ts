@@ -197,11 +197,11 @@ const enMeta = generateCalculatorMetadata({
   description: MORTGAGE_CALCULATOR.description,
   slug: MORTGAGE_CALCULATOR.slug,
   locale: "en",
-  baseUrl: "https://calcplatform.com",
+  baseUrl: "https://calcplatform.org",
 });
 
 assert(
-  enMeta.alternates.canonical === "https://calcplatform.com/calculators/mortgage-calculator",
+  enMeta.alternates.canonical === "https://calcplatform.org/calculators/mortgage-calculator",
   "G1: English canonical is root /calculators/mortgage-calculator",
   `Got ${enMeta.alternates.canonical}`
 );
@@ -210,13 +210,13 @@ assert(
   "G2: English title matches exact golden pattern"
 );
 assert(
-  enMeta.alternates.languages["x-default"] === "https://calcplatform.com/calculators/mortgage-calculator",
+  enMeta.alternates.languages["x-default"] === "https://calcplatform.org/calculators/mortgage-calculator",
   "G3: x-default points to English root canonical"
 );
 
-const esCanonical = getCalculatorCanonicalUrl("mortgage-calculator", "es", "https://calcplatform.com");
+const esCanonical = getCalculatorCanonicalUrl("mortgage-calculator", "es", "https://calcplatform.org");
 assert(
-  esCanonical === "https://calcplatform.com/es/calculators/mortgage-calculator",
+  esCanonical === "https://calcplatform.org/es/calculators/mortgage-calculator",
   "G4: Localized canonical generator correctly prefixes locale /es/..."
 );
 

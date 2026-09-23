@@ -106,19 +106,19 @@ export function RefinanceContentSection() {
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://calcplatform.com/"
+        "item": "https://calcplatform.org/"
       },
       {
         "@type": "ListItem",
         "position": 2,
         "name": "Finance",
-        "item": "https://calcplatform.com/category/finance"
+        "item": "https://calcplatform.org/category/finance"
       },
       {
         "@type": "ListItem",
         "position": 3,
         "name": "Refinance Calculator",
-        "item": "https://calcplatform.com/calculators/refinance-calculator"
+        "item": "https://calcplatform.org/calculators/refinance-calculator"
       }
     ]
   };

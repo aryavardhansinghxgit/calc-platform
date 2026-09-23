@@ -21,6 +21,6 @@ export const grade_calculatorMetadata: Metadata = {
     "percentage to letter grade",
   ],
   alternates: {
-    canonical: "https://calcplatform.com/calculators/grade-calculator",
+    canonical: "https://calcplatform.org/calculators/grade-calculator",
   },
 };

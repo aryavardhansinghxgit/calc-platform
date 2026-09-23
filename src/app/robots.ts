@@ -3,7 +3,7 @@ import { MetadataRoute } from "next";
 export const dynamic = "force-static";
 
 export default function robots(): MetadataRoute.Robots {
-  const rawBaseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://calcplatform.com";
+  const rawBaseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://calcplatform.org";
   const baseUrl = rawBaseUrl.replace(/\/+$/, "");
 
   return {

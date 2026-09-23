@@ -65,7 +65,7 @@ async function runPilotUxTests() {
   assert(enRes.body.includes("Basic Loan Details"), "2.5: English UI inputs intact");
 
   // Verify English canonical & hreflang tags
-  assert(enRes.body.includes('href="https://calcplatform.com/calculators/mortgage-calculator"'), "2.6: English canonical is /calculators/mortgage-calculator");
+  assert(enRes.body.includes('href="https://calcplatform.org/calculators/mortgage-calculator"'), "2.6: English canonical is /calculators/mortgage-calculator");
   assert(/hreflang=["']es["']/i.test(enRes.body), "2.7: English hreflang alternates include 'es'");
   assert(/hreflang=["']x-default["']/i.test(enRes.body), "2.8: English hreflang alternates include 'x-default'");
 
@@ -80,7 +80,7 @@ async function runPilotUxTests() {
   assert(esRes.body.includes("Detalles Básicos del Préstamo"), "3.4: Spanish UI inputs intact");
 
   // Verify Spanish canonical & hreflang tags
-  assert(esRes.body.includes('href="https://calcplatform.com/es/calculators/mortgage-calculator"'), "3.5: Spanish canonical is /es/calculators/mortgage-calculator");
+  assert(esRes.body.includes('href="https://calcplatform.org/es/calculators/mortgage-calculator"'), "3.5: Spanish canonical is /es/calculators/mortgage-calculator");
   assert(/hreflang=["']en["']/i.test(esRes.body), "3.6: Spanish hreflang alternates include 'en'");
   assert(/hreflang=["']es["']/i.test(esRes.body), "3.7: Spanish hreflang alternates include 'es'");
 

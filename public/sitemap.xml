@@ -4,1291 +4,1291 @@
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
   <url>
-    <loc>https://calcplatform.com</loc>
+    <loc>https://calcplatform.org</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/loan-calculator</loc>
+    <loc>https://calcplatform.org/loan-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/cd-calculator</loc>
+    <loc>https://calcplatform.org/cd-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/finance-calculator</loc>
+    <loc>https://calcplatform.org/finance-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/house-affordability-calculator</loc>
+    <loc>https://calcplatform.org/house-affordability-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/interest-rate-calculator</loc>
+    <loc>https://calcplatform.org/interest-rate-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/refinance-calculator</loc>
+    <loc>https://calcplatform.org/refinance-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/cash-back-or-low-interest-calculator</loc>
+    <loc>https://calcplatform.org/cash-back-or-low-interest-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/category/finance</loc>
-    <lastmod>2026-09-18</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://calcplatform.com/category/health</loc>
+    <loc>https://calcplatform.org/category/finance</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/category/math</loc>
+    <loc>https://calcplatform.org/category/health</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/category/construction</loc>
+    <loc>https://calcplatform.org/category/math</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/category/converters</loc>
+    <loc>https://calcplatform.org/category/construction</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/category/date</loc>
+    <loc>https://calcplatform.org/category/converters</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/category/other</loc>
+    <loc>https://calcplatform.org/category/date</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/mortgage-calculator</loc>
+    <loc>https://calcplatform.org/category/other</loc>
     <lastmod>2026-09-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://calcplatform.org/calculators/mortgage-calculator</loc>
+    <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/home-equity-loan-calculator</loc>
+    <loc>https://calcplatform.org/calculators/home-equity-loan-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/heloc-calculator</loc>
+    <loc>https://calcplatform.org/calculators/heloc-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/down-payment-calculator</loc>
+    <loc>https://calcplatform.org/calculators/down-payment-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/rent-vs-buy-calculator</loc>
+    <loc>https://calcplatform.org/calculators/rent-vs-buy-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/va-mortgage-calculator</loc>
+    <loc>https://calcplatform.org/calculators/va-mortgage-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/fha-loan-calculator</loc>
+    <loc>https://calcplatform.org/calculators/fha-loan-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/apr-calculator</loc>
+    <loc>https://calcplatform.org/calculators/apr-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/rental-property-calculator</loc>
+    <loc>https://calcplatform.org/calculators/rental-property-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/dti-calculator</loc>
+    <loc>https://calcplatform.org/calculators/dti-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/rent-calculator</loc>
+    <loc>https://calcplatform.org/calculators/rent-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/loan-calculator</loc>
+    <loc>https://calcplatform.org/calculators/loan-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/payment-calculator</loc>
+    <loc>https://calcplatform.org/calculators/payment-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/emi-calculator</loc>
+    <loc>https://calcplatform.org/calculators/emi-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/amortization-calculator</loc>
+    <loc>https://calcplatform.org/calculators/amortization-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/mortgage-payoff-calculator</loc>
+    <loc>https://calcplatform.org/calculators/mortgage-payoff-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/house-affordability-calculator</loc>
+    <loc>https://calcplatform.org/calculators/house-affordability-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/refinance-calculator</loc>
+    <loc>https://calcplatform.org/calculators/refinance-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/auto-loan-calculator</loc>
+    <loc>https://calcplatform.org/calculators/auto-loan-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/auto-lease-calculator</loc>
+    <loc>https://calcplatform.org/calculators/auto-lease-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/lease-calculator</loc>
+    <loc>https://calcplatform.org/calculators/lease-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/cash-back-or-low-interest-calculator</loc>
+    <loc>https://calcplatform.org/calculators/cash-back-or-low-interest-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/boat-loan-calculator</loc>
+    <loc>https://calcplatform.org/calculators/boat-loan-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/finance-calculator</loc>
+    <loc>https://calcplatform.org/calculators/finance-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/compound-interest-calculator</loc>
+    <loc>https://calcplatform.org/calculators/compound-interest-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/interest-calculator</loc>
+    <loc>https://calcplatform.org/calculators/interest-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/interest-rate-calculator</loc>
+    <loc>https://calcplatform.org/calculators/interest-rate-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/simple-interest-calculator</loc>
+    <loc>https://calcplatform.org/calculators/simple-interest-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/investment-calculator</loc>
+    <loc>https://calcplatform.org/calculators/investment-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/savings-calculator</loc>
+    <loc>https://calcplatform.org/calculators/savings-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/cd-calculator</loc>
+    <loc>https://calcplatform.org/calculators/cd-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/sip-calculator</loc>
+    <loc>https://calcplatform.org/calculators/sip-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/fd-calculator</loc>
+    <loc>https://calcplatform.org/calculators/fd-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/rd-calculator</loc>
+    <loc>https://calcplatform.org/calculators/rd-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/cagr-calculator</loc>
+    <loc>https://calcplatform.org/calculators/cagr-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/roi-calculator</loc>
+    <loc>https://calcplatform.org/calculators/roi-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/future-value-calculator</loc>
+    <loc>https://calcplatform.org/calculators/future-value-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/present-value-calculator</loc>
+    <loc>https://calcplatform.org/calculators/present-value-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/bond-calculator</loc>
+    <loc>https://calcplatform.org/calculators/bond-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/mutual-fund-calculator</loc>
+    <loc>https://calcplatform.org/calculators/mutual-fund-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/average-return-calculator</loc>
+    <loc>https://calcplatform.org/calculators/average-return-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/irr-calculator</loc>
+    <loc>https://calcplatform.org/calculators/irr-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/payback-period-calculator</loc>
+    <loc>https://calcplatform.org/calculators/payback-period-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/income-tax-calculator</loc>
+    <loc>https://calcplatform.org/calculators/income-tax-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/salary-calculator</loc>
+    <loc>https://calcplatform.org/calculators/salary-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/take-home-pay-calculator</loc>
+    <loc>https://calcplatform.org/calculators/take-home-pay-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/marriage-tax-calculator</loc>
+    <loc>https://calcplatform.org/calculators/marriage-tax-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/estate-tax-calculator</loc>
+    <loc>https://calcplatform.org/calculators/estate-tax-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/gst-calculator</loc>
+    <loc>https://calcplatform.org/calculators/gst-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/vat-calculator</loc>
+    <loc>https://calcplatform.org/calculators/vat-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/sales-tax-calculator</loc>
+    <loc>https://calcplatform.org/calculators/sales-tax-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/repayment-calculator</loc>
+    <loc>https://calcplatform.org/calculators/repayment-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/credit-card-calculator</loc>
+    <loc>https://calcplatform.org/calculators/credit-card-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/credit-card-payoff-calculator</loc>
+    <loc>https://calcplatform.org/calculators/credit-card-payoff-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/debt-payoff-calculator</loc>
+    <loc>https://calcplatform.org/calculators/debt-payoff-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/debt-consolidation-calculator</loc>
+    <loc>https://calcplatform.org/calculators/debt-consolidation-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/retirement-calculator</loc>
+    <loc>https://calcplatform.org/calculators/retirement-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/401k-calculator</loc>
+    <loc>https://calcplatform.org/calculators/401k-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/traditional-ira-calculator</loc>
+    <loc>https://calcplatform.org/calculators/traditional-ira-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/roth-ira-calculator</loc>
+    <loc>https://calcplatform.org/calculators/roth-ira-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/rmd-calculator</loc>
+    <loc>https://calcplatform.org/calculators/rmd-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/pension-calculator</loc>
+    <loc>https://calcplatform.org/calculators/pension-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/social-security-calculator</loc>
+    <loc>https://calcplatform.org/calculators/social-security-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/annuity-calculator</loc>
+    <loc>https://calcplatform.org/calculators/annuity-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/annuity-payout-calculator</loc>
+    <loc>https://calcplatform.org/calculators/annuity-payout-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/margin-calculator</loc>
+    <loc>https://calcplatform.org/calculators/margin-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/discount-calculator</loc>
+    <loc>https://calcplatform.org/calculators/discount-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/commission-calculator</loc>
+    <loc>https://calcplatform.org/calculators/commission-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/depreciation-calculator</loc>
+    <loc>https://calcplatform.org/calculators/depreciation-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/personal-loan-calculator</loc>
+    <loc>https://calcplatform.org/calculators/personal-loan-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/business-loan-calculator</loc>
+    <loc>https://calcplatform.org/calculators/business-loan-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/student-loan-calculator</loc>
+    <loc>https://calcplatform.org/calculators/student-loan-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/college-cost-calculator</loc>
+    <loc>https://calcplatform.org/calculators/college-cost-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/budget-calculator</loc>
+    <loc>https://calcplatform.org/calculators/budget-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/currency-calculator</loc>
+    <loc>https://calcplatform.org/calculators/currency-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/inflation-calculator</loc>
+    <loc>https://calcplatform.org/calculators/inflation-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/scientific-calculator</loc>
+    <loc>https://calcplatform.org/calculators/scientific-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/fraction-calculator</loc>
+    <loc>https://calcplatform.org/calculators/fraction-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/percentage-calculator</loc>
+    <loc>https://calcplatform.org/calculators/percentage-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/random-number-generator</loc>
+    <loc>https://calcplatform.org/calculators/random-number-generator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/percent-error-calculator</loc>
+    <loc>https://calcplatform.org/calculators/percent-error-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/exponent-calculator</loc>
+    <loc>https://calcplatform.org/calculators/exponent-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/binary-calculator</loc>
+    <loc>https://calcplatform.org/calculators/binary-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/hex-calculator</loc>
+    <loc>https://calcplatform.org/calculators/hex-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/half-life-calculator</loc>
+    <loc>https://calcplatform.org/calculators/half-life-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/quadratic-formula-calculator</loc>
+    <loc>https://calcplatform.org/calculators/quadratic-formula-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/log-calculator</loc>
+    <loc>https://calcplatform.org/calculators/log-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/ratio-calculator</loc>
+    <loc>https://calcplatform.org/calculators/ratio-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/root-calculator</loc>
+    <loc>https://calcplatform.org/calculators/root-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/lcm-calculator</loc>
+    <loc>https://calcplatform.org/calculators/lcm-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/gcf-calculator</loc>
+    <loc>https://calcplatform.org/calculators/gcf-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/factor-calculator</loc>
+    <loc>https://calcplatform.org/calculators/factor-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/rounding-calculator</loc>
+    <loc>https://calcplatform.org/calculators/rounding-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/matrix-calculator</loc>
+    <loc>https://calcplatform.org/calculators/matrix-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/scientific-notation-calculator</loc>
+    <loc>https://calcplatform.org/calculators/scientific-notation-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/big-number-calculator</loc>
+    <loc>https://calcplatform.org/calculators/big-number-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/standard-deviation-calculator</loc>
+    <loc>https://calcplatform.org/calculators/standard-deviation-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/number-sequence-calculator</loc>
+    <loc>https://calcplatform.org/calculators/number-sequence-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/sample-size-calculator</loc>
+    <loc>https://calcplatform.org/calculators/sample-size-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/probability-calculator</loc>
+    <loc>https://calcplatform.org/calculators/probability-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/statistics-calculator</loc>
+    <loc>https://calcplatform.org/calculators/statistics-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/mean-median-mode-calculator</loc>
+    <loc>https://calcplatform.org/calculators/mean-median-mode-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/permutation-combination-calculator</loc>
+    <loc>https://calcplatform.org/calculators/permutation-combination-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/z-score-calculator</loc>
+    <loc>https://calcplatform.org/calculators/z-score-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/confidence-interval-calculator</loc>
+    <loc>https://calcplatform.org/calculators/confidence-interval-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/triangle-calculator</loc>
+    <loc>https://calcplatform.org/calculators/triangle-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/volume-calculator</loc>
+    <loc>https://calcplatform.org/calculators/volume-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/slope-calculator</loc>
+    <loc>https://calcplatform.org/calculators/slope-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/area-calculator</loc>
+    <loc>https://calcplatform.org/calculators/area-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/distance-calculator</loc>
+    <loc>https://calcplatform.org/calculators/distance-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/circle-calculator</loc>
+    <loc>https://calcplatform.org/calculators/circle-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/surface-area-calculator</loc>
+    <loc>https://calcplatform.org/calculators/surface-area-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/pythagorean-theorem-calculator</loc>
+    <loc>https://calcplatform.org/calculators/pythagorean-theorem-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/right-triangle-calculator</loc>
+    <loc>https://calcplatform.org/calculators/right-triangle-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/bmi-calculator</loc>
+    <loc>https://calcplatform.org/calculators/bmi-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/calorie-calculator</loc>
+    <loc>https://calcplatform.org/calculators/calorie-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/body-fat-calculator</loc>
+    <loc>https://calcplatform.org/calculators/body-fat-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/bmr-calculator</loc>
+    <loc>https://calcplatform.org/calculators/bmr-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/ideal-weight-calculator</loc>
+    <loc>https://calcplatform.org/calculators/ideal-weight-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/pace-calculator</loc>
+    <loc>https://calcplatform.org/calculators/pace-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/army-body-fat-calculator</loc>
+    <loc>https://calcplatform.org/calculators/army-body-fat-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/lean-body-mass-calculator</loc>
+    <loc>https://calcplatform.org/calculators/lean-body-mass-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/healthy-weight-calculator</loc>
+    <loc>https://calcplatform.org/calculators/healthy-weight-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/calories-burned-calculator</loc>
+    <loc>https://calcplatform.org/calculators/calories-burned-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/one-rep-max-calculator</loc>
+    <loc>https://calcplatform.org/calculators/one-rep-max-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/target-heart-rate-calculator</loc>
+    <loc>https://calcplatform.org/calculators/target-heart-rate-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/pregnancy-calculator</loc>
+    <loc>https://calcplatform.org/calculators/pregnancy-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/pregnancy-weight-gain-calculator</loc>
+    <loc>https://calcplatform.org/calculators/pregnancy-weight-gain-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/pregnancy-conception-calculator</loc>
+    <loc>https://calcplatform.org/calculators/pregnancy-conception-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/due-date-calculator</loc>
+    <loc>https://calcplatform.org/calculators/due-date-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/ovulation-calculator</loc>
+    <loc>https://calcplatform.org/calculators/ovulation-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/conception-calculator</loc>
+    <loc>https://calcplatform.org/calculators/conception-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/period-calculator</loc>
+    <loc>https://calcplatform.org/calculators/period-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/macro-calculator</loc>
+    <loc>https://calcplatform.org/calculators/macro-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/carbohydrate-calculator</loc>
+    <loc>https://calcplatform.org/calculators/carbohydrate-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/protein-calculator</loc>
+    <loc>https://calcplatform.org/calculators/protein-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/fat-intake-calculator</loc>
+    <loc>https://calcplatform.org/calculators/fat-intake-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/tdee-calculator</loc>
+    <loc>https://calcplatform.org/calculators/tdee-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/gfr-calculator</loc>
+    <loc>https://calcplatform.org/calculators/gfr-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/body-type-calculator</loc>
+    <loc>https://calcplatform.org/calculators/body-type-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/body-surface-area-calculator</loc>
+    <loc>https://calcplatform.org/calculators/body-surface-area-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/bac-calculator</loc>
+    <loc>https://calcplatform.org/calculators/bac-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/age-calculator</loc>
+    <loc>https://calcplatform.org/calculators/age-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/date-calculator</loc>
+    <loc>https://calcplatform.org/calculators/date-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/time-calculator</loc>
+    <loc>https://calcplatform.org/calculators/time-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/hours-calculator</loc>
+    <loc>https://calcplatform.org/calculators/hours-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/time-card-calculator</loc>
+    <loc>https://calcplatform.org/calculators/time-card-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/time-zone-calculator</loc>
+    <loc>https://calcplatform.org/calculators/time-zone-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/time-duration-calculator</loc>
+    <loc>https://calcplatform.org/calculators/time-duration-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/day-counter-calculator</loc>
+    <loc>https://calcplatform.org/calculators/day-counter-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/day-of-the-week-calculator</loc>
+    <loc>https://calcplatform.org/calculators/day-of-the-week-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/concrete-calculator</loc>
+    <loc>https://calcplatform.org/calculators/concrete-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/btu-calculator</loc>
+    <loc>https://calcplatform.org/calculators/btu-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/square-footage-calculator</loc>
+    <loc>https://calcplatform.org/calculators/square-footage-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/stair-calculator</loc>
+    <loc>https://calcplatform.org/calculators/stair-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/roofing-calculator</loc>
+    <loc>https://calcplatform.org/calculators/roofing-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/tile-calculator</loc>
+    <loc>https://calcplatform.org/calculators/tile-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/mulch-calculator</loc>
+    <loc>https://calcplatform.org/calculators/mulch-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/gravel-calculator</loc>
+    <loc>https://calcplatform.org/calculators/gravel-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/height-calculator</loc>
+    <loc>https://calcplatform.org/calculators/height-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/conversion-calculator</loc>
+    <loc>https://calcplatform.org/calculators/conversion-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/density-calculator</loc>
+    <loc>https://calcplatform.org/calculators/density-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/mass-calculator</loc>
+    <loc>https://calcplatform.org/calculators/mass-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/weight-calculator</loc>
+    <loc>https://calcplatform.org/calculators/weight-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/speed-calculator</loc>
+    <loc>https://calcplatform.org/calculators/speed-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/roman-numeral-converter</loc>
+    <loc>https://calcplatform.org/calculators/roman-numeral-converter</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/shoe-size-calculator</loc>
+    <loc>https://calcplatform.org/calculators/shoe-size-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/electricity-calculator</loc>
+    <loc>https://calcplatform.org/calculators/electricity-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/voltage-drop-calculator</loc>
+    <loc>https://calcplatform.org/calculators/voltage-drop-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/resistor-calculator</loc>
+    <loc>https://calcplatform.org/calculators/resistor-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/ohms-law-calculator</loc>
+    <loc>https://calcplatform.org/calculators/ohms-law-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/ip-subnet-calculator</loc>
+    <loc>https://calcplatform.org/calculators/ip-subnet-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/bandwidth-calculator</loc>
+    <loc>https://calcplatform.org/calculators/bandwidth-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/base64-calculator</loc>
+    <loc>https://calcplatform.org/calculators/base64-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/url-encoder-decoder</loc>
+    <loc>https://calcplatform.org/calculators/url-encoder-decoder</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/password-generator</loc>
+    <loc>https://calcplatform.org/calculators/password-generator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/bra-size-calculator</loc>
+    <loc>https://calcplatform.org/calculators/bra-size-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/tip-calculator</loc>
+    <loc>https://calcplatform.org/calculators/tip-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/golf-handicap-calculator</loc>
+    <loc>https://calcplatform.org/calculators/golf-handicap-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/sleep-calculator</loc>
+    <loc>https://calcplatform.org/calculators/sleep-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/wind-chill-calculator</loc>
+    <loc>https://calcplatform.org/calculators/wind-chill-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/heat-index-calculator</loc>
+    <loc>https://calcplatform.org/calculators/heat-index-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/dew-point-calculator</loc>
+    <loc>https://calcplatform.org/calculators/dew-point-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/fuel-cost-calculator</loc>
+    <loc>https://calcplatform.org/calculators/fuel-cost-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/gas-mileage-calculator</loc>
+    <loc>https://calcplatform.org/calculators/gas-mileage-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/horsepower-calculator</loc>
+    <loc>https://calcplatform.org/calculators/horsepower-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/engine-horsepower-calculator</loc>
+    <loc>https://calcplatform.org/calculators/engine-horsepower-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/mileage-calculator</loc>
+    <loc>https://calcplatform.org/calculators/mileage-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/tire-size-calculator</loc>
+    <loc>https://calcplatform.org/calculators/tire-size-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/dice-roller</loc>
+    <loc>https://calcplatform.org/calculators/dice-roller</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/love-calculator</loc>
+    <loc>https://calcplatform.org/calculators/love-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/gpa-calculator</loc>
+    <loc>https://calcplatform.org/calculators/gpa-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/grade-calculator</loc>
+    <loc>https://calcplatform.org/calculators/grade-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/molarity-calculator</loc>
+    <loc>https://calcplatform.org/calculators/molarity-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/molecular-weight-calculator</loc>
+    <loc>https://calcplatform.org/calculators/molecular-weight-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/calculators/gdp-calculator</loc>
+    <loc>https://calcplatform.org/calculators/gdp-calculator</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/about</loc>
+    <loc>https://calcplatform.org/about</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/privacy</loc>
+    <loc>https://calcplatform.org/privacy</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/terms</loc>
+    <loc>https://calcplatform.org/terms</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://calcplatform.com/contact</loc>
+    <loc>https://calcplatform.org/contact</loc>
     <lastmod>2026-09-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

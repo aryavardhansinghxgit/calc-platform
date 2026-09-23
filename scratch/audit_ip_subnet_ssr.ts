@@ -91,7 +91,7 @@ async function auditSEO() {
   console.log(`H1 === 1 ("IP Subnet Calculator"): ${h1Matches.length === 1 && h1Text === "IP Subnet Calculator" ? "PASS" : "FAIL"}`);
   console.log(`Title clean & accurate:         ${title === "IP Subnet Calculator – IPv4, IPv6, CIDR, Hosts & Subnetting" ? "PASS" : "FAIL"}`);
   console.log(`Meta Description accurate:      ${metaDesc === "Calculate IPv4 and IPv6 subnets, CIDR masks, network and broadcast addresses, usable hosts, subnet splits, host capacity, and route summaries." ? "PASS" : "FAIL"}`);
-  console.log(`Canonical URL accurate:         ${canonical === "https://calcplatform.com/calculators/ip-subnet-calculator" ? "PASS" : "FAIL"}`);
+  console.log(`Canonical URL accurate:         ${canonical === "https://calcplatform.org/calculators/ip-subnet-calculator" ? "PASS" : "FAIL"}`);
   console.log(`Related Blocks === 2:           ${relatedMatches.length === 2 ? "PASS" : "FAIL"}`);
   console.log(`FAQ Section === 1:              ${faqHeadingMatches.length === 1 ? "PASS" : "FAIL"}`);
   console.log(`Article (22 sections):          ${hasArticle ? "PASS" : "FAIL"}`);

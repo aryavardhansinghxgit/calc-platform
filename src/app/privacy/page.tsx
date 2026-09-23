@@ -173,7 +173,7 @@ export default function PrivacyPolicyPage() {
             <Link href="/contact" className="text-blue-600 dark:text-blue-400 underline font-semibold">
               Contact Page
             </Link>{" "}
-            or email us directly at <span className="font-mono text-zinc-800 dark:text-zinc-200 font-bold">contact@calcplatform.com</span>.
+            or email us directly at <span className="font-mono text-zinc-800 dark:text-zinc-200 font-bold">contact@calcplatform.org</span>.
           </p>
         </section>
       </div>

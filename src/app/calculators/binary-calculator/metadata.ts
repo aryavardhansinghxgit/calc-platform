@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 
-const DEFAULT_BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://calcplatform.com";
+const DEFAULT_BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://calcplatform.org";
 const canonicalUrl = `${DEFAULT_BASE_URL}/calculators/binary-calculator`;
 
 export const binary_calculatorMetadata: Metadata = {

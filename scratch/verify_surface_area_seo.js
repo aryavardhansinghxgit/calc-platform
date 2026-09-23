@@ -62,8 +62,8 @@ async function verifySEO() {
   const canonicalMatch = html.match(/<link\s+rel="canonical"\s+href="([^"]*)"/i);
   const canonical = canonicalMatch ? canonicalMatch[1] : "";
   console.log(`Canonical URL: ${canonical}`);
-  if (canonical === "https://calcplatform.com/calculators/surface-area-calculator") {
-    console.log("✔ Exact Real production canonical URL (https://calcplatform.com/calculators/surface-area-calculator)!");
+  if (canonical === "https://calcplatform.org/calculators/surface-area-calculator") {
+    console.log("✔ Exact Real production canonical URL (https://calcplatform.org/calculators/surface-area-calculator)!");
   } else {
     console.error("FAIL: Canonical URL mismatch!");
     process.exit(1);

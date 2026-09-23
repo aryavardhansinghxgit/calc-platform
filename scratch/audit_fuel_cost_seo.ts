@@ -34,7 +34,7 @@ async function auditFuelCostSeo() {
   const canonicalMatch = html.match(/<link\s+rel=["']canonical["']\s+href=["']([^"']*)["']/i);
   const canonical = canonicalMatch ? canonicalMatch[1] : "NONE";
   console.log("Canonical:", canonical);
-  if (canonical !== "https://calcplatform.com/calculators/fuel-cost-calculator") {
+  if (canonical !== "https://calcplatform.org/calculators/fuel-cost-calculator") {
     console.error("Canonical mismatch!", canonical);
   } else {
     console.log("Canonical: PASS");

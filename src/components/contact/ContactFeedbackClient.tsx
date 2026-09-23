@@ -97,7 +97,7 @@ export function ContactFeedbackClient() {
     honeypot: "",
   });
 
-  const targetEmail = "contact@calcplatform.com";
+  const targetEmail = "contact@calcplatform.org";
 
   const selectedTopicObj =
     FEEDBACK_TOPICS.find((t) => t.id === formData.topic) || FEEDBACK_TOPICS[0];
@@ -198,7 +198,7 @@ Sent from CalcPlatform Feedback Hub (${new Date().toLocaleString()})`;
     {
       icon: Lightbulb,
       title: "Request a New Calculator",
-      email: "requests@calcplatform.com",
+      email: "requests@calcplatform.org",
       desc: "Suggest a financial tool, physics solver, health index, or construction estimator you want us to add to our 190+ tool library.",
       badge: "Feature Requests",
       badgeColor: "bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-800",
@@ -206,7 +206,7 @@ Sent from CalcPlatform Feedback Hub (${new Date().toLocaleString()})`;
     {
       icon: Calculator,
       title: "Formula & Mathematical Review",
-      email: "formulas@calcplatform.com",
+      email: "formulas@calcplatform.org",
       desc: "Found an edge-case rounding anomaly, formula discrepancy, or boundary condition issue? Our math team inspects all reports.",
       badge: "Mathematical Rigor",
       badgeColor: "bg-blue-100 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 border-blue-200 dark:border-blue-800",
@@ -214,7 +214,7 @@ Sent from CalcPlatform Feedback Hub (${new Date().toLocaleString()})`;
     {
       icon: MessageSquare,
       title: "General Inquiries & Feedback",
-      email: "contact@calcplatform.com",
+      email: "contact@calcplatform.org",
       desc: "Share UX impressions, browser compatibility notes, educational classroom use questions, or general messages.",
       badge: "Direct Support",
       badgeColor: "bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800",

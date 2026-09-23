@@ -98,17 +98,17 @@ async function runAudit() {
   console.log(`English Canonical: ${enCanonical1}`);
   console.log(`English Hreflangs: ${JSON.stringify(enHreflangs1)}`);
 
-  if (enCanonical1 !== "https://calcplatform.com/calculators/mortgage-calculator") {
-    defects.push(`English canonical mismatch: expected https://calcplatform.com/calculators/mortgage-calculator, got ${enCanonical1}`);
+  if (enCanonical1 !== "https://calcplatform.org/calculators/mortgage-calculator") {
+    defects.push(`English canonical mismatch: expected https://calcplatform.org/calculators/mortgage-calculator, got ${enCanonical1}`);
   }
   const enHrefLangsMap = Object.fromEntries(enHreflangs1.map((h) => [h.lang, h.href]));
-  if (enHrefLangsMap["en"] !== "https://calcplatform.com/calculators/mortgage-calculator") {
+  if (enHrefLangsMap["en"] !== "https://calcplatform.org/calculators/mortgage-calculator") {
     defects.push(`English hreflang en mismatch: ${enHrefLangsMap["en"]}`);
   }
-  if (enHrefLangsMap["es"] !== "https://calcplatform.com/es/calculators/mortgage-calculator") {
+  if (enHrefLangsMap["es"] !== "https://calcplatform.org/es/calculators/mortgage-calculator") {
     defects.push(`English hreflang es mismatch: ${enHrefLangsMap["es"]}`);
   }
-  if (enHrefLangsMap["x-default"] !== "https://calcplatform.com/calculators/mortgage-calculator") {
+  if (enHrefLangsMap["x-default"] !== "https://calcplatform.org/calculators/mortgage-calculator") {
     defects.push(`English hreflang x-default mismatch: ${enHrefLangsMap["x-default"]}`);
   }
   if (enHrefLangsMap["fr"] || enHrefLangsMap["de"] || enHrefLangsMap["hi"] || enHrefLangsMap["pt"]) {
@@ -140,17 +140,17 @@ async function runAudit() {
   console.log(`Spanish Canonical: ${esCanonical}`);
   console.log(`Spanish Hreflangs: ${JSON.stringify(esHreflangs)}`);
 
-  if (esCanonical !== "https://calcplatform.com/es/calculators/mortgage-calculator") {
-    defects.push(`Spanish canonical mismatch: expected https://calcplatform.com/es/calculators/mortgage-calculator, got ${esCanonical}`);
+  if (esCanonical !== "https://calcplatform.org/es/calculators/mortgage-calculator") {
+    defects.push(`Spanish canonical mismatch: expected https://calcplatform.org/es/calculators/mortgage-calculator, got ${esCanonical}`);
   }
   const esHrefLangsMap = Object.fromEntries(esHreflangs.map((h) => [h.lang, h.href]));
-  if (esHrefLangsMap["en"] !== "https://calcplatform.com/calculators/mortgage-calculator") {
+  if (esHrefLangsMap["en"] !== "https://calcplatform.org/calculators/mortgage-calculator") {
     defects.push(`Spanish hreflang en mismatch: ${esHrefLangsMap["en"]}`);
   }
-  if (esHrefLangsMap["es"] !== "https://calcplatform.com/es/calculators/mortgage-calculator") {
+  if (esHrefLangsMap["es"] !== "https://calcplatform.org/es/calculators/mortgage-calculator") {
     defects.push(`Spanish hreflang es mismatch: ${esHrefLangsMap["es"]}`);
   }
-  if (esHrefLangsMap["x-default"] !== "https://calcplatform.com/calculators/mortgage-calculator") {
+  if (esHrefLangsMap["x-default"] !== "https://calcplatform.org/calculators/mortgage-calculator") {
     defects.push(`Spanish hreflang x-default mismatch: ${esHrefLangsMap["x-default"]}`);
   }
   if (esHrefLangsMap["fr"] || esHrefLangsMap["de"] || esHrefLangsMap["hi"] || esHrefLangsMap["pt"]) {

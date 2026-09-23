@@ -2,7 +2,7 @@ import { calculateUrlEncoderDecoder } from "./calculator";
 
 export function runURLEncodeDecodeTests() {
   const defaultInputs = {
-    text: "https://calcplatform.com/search?q=math & health",
+    text: "https://calcplatform.org/search?q=math & health",
     mode: "encode",
   };
   const res1 = calculateUrlEncoderDecoder(defaultInputs);

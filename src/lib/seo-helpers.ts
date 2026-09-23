@@ -15,7 +15,7 @@ export interface CalculatorSeoProps {
   faqs?: Array<{ question: string; answer: string }>;
 }
 
-const DEFAULT_BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://calcplatform.com";
+const DEFAULT_BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://calcplatform.org";
 
 /**
  * Computes canonical URL for a given slug.

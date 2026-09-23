@@ -209,7 +209,7 @@ export function parseUrlBreakdown(urlStr: string): UrlBreakdown | null {
 
 const SAMPLE_URLS = [
   "https://api.example.com/v1/search?query=hello world&category=dev tools&tags=c++#results",
-  "https://shop.calcplatform.com/cart?item=Wireless Headphones&price=$149.99&coupon=SUMMER 2026",
+  "https://shop.calcplatform.org/cart?item=Wireless Headphones&price=$149.99&coupon=SUMMER 2026",
   "https://maps.google.com/search?q=Central Park, New York&geo=40.7851,-73.9683",
   "https://auth.company.org/login?redirect_uri=https://app.company.org/oauth/callback&scope=user:email",
 ];

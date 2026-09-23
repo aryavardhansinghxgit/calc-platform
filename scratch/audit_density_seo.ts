@@ -59,7 +59,7 @@ async function audit() {
   const canonicalMatch = html.match(/<link[^>]*rel=["']canonical["'][^>]*href=["']([^"']*)["']/i) ||
                          html.match(/<link[^>]*href=["']([^"']*)["'][^>]*rel=["']canonical["']/i);
   const canonical = canonicalMatch ? canonicalMatch[1] : "";
-  const expectedCanonical = "https://calcplatform.com/calculators/density-calculator";
+  const expectedCanonical = "https://calcplatform.org/calculators/density-calculator";
   results.push({
     test: "Canonical URL matches exact requirement",
     pass: canonical === expectedCanonical,

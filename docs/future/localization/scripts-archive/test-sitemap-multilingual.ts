@@ -43,31 +43,31 @@ async function runSitemapTests() {
 
   // A. English mortgage route
   assert(
-    urls.includes("https://calcplatform.com/calculators/mortgage-calculator"),
-    "1.2: English route 'https://calcplatform.com/calculators/mortgage-calculator' is present"
+    urls.includes("https://calcplatform.org/calculators/mortgage-calculator"),
+    "1.2: English route 'https://calcplatform.org/calculators/mortgage-calculator' is present"
   );
 
   // B. Published Spanish mortgage route
   assert(
-    urls.includes("https://calcplatform.com/es/calculators/mortgage-calculator"),
-    "1.3: Published Spanish route 'https://calcplatform.com/es/calculators/mortgage-calculator' is present"
+    urls.includes("https://calcplatform.org/es/calculators/mortgage-calculator"),
+    "1.3: Published Spanish route 'https://calcplatform.org/es/calculators/mortgage-calculator' is present"
   );
 
   // C-F. Published 6-locale mortgage routes must appear
   assert(
-    urls.includes("https://calcplatform.com/fr/calculators/mortgage-calculator"),
+    urls.includes("https://calcplatform.org/fr/calculators/mortgage-calculator"),
     "1.4: Published French mortgage route is present"
   );
   assert(
-    urls.includes("https://calcplatform.com/de/calculators/mortgage-calculator"),
+    urls.includes("https://calcplatform.org/de/calculators/mortgage-calculator"),
     "1.5: Published German mortgage route is present"
   );
   assert(
-    urls.includes("https://calcplatform.com/hi/calculators/mortgage-calculator"),
+    urls.includes("https://calcplatform.org/hi/calculators/mortgage-calculator"),
     "1.6: Published Hindi mortgage route is present"
   );
   assert(
-    urls.includes("https://calcplatform.com/pt/calculators/mortgage-calculator"),
+    urls.includes("https://calcplatform.org/pt/calculators/mortgage-calculator"),
     "1.7: Published Portuguese mortgage route is present"
   );
 
@@ -95,11 +95,11 @@ async function runSitemapTests() {
   );
 
   // J. Core, Category, Standalone, Legal pages
-  assert(urls.includes("https://calcplatform.com"), "1.12: Root platform page present");
-  assert(urls.includes("https://calcplatform.com/category/finance"), "1.13: Category '/category/finance' present");
-  assert(urls.includes("https://calcplatform.com/category/health"), "1.14: Category '/category/health' present");
-  assert(urls.includes("https://calcplatform.com/about"), "1.15: Legal '/about' present");
-  assert(urls.includes("https://calcplatform.com/privacy"), "1.16: Legal '/privacy' present");
+  assert(urls.includes("https://calcplatform.org"), "1.12: Root platform page present");
+  assert(urls.includes("https://calcplatform.org/category/finance"), "1.13: Category '/category/finance' present");
+  assert(urls.includes("https://calcplatform.org/category/health"), "1.14: Category '/category/health' present");
+  assert(urls.includes("https://calcplatform.org/about"), "1.15: Legal '/about' present");
+  assert(urls.includes("https://calcplatform.org/privacy"), "1.16: Legal '/privacy' present");
 
   // --- SUITE 2: Live Rendered /sitemap.xml DOM Verification ---
   console.log("\n--- SUITE 2: Live Rendered /sitemap.xml Verification ---");
@@ -107,12 +107,12 @@ async function runSitemapTests() {
     const res = await fetch("http://localhost:3000/sitemap.xml");
     if (res.status === 200) {
       const xml = await res.text();
-      assert(xml.includes("<loc>https://calcplatform.com/calculators/mortgage-calculator</loc>"), "2.1: Rendered XML contains English mortgage URL");
-      assert(xml.includes("<loc>https://calcplatform.com/es/calculators/mortgage-calculator</loc>"), "2.2: Rendered XML contains Spanish mortgage URL");
-      assert(xml.includes("<loc>https://calcplatform.com/fr/calculators/mortgage-calculator</loc>"), "2.3: Rendered XML contains French mortgage URL");
-      assert(xml.includes("<loc>https://calcplatform.com/de/calculators/mortgage-calculator</loc>"), "2.4: Rendered XML contains German mortgage URL");
-      assert(xml.includes("<loc>https://calcplatform.com/hi/calculators/mortgage-calculator</loc>"), "2.5: Rendered XML contains Hindi mortgage URL");
-      assert(xml.includes("<loc>https://calcplatform.com/pt/calculators/mortgage-calculator</loc>"), "2.6: Rendered XML contains Portuguese mortgage URL");
+      assert(xml.includes("<loc>https://calcplatform.org/calculators/mortgage-calculator</loc>"), "2.1: Rendered XML contains English mortgage URL");
+      assert(xml.includes("<loc>https://calcplatform.org/es/calculators/mortgage-calculator</loc>"), "2.2: Rendered XML contains Spanish mortgage URL");
+      assert(xml.includes("<loc>https://calcplatform.org/fr/calculators/mortgage-calculator</loc>"), "2.3: Rendered XML contains French mortgage URL");
+      assert(xml.includes("<loc>https://calcplatform.org/de/calculators/mortgage-calculator</loc>"), "2.4: Rendered XML contains German mortgage URL");
+      assert(xml.includes("<loc>https://calcplatform.org/hi/calculators/mortgage-calculator</loc>"), "2.5: Rendered XML contains Hindi mortgage URL");
+      assert(xml.includes("<loc>https://calcplatform.org/pt/calculators/mortgage-calculator</loc>"), "2.6: Rendered XML contains Portuguese mortgage URL");
       assert(!xml.includes("/fr/calculators/percentage-calculator"), "2.7: Rendered XML does NOT contain draft French percentage URL");
       assert(!xml.includes("/en/calculators/mortgage-calculator"), "2.8: Rendered XML does NOT contain /en/ duplicate URL");
     } else {

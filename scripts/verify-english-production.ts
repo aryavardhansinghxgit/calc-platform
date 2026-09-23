@@ -66,7 +66,7 @@ for (const slug of testSlugs) {
   const canonical = (meta.alternates as any)?.canonical;
   const languages = (meta.alternates as any)?.languages;
 
-  assert(`[${slug}] Canonical URL is standard English route: /calculators/${slug}`, canonical === `https://calcplatform.com/calculators/${slug}`);
+  assert(`[${slug}] Canonical URL is standard English route: /calculators/${slug}`, canonical === `https://calcplatform.org/calculators/${slug}`);
   assert(`[${slug}] No hreflang languages alternate dictionary emitted`, languages === undefined);
 
   const schemas = generateJsonLdSchema({
@@ -91,8 +91,8 @@ if (fs.existsSync(sitemapPath)) {
   assert("Sitemap contains zero /hi/ URLs", !sitemapContent.includes("/hi/"));
   assert("Sitemap contains zero /pt/ URLs", !sitemapContent.includes("/pt/"));
   assert("Sitemap contains zero /en/ URLs", !sitemapContent.includes("/en/"));
-  assert("Sitemap contains root canonical https://calcplatform.com", sitemapContent.includes("<loc>https://calcplatform.com</loc>"));
-  assert("Sitemap contains mortgage-calculator English URL", sitemapContent.includes("<loc>https://calcplatform.com/calculators/mortgage-calculator</loc>"));
+  assert("Sitemap contains root canonical https://calcplatform.org", sitemapContent.includes("<loc>https://calcplatform.org</loc>"));
+  assert("Sitemap contains mortgage-calculator English URL", sitemapContent.includes("<loc>https://calcplatform.org/calculators/mortgage-calculator</loc>"));
 } else {
   assert("public/sitemap.xml exists", false);
 }

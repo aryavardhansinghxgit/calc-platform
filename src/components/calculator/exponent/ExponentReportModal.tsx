@@ -307,7 +307,7 @@ export const ExponentReportModal: React.FC<ExponentReportModalProps> = ({
           {/* FOOTER BAR */}
           <div className="border-t pt-3 mt-4 text-[9px] text-slate-500 text-center space-y-0.5">
             <p className="font-semibold text-slate-600">
-              CalcPlatform Exponent Calculator &bull; https://calcplatform.com/calculators/exponent-calculator
+              CalcPlatform Exponent Calculator &bull; https://calcplatform.org/calculators/exponent-calculator
             </p>
             <p>Generated for coursework, engineering documentation, and algebraic reference.</p>
           </div>

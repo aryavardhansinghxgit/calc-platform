@@ -67,7 +67,7 @@ async function main() {
     "Comprensión de su Hipoteca y los Costos Totales de Vivienda",
     "Cómo se Calculan los Pagos de la Hipoteca",
     "Ejemplo Práctico de Cálculo Hipotecario Paso a Paso",
-    "https://calcplatform.com/es/calculators/mortgage-calculator", // canonical
+    "https://calcplatform.org/es/calculators/mortgage-calculator", // canonical
   ];
   for (const check of esChecks) {
     if (!esRes.body.includes(check)) {

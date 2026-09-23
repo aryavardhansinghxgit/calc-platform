@@ -58,8 +58,8 @@ export async function POST(req: Request) {
     const destinationEmail = process.env.CONTACT_DESTINATION_EMAIL || "xasvmax@gmail.com";
     const emailSubject = `[CalcPlatform Feedback] ${topicLabel || topic || "General Feedback"}${calculatorName ? ` [${calculatorName}]` : ""}`;
 
-    const origin = req.headers.get("origin") || "https://calcplatform.com";
-    const referer = req.headers.get("referer") || "https://calcplatform.com/contact";
+    const origin = req.headers.get("origin") || "https://calcplatform.org";
+    const referer = req.headers.get("referer") || "https://calcplatform.org/contact";
     const userAgent =
       req.headers.get("user-agent") ||
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
@@ -107,7 +107,7 @@ export async function POST(req: Request) {
       return NextResponse.json({
         success: true,
         message: "Message recorded.",
-        fallback: `mailto:contact@calcplatform.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(message)}`,
+        fallback: `mailto:contact@calcplatform.org?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(message)}`,
       });
     }
   } catch (error) {
@@ -115,7 +115,7 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         error: "Failed to send message via automated gateway.",
-        fallback: "mailto:contact@calcplatform.com",
+        fallback: "mailto:contact@calcplatform.org",
       },
       { status: 500 }
     );

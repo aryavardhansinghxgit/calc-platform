@@ -3,7 +3,7 @@ import path from "path";
 import { getAllCalculatorDefinitions } from "../src/calculators";
 import { CATEGORIES } from "../src/data/categories";
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://calcplatform.com";
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://calcplatform.org";
 const currentDate = new Date().toISOString().split("T")[0];
 
 const standalonePages = [

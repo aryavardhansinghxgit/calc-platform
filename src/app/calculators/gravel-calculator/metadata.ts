@@ -5,13 +5,13 @@ export const gravel_calculatorMetadata: Metadata = {
   description:
     "Calculate gravel needed in cubic yards, tons, bags and truckloads for driveways, patios, walkways and drainage. Includes compaction, waste, cost and French drain estimates.",
   alternates: {
-    canonical: "https://calcplatform.com/calculators/gravel-calculator",
+    canonical: "https://calcplatform.org/calculators/gravel-calculator",
   },
   openGraph: {
     title: "Gravel Calculator – Cubic Yards, Tons & Cost Estimator | CalcPlatform",
     description:
       "Calculate gravel needed in cubic yards, tons, bags and truckloads for driveways, patios, walkways and drainage. Includes compaction, waste, cost and French drain estimates.",
-    url: "https://calcplatform.com/calculators/gravel-calculator",
+    url: "https://calcplatform.org/calculators/gravel-calculator",
     type: "website",
   },
   twitter: {

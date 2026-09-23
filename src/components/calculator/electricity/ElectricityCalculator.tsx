@@ -770,7 +770,7 @@ export function ElectricityCalculator() {
       `================================================================`,
       `ELECTRICITY & POWER CONSUMPTION AUDIT REPORT`,
       `Generated: ${new Date().toLocaleString()}`,
-      `Platform: CalcPlatform (calcplatform.com/calculators/electricity-calculator)`,
+      `Platform: CalcPlatform (calcplatform.org/calculators/electricity-calculator)`,
       `================================================================`,
       ``,
       `REGIONAL PARAMETERS:`,
